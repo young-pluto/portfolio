@@ -1,0 +1,14 @@
+{
+    "version": 2,
+    "routes": [
+      {
+        "src": "/",
+        "headers": { "host": "tasks.builtbyapoorv.in" },
+        "dest": "/tasks/index.html"
+      },
+      { 
+        "src": "/(.*)", 
+        "dest": "/$1" 
+      }
+    ]
+  }
