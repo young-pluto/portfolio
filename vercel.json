@@ -1,19 +1,29 @@
 {
-    "version": 2,
-    "routes": [
-      {
-        "src": "/(.*)",
-        "has": [
-          {
-            "type": "host",
-            "value": "tasks.builtbyapoorv.in"
-          }
-        ],
-        "dest": "/tasks/$1"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/$1"
-      }
-    ]
-  }
+  "version": 2,
+  "routes": [
+    {
+      "src": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "tasks.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/tasks/task-manager.html"
+    },
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "tasks.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/tasks/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}

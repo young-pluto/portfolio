@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modern Task Manager</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Import Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
+        /* Your existing styles here */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
         * {
@@ -56,7 +61,55 @@
             font-size: 0.9rem;
         }
 
-        /* Rest of your existing styles... */
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #667eea;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .delete-btn {
+            width: auto;
+            padding: 8px;
+            margin-left: auto;
+            background: transparent;
+            color: #e53e3e;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #718096;
+        }
     </style>
 </head>
 <body>
@@ -83,16 +136,24 @@
         </div>
     </div>
 
-    <script type="module">
-        import { auth } from './firebase-config.js';
-        import { loginUser, registerUser, logoutUser } from './firebase-auth.js';
-        import { addTask, toggleTask, deleteTask } from './firebase-db.js';
-        import { onAuthStateChanged } from 'firebase/auth';
-        import { ref, onValue } from 'firebase/database';
-        import { db } from './firebase-config.js';
+    <script>
+        // Initialize Firebase with your config
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-F0C8l_fOhJPpkYsL6Eb6P7GUFcaC9MQ",
+            authDomain: "portfolio-415e1.firebaseapp.com",
+            databaseURL: "https://portfolio-415e1-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "portfolio-415e1",
+            storageBucket: "portfolio-415e1.firebasestorage.app",
+            messagingSenderId: "959081513500",
+            appId: "1:959081513500:web:e1889367df9e24f25355d9"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
 
         // Auth state observer
-        onAuthStateChanged(auth, (user) => {
+        auth.onAuthStateChanged((user) => {
             if (user) {
                 showTaskScreen();
                 loadTasks(user.uid);
@@ -105,25 +166,33 @@
         document.getElementById('loginBtn').addEventListener('click', async () => {
             const email = document.getElementById('emailInput').value;
             const password = document.getElementById('passwordInput').value;
-            const result = await loginUser(email, password);
             
-            if (!result.success) {
-                showError(result.error);
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                document.getElementById('errorMessage').textContent = '';
+            } catch (error) {
+                showError(error.message);
             }
         });
 
         document.getElementById('registerBtn').addEventListener('click', async () => {
             const email = document.getElementById('emailInput').value;
             const password = document.getElementById('passwordInput').value;
-            const result = await registerUser(email, password);
             
-            if (!result.success) {
-                showError(result.error);
+            try {
+                await auth.createUserWithEmailAndPassword(email, password);
+                document.getElementById('errorMessage').textContent = '';
+            } catch (error) {
+                showError(error.message);
             }
         });
 
         document.getElementById('logoutBtn').addEventListener('click', async () => {
-            await logoutUser();
+            try {
+                await auth.signOut();
+            } catch (error) {
+                showError(error.message);
+            }
         });
 
         document.getElementById('addTaskBtn').addEventListener('click', () => {
@@ -160,18 +229,23 @@
             const text = input.value.trim();
             
             if (text && auth.currentUser) {
-                const result = await addTask(auth.currentUser.uid, text);
-                if (result.success) {
+                try {
+                    const taskRef = database.ref(`tasks/${auth.currentUser.uid}`).push();
+                    await taskRef.set({
+                        text: text,
+                        completed: false,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    });
                     input.value = '';
-                } else {
-                    showError(result.error);
+                } catch (error) {
+                    showError(error.message);
                 }
             }
         }
 
         function loadTasks(userId) {
-            const tasksRef = ref(db, `tasks/${userId}`);
-            onValue(tasksRef, (snapshot) => {
+            const tasksRef = database.ref(`tasks/${userId}`);
+            tasksRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 const taskList = document.getElementById('taskList');
                 taskList.innerHTML = '';
@@ -201,12 +275,14 @@
             // Add event listeners
             const checkbox = div.querySelector('input[type="checkbox"]');
             checkbox.addEventListener('change', () => {
-                toggleTask(auth.currentUser.uid, taskId, checkbox.checked);
+                const taskRef = database.ref(`tasks/${auth.currentUser.uid}/${taskId}`);
+                taskRef.update({ completed: checkbox.checked });
             });
 
             const deleteBtn = div.querySelector('.delete-btn');
             deleteBtn.addEventListener('click', () => {
-                deleteTask(auth.currentUser.uid, taskId);
+                const taskRef = database.ref(`tasks/${auth.currentUser.uid}/${taskId}`);
+                taskRef.remove();
             });
 
             document.getElementById('taskList').appendChild(div);
