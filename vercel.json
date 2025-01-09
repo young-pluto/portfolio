@@ -1,14 +1,34 @@
 {
     "version": 2,
+    "redirects": [
+      {
+        "source": "/",
+        "has": [
+          {
+            "type": "host",
+            "value": "tasks.builtbyapoorv.in"
+          }
+        ],
+        "destination": "/tasks"
+      }
+    ],
+    "builds": [
+      { "src": "**/*.html", "use": "@vercel/static" }
+    ],
     "routes": [
       {
         "src": "/",
-        "headers": { "host": "tasks.builtbyapoorv.in" },
+        "has": [
+          {
+            "type": "host",
+            "value": "tasks.builtbyapoorv.in"
+          }
+        ],
         "dest": "/tasks/index.html"
       },
-      { 
-        "src": "/(.*)", 
-        "dest": "/$1" 
+      {
+        "src": "/(.*)",
+        "dest": "/$1"
       }
     ]
   }
