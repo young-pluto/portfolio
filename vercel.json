@@ -8,21 +8,35 @@
     { 
       "src": "apps/**/frontend/**/*",
       "use": "@vercel/static"
+    },
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
+      "src": "/api/auth/(login|register)",
       "has": [
         {
           "type": "host",
           "value": "tasks.builtbyapoorv.in"
         }
       ],
-      "dest": "/apps/tasks/api/$1"
+      "dest": "/apps/tasks/api/auth/index.js"
     },
     {
-      "src": "/",
+      "src": "/api/tasks(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "tasks.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/tasks/api/tasks/index.js"
+    },
+    {
+      "src": "/(.*)",
       "has": [
         {
           "type": "host",
@@ -30,6 +44,10 @@
         }
       ],
       "dest": "/apps/tasks/frontend/task-manager.html"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
     },
     {
       "src": "/(.*)",
