@@ -4,7 +4,7 @@ const serviceAccount = require('../serviceAccountKey.json');
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: process.env.FIREBASE_DATABASE_URL
+    databaseURL: "https://portfolio-415e1-default-rtdb.asia-southeast1.firebasedatabase.app"
 });
 
 module.exports = admin;
