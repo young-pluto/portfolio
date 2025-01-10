@@ -2,30 +2,24 @@
   "version": 2,
   "builds": [
     { 
-      "src": "api/**/*.js",
+      "src": "apps/tasks/api/**/*.js",
       "use": "@vercel/node"
     },
     { 
-      "src": "tasks/**/*",
-      "use": "@vercel/static"
-    },
-    { 
-      "src": "*.html",
+      "src": "apps/**/frontend/**/*",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/api/auth/(.*)",
-      "dest": "/api/auth/index.js"
-    },
-    {
-      "src": "/api/tasks/(.*)",
-      "dest": "/api/tasks/index.js"
-    },
-    {
       "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "has": [
+        {
+          "type": "host",
+          "value": "tasks.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/tasks/api/$1"
     },
     {
       "src": "/",
@@ -35,17 +29,7 @@
           "value": "tasks.builtbyapoorv.in"
         }
       ],
-      "dest": "/tasks/task-manager.html"
-    },
-    {
-      "src": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "tasks.builtbyapoorv.in"
-        }
-      ],
-      "dest": "/tasks/$1"
+      "dest": "/apps/tasks/frontend/task-manager.html"
     },
     {
       "src": "/(.*)",

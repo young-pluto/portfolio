@@ -1,4 +1,3 @@
-// api/tasks/index.js
 const admin = require('../config/firebase');
 
 const corsHeaders = {
@@ -29,7 +28,6 @@ async function verifyToken(req) {
 }
 
 module.exports = async (req, res) => {
-    // Handle CORS
     if (handleCors(req, res)) return;
 
     try {

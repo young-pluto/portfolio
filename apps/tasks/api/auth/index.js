@@ -1,4 +1,3 @@
-// api/auth/index.js
 const admin = require('../config/firebase');
 const fetch = require('node-fetch');
 
@@ -22,7 +21,6 @@ function handleCors(req, res) {
 }
 
 module.exports = async (req, res) => {
-    // Handle CORS
     if (handleCors(req, res)) return;
 
     try {
@@ -33,8 +31,6 @@ module.exports = async (req, res) => {
             case 'login':
                 if (req.method === 'POST') {
                     const { email, password } = req.body;
-
-                    // Authenticate with Firebase Auth REST API
                     const response = await fetch(
                         `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.FIREBASE_API_KEY}`,
                         {
@@ -49,13 +45,11 @@ module.exports = async (req, res) => {
                     );
 
                     const data = await response.json();
-                    
                     if (!response.ok) {
                         throw new Error(data.error?.message || 'Login failed');
                     }
 
                     const userRecord = await admin.auth().getUserByEmail(email);
-
                     return res.json({
                         token: data.idToken,
                         idToken: data.idToken,
@@ -70,7 +64,6 @@ module.exports = async (req, res) => {
             case 'register':
                 if (req.method === 'POST') {
                     const { email, password } = req.body;
-                    
                     const userRecord = await admin.auth().createUser({
                         email,
                         password,
