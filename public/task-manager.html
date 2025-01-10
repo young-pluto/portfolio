@@ -164,8 +164,8 @@
 
     <script>
 // Near the top of your script tag
-const API_URL = 'https://tasks.builtbyapoorv.in/api';
-let authToken = localStorage.getItem('authToken');
+const API_URL = window.location.origin + '/api'; 
+
 let idToken = localStorage.getItem('idToken'); // Add this line
 
 // Update login event listener
@@ -190,10 +190,6 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
         localStorage.setItem('idToken', data.idToken);  // Backend will send this
         authToken = data.token;
         idToken = data.idToken;
-
-        // Confirm the token is set properly after login
-console.log('Auth Token:', localStorage.getItem('idToken'));
-
 
         showTaskScreen();
         loadTasks();
@@ -226,7 +222,7 @@ console.log('Auth Token:', localStorage.getItem('idToken'));
         });
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('authToken');
+            localStorage.removeItem('idToken');
             authToken = null;
             showLoginScreen();
         });
@@ -326,7 +322,7 @@ async function loadTasks() {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${authToken}`
+                            'Authorization': `Bearer ${idToken}`
                         },
                         body: JSON.stringify({ completed: checkbox.checked })
                     });
@@ -345,7 +341,7 @@ async function loadTasks() {
                     const response = await fetch(`${API_URL}/tasks/${taskId}`, {
                         method: 'DELETE',
                         headers: {
-                            'Authorization': `Bearer ${authToken}`
+                            'Authorization': `Bearer ${idToken}`
                         }
                     });
 
@@ -360,7 +356,7 @@ async function loadTasks() {
         }
 
         // Check auth state on load
-        if (authToken) {
+        if (idToken) {
             showTaskScreen();
         } else {
             showLoginScreen();
