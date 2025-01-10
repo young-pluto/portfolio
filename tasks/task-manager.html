@@ -3,14 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Task Manager</title>
+    <title>✨ Task Manager</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Import Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-        /* Your existing styles here */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
         * {
@@ -51,14 +46,13 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 500px;
-            transform: translateY(0);
-            transition: all 0.3s ease;
         }
 
         .error-message {
             color: #e53e3e;
             margin-bottom: 10px;
             font-size: 0.9rem;
+            min-height: 20px;
         }
 
         input[type="email"],
@@ -96,6 +90,18 @@
             margin-bottom: 8px;
             background: white;
             border-radius: 8px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .delete-btn {
@@ -109,6 +115,26 @@
         .completed {
             text-decoration: line-through;
             color: #718096;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logout-btn {
+            width: auto;
+            padding: 8px 16px;
+            background: transparent;
+            color: #e53e3e;
+            border: 1px solid #e53e3e;
+        }
+
+        .logout-btn:hover {
+            background: #e53e3e;
+            color: white;
         }
     </style>
 </head>
@@ -137,75 +163,75 @@
     </div>
 
     <script>
-        // Initialize Firebase with your config
-        const firebaseConfig = {
-            apiKey: "AIzaSyB-F0C8l_fOhJPpkYsL6Eb6P7GUFcaC9MQ",
-            authDomain: "portfolio-415e1.firebaseapp.com",
-            databaseURL: "https://portfolio-415e1-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "portfolio-415e1",
-            storageBucket: "portfolio-415e1.firebasestorage.app",
-            messagingSenderId: "959081513500",
-            appId: "1:959081513500:web:e1889367df9e24f25355d9"
-        };
+// Near the top of your script tag
+const API_URL = 'http://localhost:3000/api';
+let authToken = localStorage.getItem('authToken');
+let idToken = localStorage.getItem('idToken'); // Add this line
 
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const database = firebase.database();
-
-        // Auth state observer
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                showTaskScreen();
-                loadTasks(user.uid);
-            } else {
-                showLoginScreen();
-            }
+// Update login event listener
+document.getElementById('loginBtn').addEventListener('click', async () => {
+    const email = document.getElementById('emailInput').value;
+    const password = document.getElementById('passwordInput').value;
+    
+    try {
+        const response = await fetch(`${API_URL}/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
         });
 
-        // Event Listeners
-        document.getElementById('loginBtn').addEventListener('click', async () => {
-            const email = document.getElementById('emailInput').value;
-            const password = document.getElementById('passwordInput').value;
-            
-            try {
-                await auth.signInWithEmailAndPassword(email, password);
-                document.getElementById('errorMessage').textContent = '';
-            } catch (error) {
-                showError(error.message);
-            }
-        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Login failed');
+
+        // Store both tokens
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('idToken', data.idToken);  // Backend will send this
+        authToken = data.token;
+        idToken = data.idToken;
+
+        showTaskScreen();
+        loadTasks();
+    } catch (error) {
+        showError(error.message);
+    }
+});
 
         document.getElementById('registerBtn').addEventListener('click', async () => {
             const email = document.getElementById('emailInput').value;
             const password = document.getElementById('passwordInput').value;
             
             try {
-                await auth.createUserWithEmailAndPassword(email, password);
-                document.getElementById('errorMessage').textContent = '';
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Registration failed');
+
+                showError('Successfully registered! Please login.');
+                // Don't auto-login after registration
             } catch (error) {
                 showError(error.message);
             }
         });
 
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
-            try {
-                await auth.signOut();
-            } catch (error) {
-                showError(error.message);
-            }
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('authToken');
+            authToken = null;
+            showLoginScreen();
         });
 
-        document.getElementById('addTaskBtn').addEventListener('click', () => {
-            addNewTask();
-        });
-
+        document.getElementById('addTaskBtn').addEventListener('click', addNewTask);
         document.getElementById('newTask').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                addNewTask();
-            }
+            if (e.key === 'Enter') addNewTask();
         });
 
-        // Helper Functions
         function showError(message) {
             const errorDiv = document.getElementById('errorMessage');
             errorDiv.textContent = message;
@@ -217,6 +243,7 @@
         function showTaskScreen() {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('taskScreen').style.display = 'block';
+            loadTasks();
         }
 
         function showLoginScreen() {
@@ -224,68 +251,115 @@
             document.getElementById('taskScreen').style.display = 'none';
         }
 
-        async function addNewTask() {
-            const input = document.getElementById('newTask');
-            const text = input.value.trim();
-            
-            if (text && auth.currentUser) {
-                try {
-                    const taskRef = database.ref(`tasks/${auth.currentUser.uid}`).push();
-                    await taskRef.set({
-                        text: text,
-                        completed: false,
-                        timestamp: firebase.database.ServerValue.TIMESTAMP
-                    });
-                    input.value = '';
-                } catch (error) {
-                    showError(error.message);
-                }
-            }
+// Update addNewTask function
+async function addNewTask() {
+    const input = document.getElementById('newTask');
+    const text = input.value.trim();
+    
+    if (!text || !idToken) return;  // Use idToken here
+
+    try {
+        const response = await fetch(`${API_URL}/tasks`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${idToken}`  // Use idToken here
+            },
+            body: JSON.stringify({ text })
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || 'Failed to add task');
         }
 
-        function loadTasks(userId) {
-            const tasksRef = database.ref(`tasks/${userId}`);
-            tasksRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                const taskList = document.getElementById('taskList');
-                taskList.innerHTML = '';
-                
-                if (data) {
-                    Object.entries(data).forEach(([taskId, task]) => {
-                        createTaskElement(taskId, task);
-                    });
-                }
+        input.value = '';
+        await loadTasks();
+    } catch (error) {
+        showError(error.message);
+    }
+}
+// Update loadTasks function
+async function loadTasks() {
+    try {
+        const response = await fetch(`${API_URL}/tasks`, {
+            headers: {
+                'Authorization': `Bearer ${idToken}`  // Use idToken here
+            }
+        });
+
+        if (!response.ok) throw new Error('Failed to load tasks');
+        const tasks = await response.json();
+        
+        const taskList = document.getElementById('taskList');
+        taskList.innerHTML = '';
+        
+        if (tasks) {
+            Object.entries(tasks).forEach(([taskId, task]) => {
+                createTaskElement(taskId, task);
             });
         }
+    } catch (error) {
+        showError(error.message);
+    }
+}
 
         function createTaskElement(taskId, task) {
             const div = document.createElement('div');
             div.className = 'task-item';
             div.innerHTML = `
-                <label class="task-checkbox">
-                    <input type="checkbox" ${task.completed ? 'checked' : ''}>
-                    <span class="checkmark"></span>
-                </label>
+                <input type="checkbox" ${task.completed ? 'checked' : ''}>
                 <span class="${task.completed ? 'completed' : ''}">${task.text}</span>
                 <button class="delete-btn">
                     <i class="fas fa-trash"></i>
                 </button>
             `;
 
-            // Add event listeners
             const checkbox = div.querySelector('input[type="checkbox"]');
-            checkbox.addEventListener('change', () => {
-                const taskRef = database.ref(`tasks/${auth.currentUser.uid}/${taskId}`);
-                taskRef.update({ completed: checkbox.checked });
+            checkbox.addEventListener('change', async () => {
+                try {
+                    const response = await fetch(`${API_URL}/tasks/${taskId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${authToken}`
+                        },
+                        body: JSON.stringify({ completed: checkbox.checked })
+                    });
+
+                    if (!response.ok) throw new Error('Failed to update task');
+                    loadTasks();
+                } catch (error) {
+                    showError(error.message);
+                    checkbox.checked = !checkbox.checked; // Revert on failure
+                }
             });
 
             const deleteBtn = div.querySelector('.delete-btn');
-            deleteBtn.addEventListener('click', () => {
-                const taskRef = database.ref(`tasks/${auth.currentUser.uid}/${taskId}`);
-                taskRef.remove();
+            deleteBtn.addEventListener('click', async () => {
+                try {
+                    const response = await fetch(`${API_URL}/tasks/${taskId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`
+                        }
+                    });
+
+                    if (!response.ok) throw new Error('Failed to delete task');
+                    loadTasks();
+                } catch (error) {
+                    showError(error.message);
+                }
             });
 
             document.getElementById('taskList').appendChild(div);
+        }
+
+        // Check auth state on load
+        if (authToken) {
+            showTaskScreen();
+        } else {
+            showLoginScreen();
         }
     </script>
 </body>
