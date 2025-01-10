@@ -191,6 +191,10 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
         authToken = data.token;
         idToken = data.idToken;
 
+        // Confirm the token is set properly after login
+console.log('Auth Token:', localStorage.getItem('idToken'));
+
+
         showTaskScreen();
         loadTasks();
     } catch (error) {
