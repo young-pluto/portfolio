@@ -5,7 +5,8 @@ const router = express.Router();
 const fetch = require('node-fetch'); // Add this at the top
 
 // Add this constant at the top of the file
-const FIREBASE_API_KEY = "AIzaSyB-F0C8l_fOhJPpkYsL6Eb6P7GUFcaC9MQ"; // Your Firebase API key
+const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY;
+
 
 router.post('/login', async (req, res) => {
     try {
