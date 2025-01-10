@@ -1,6 +1,10 @@
 {
   "name": "portfolio",
   "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "firebase-admin": "^11.0.0",
     "node-fetch": "^2.6.7"
