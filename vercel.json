@@ -1,6 +1,26 @@
 {
   "version": 2,
+  "builds": [
+    {
+      "src": "task-manager-backend/server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "tasks/task-manager.html",
+      "use": "@vercel/static"
+    }
+  ],
   "routes": [
+    {
+      "src": "/api/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "tasks.builtbyapoorv.in"
+        }
+      ],
+      "dest": "task-manager-backend/server.js"
+    },
     {
       "src": "/",
       "has": [
