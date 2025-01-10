@@ -164,9 +164,7 @@
 
     <script>
 // Near the top of your script tag
-const API_URL = window.location.hostname === 'localhost' 
-  ? 'http://localhost:3000/api'
-  : 'https://tasks.builtbyapoorv.in/api';
+const API_URL = 'https://tasks.builtbyapoorv.in/api';
 let authToken = localStorage.getItem('authToken');
 let idToken = localStorage.getItem('idToken'); // Add this line
 
