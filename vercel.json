@@ -2,8 +2,8 @@
   "version": 2,
   "builds": [
     { "src": "api/**/*.js", "use": "@vercel/node" },
-    { "src": "*.html", "use": "@vercel/static" },
-    { "src": "public/**/*", "use": "@vercel/static" }
+    { "src": "**/*.html", "use": "@vercel/static" },
+    { "src": "tasks/**/*", "use": "@vercel/static" }
   ],
   "routes": [
     {
@@ -18,7 +18,17 @@
           "value": "tasks.builtbyapoorv.in"
         }
       ],
-      "dest": "/task-manager.html"
+      "dest": "/tasks/task-manager.html"
+    },
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "tasks.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/tasks/$1"
     },
     {
       "src": "/(.*)",
