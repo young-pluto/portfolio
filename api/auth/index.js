@@ -1,20 +1,18 @@
-// api/auth/[...auth].js
-import admin from '../config/firebase';
-import fetch from 'node-fetch';
-
-const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY;
+// api/auth/index.js
+const admin = require('../config/firebase');
+const fetch = require('node-fetch');
 
 const corsHeaders = {
     'Access-Control-Allow-Credentials': true,
-    'Access-Control-Allow-Origin': '*', // Update this with your domain in production
+    'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
-// Helper function to handle CORS
 function handleCors(req, res) {
     if (req.method === 'OPTIONS') {
-        res.status(200).send('');
+        res.writeHead(200, corsHeaders);
+        res.end();
         return true;
     }
     Object.entries(corsHeaders).forEach(([key, value]) => {
@@ -23,14 +21,14 @@ function handleCors(req, res) {
     return false;
 }
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
     // Handle CORS
     if (handleCors(req, res)) return;
 
-    const { path } = req.query;
-    const endpoint = path?.[0] || '';
-
     try {
+        const { pathname } = new URL(req.url, `http://${req.headers.host}`);
+        const endpoint = pathname.split('/').pop();
+
         switch (endpoint) {
             case 'login':
                 if (req.method === 'POST') {
@@ -38,7 +36,7 @@ export default async function handler(req, res) {
 
                     // Authenticate with Firebase Auth REST API
                     const response = await fetch(
-                        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`,
+                        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.FIREBASE_API_KEY}`,
                         {
                             method: 'POST',
                             body: JSON.stringify({
@@ -56,10 +54,9 @@ export default async function handler(req, res) {
                         throw new Error(data.error?.message || 'Login failed');
                     }
 
-                    // Get additional user info
                     const userRecord = await admin.auth().getUserByEmail(email);
 
-                    return res.status(200).json({
+                    return res.json({
                         token: data.idToken,
                         idToken: data.idToken,
                         user: {
@@ -80,7 +77,7 @@ export default async function handler(req, res) {
                         emailVerified: false
                     });
 
-                    return res.status(200).json({
+                    return res.json({
                         success: true,
                         message: 'User registered successfully'
                     });
@@ -94,4 +91,4 @@ export default async function handler(req, res) {
         console.error('Auth error:', error);
         return res.status(500).json({ error: error.message });
     }
-}
+};
