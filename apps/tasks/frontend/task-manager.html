@@ -17,7 +17,7 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #556270 100%);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
         }
@@ -32,20 +32,34 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .login-screen, .task-screen {
-            background: rgba(255, 255, 255, 0.9);
+        .login-screen {
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            padding: 30px;
+            padding: 40px;
             border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 500px;
+        }
+
+        .task-screen {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
 
         .error-message {
@@ -59,20 +73,29 @@
         input[type="password"],
         input[type="text"] {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             margin-bottom: 15px;
             border: 2px solid #e2e8f0;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="text"]:focus {
+            border-color: #4ECDC4;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
         }
 
         button {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             margin-bottom: 10px;
             border: none;
-            border-radius: 8px;
-            background: #667eea;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4ECDC4 0%, #556270 100%);
             color: white;
             font-size: 1rem;
             cursor: pointer;
@@ -80,17 +103,38 @@
         }
 
         button:hover {
-            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .task-item {
             display: flex;
             align-items: center;
-            padding: 12px;
-            margin-bottom: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
             background: white;
-            border-radius: 8px;
+            border-radius: 12px;
             animation: slideIn 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .task-number {
+            min-width: 30px;
+            margin-right: 10px;
+            color: #556270;
+            font-weight: 500;
+        }
+
+        .task-checkbox {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .task-text {
+            flex-grow: 1;
+            margin: 0 15px;
         }
 
         @keyframes slideIn {
@@ -109,7 +153,13 @@
             padding: 8px;
             margin-left: auto;
             background: transparent;
+            color: #FF6B6B;
+            transition: all 0.2s ease;
+        }
+
+        .delete-btn:hover {
             color: #e53e3e;
+            transform: scale(1.1);
         }
 
         .completed {
@@ -124,24 +174,32 @@
             margin-bottom: 20px;
         }
 
+        .card-title {
+            font-size: 1.5rem;
+            color: #556270;
+            margin-bottom: 20px;
+        }
+
         .logout-btn {
             width: auto;
-            padding: 8px 16px;
+            padding: 10px 20px;
             background: transparent;
-            color: #e53e3e;
-            border: 1px solid #e53e3e;
+            color: #FF6B6B;
+            border: 2px solid #FF6B6B;
+            transition: all 0.3s ease;
         }
 
         .logout-btn:hover {
-            background: #e53e3e;
+            background: #FF6B6B;
             color: white;
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="login-screen" id="loginScreen">
-            <h1>✨ Task Manager</h1>
+            <h1 class="card-title">✨ Task Manager</h1>
             <div id="errorMessage" class="error-message"></div>
             <input type="email" id="emailInput" placeholder="Enter email" required>
             <input type="password" id="passwordInput" placeholder="Enter password" required>
@@ -150,53 +208,57 @@
         </div>
 
         <div class="task-screen" id="taskScreen" style="display: none;">
-            <div class="header">
-                <h1>My Tasks ✨</h1>
-                <button id="logoutBtn" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
+            <div class="card">
+                <div class="header">
+                    <h1 class="card-title">✨ Add New Task</h1>
+                    <button id="logoutBtn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+                <input type="text" id="newTask" placeholder="What needs to be done?">
+                <button id="addTaskBtn">Add Task</button>
             </div>
-            <input type="text" id="newTask" placeholder="Add new task">
-            <button id="addTaskBtn">Add Task</button>
-            <div id="taskList"></div>
+
+            <div class="card">
+                <h2 class="card-title">My Tasks</h2>
+                <div id="taskList"></div>
+            </div>
         </div>
     </div>
 
     <script>
-// Near the top of your script tag
-const API_URL = window.location.origin + '/api'; 
+        // All the existing JavaScript code remains exactly the same
+        const API_URL = window.location.origin + '/api'; 
 
-let idToken = localStorage.getItem('idToken'); // Add this line
+        let idToken = localStorage.getItem('idToken');
 
-// Update login event listener
-document.getElementById('loginBtn').addEventListener('click', async () => {
-    const email = document.getElementById('emailInput').value;
-    const password = document.getElementById('passwordInput').value;
-    
-    try {
-        const response = await fetch(`${API_URL}/auth/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Login failed');
+
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('idToken', data.idToken);
+                authToken = data.token;
+                idToken = data.idToken;
+
+                showTaskScreen();
+                loadTasks();
+            } catch (error) {
+                showError(error.message);
+            }
         });
-
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Login failed');
-
-        // Store both tokens
-        localStorage.setItem('authToken', data.token);
-        localStorage.setItem('idToken', data.idToken);  // Backend will send this
-        authToken = data.token;
-        idToken = data.idToken;
-
-        showTaskScreen();
-        loadTasks();
-    } catch (error) {
-        showError(error.message);
-    }
-});
 
         document.getElementById('registerBtn').addEventListener('click', async () => {
             const email = document.getElementById('emailInput').value;
@@ -215,7 +277,6 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
                 if (!response.ok) throw new Error(data.error || 'Registration failed');
 
                 showError('Successfully registered! Please login.');
-                // Don't auto-login after registration
             } catch (error) {
                 showError(error.message);
             }
@@ -251,71 +312,72 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
             document.getElementById('taskScreen').style.display = 'none';
         }
 
-// Update addNewTask function
-async function addNewTask() {
-    const input = document.getElementById('newTask');
-    const text = input.value.trim();
-    
-    if (!text || !idToken) return;  // Use idToken here
+        async function addNewTask() {
+            const input = document.getElementById('newTask');
+            const text = input.value.trim();
+            
+            if (!text || !idToken) return;
 
-    try {
-        const response = await fetch(`${API_URL}/tasks`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${idToken}`  // Use idToken here
-            },
-            body: JSON.stringify({ text })
-        });
+            try {
+                const response = await fetch(`${API_URL}/tasks`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${idToken}`
+                    },
+                    body: JSON.stringify({ text })
+                });
 
-        if (!response.ok) {
-            const data = await response.json();
-            throw new Error(data.error || 'Failed to add task');
-        }
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.error || 'Failed to add task');
+                }
 
-        input.value = '';
-        await loadTasks();
-    } catch (error) {
-        showError(error.message);
-    }
-}
-// Update loadTasks function
-async function loadTasks() {
-    try {
-        const response = await fetch(`${API_URL}/tasks`, {
-            headers: {
-                'Authorization': `Bearer ${idToken}`  // Use idToken here
+                input.value = '';
+                await loadTasks();
+            } catch (error) {
+                showError(error.message);
             }
-        });
-
-        if (!response.ok) throw new Error('Failed to load tasks');
-        const tasks = await response.json();
-        
-        const taskList = document.getElementById('taskList');
-        taskList.innerHTML = '';
-        
-        if (tasks) {
-            Object.entries(tasks).forEach(([taskId, task]) => {
-                createTaskElement(taskId, task);
-            });
         }
-    } catch (error) {
-        showError(error.message);
-    }
-}
 
-        function createTaskElement(taskId, task) {
+        async function loadTasks() {
+            try {
+                const response = await fetch(`${API_URL}/tasks`, {
+                    headers: {
+                        'Authorization': `Bearer ${idToken}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to load tasks');
+                const tasks = await response.json();
+                
+                const taskList = document.getElementById('taskList');
+                taskList.innerHTML = '';
+                
+                if (tasks) {
+                    let taskNumber = 1;
+                    Object.entries(tasks).forEach(([taskId, task]) => {
+                        createTaskElement(taskId, task, taskNumber++);
+                    });
+                }
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        function createTaskElement(taskId, task, number) {
             const div = document.createElement('div');
             div.className = 'task-item';
             div.innerHTML = `
-                <input type="checkbox" ${task.completed ? 'checked' : ''}>
-                <span class="${task.completed ? 'completed' : ''}">${task.text}</span>
+                <span class="task-number">${number}.</span>
+                <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''}>
+                <span class="task-text ${task.completed ? 'completed' : ''}">${task.text}</span>
                 <button class="delete-btn">
                     <i class="fas fa-trash"></i>
                 </button>
             `;
 
-            const checkbox = div.querySelector('input[type="checkbox"]');
+            const checkbox = div.querySelector('.task-checkbox');
             checkbox.addEventListener('change', async () => {
                 try {
                     const response = await fetch(`${API_URL}/tasks/${taskId}`, {
@@ -331,7 +393,7 @@ async function loadTasks() {
                     loadTasks();
                 } catch (error) {
                     showError(error.message);
-                    checkbox.checked = !checkbox.checked; // Revert on failure
+                    checkbox.checked = !checkbox.checked;
                 }
             });
 
@@ -355,7 +417,6 @@ async function loadTasks() {
             document.getElementById('taskList').appendChild(div);
         }
 
-        // Check auth state on load
         if (idToken) {
             showTaskScreen();
         } else {
