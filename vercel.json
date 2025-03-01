@@ -36,6 +36,26 @@
       "dest": "/apps/tasks/api/tasks/index.js"
     },
     {
+      "src": "/api/project(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "projects.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/project/api/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "projects.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/project/frontend/project.html"
+    },
+    {
       "src": "/(.*)",
       "has": [
         {
