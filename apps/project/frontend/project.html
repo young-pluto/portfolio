@@ -543,6 +543,26 @@
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(74, 111, 220, 0.2);
     }
+
+      /* Add these to your CSS to enhance the futuristic feel with some subtle animations */
+  @keyframes glow {
+    0% { box-shadow: 0 0 15px rgba(74, 111, 220, 0.3); }
+    50% { box-shadow: 0 0 25px rgba(74, 111, 220, 0.5); }
+    100% { box-shadow: 0 0 15px rgba(74, 111, 220, 0.3); }
+  }
+  
+  [id^="timeline"] div[style*="border-radius: 16px"] {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  [id^="timeline"] div[style*="border-radius: 16px"]:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+  }
+  
+  [id^="timeline"] div[style*="position: absolute"][style*="border-radius: 50%"] {
+    animation: glow 2s infinite ease-in-out;
+  }
     
     /* Responsive Styles */
     @media (max-width: 768px) {
@@ -647,40 +667,475 @@
     </div>
   </section>
 
-  <section id="timeline" class="section" style="background-color: var(--light-bg);">
+  <section id="timeline" class="section" style="background-color: #0a0e17; color: #e0e6f0; padding: 80px 0;">
     <div class="container">
-      <h2 class="section-title">Project Timeline</h2>
+      <h2 class="section-title" style="color: #e0e6f0; margin-bottom: 60px;">Project Timeline</h2>
       
-      <div class="coming-soon">
-        <h2>Detailed Project Timeline Coming Soon</h2>
-        <p>We're preparing a comprehensive breakdown of the project phases, deliverables, and milestones.</p>
-        <div class="countdown">
-          <div class="countdown-item">
-            <span class="countdown-number">14</span>
-            <span class="countdown-label">days</span>
+      <!-- Project Overview Card -->
+      <div style="background: linear-gradient(135deg, #1a2233, #111827); border-radius: 16px; box-shadow: 0 10px 25px rgba(0, 100, 255, 0.2); padding: 40px; margin-bottom: 60px; border-left: 5px solid #4a6fdc;">
+        <div style="display: flex; align-items: center; margin-bottom: 25px;">
+          <div style="background: #4a6fdc; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px; box-shadow: 0 0 15px rgba(74, 111, 220, 0.5);">
+            <i class="fas fa-project-diagram" style="font-size: 20px; color: white;"></i>
           </div>
-          <div class="countdown-item">
-            <span class="countdown-number">22</span>
-            <span class="countdown-label">hours</span>
-          </div>
-          <div class="countdown-item">
-            <span class="countdown-number">37</span>
-            <span class="countdown-label">mins</span>
-          </div>
-          <div class="countdown-item">
-            <span class="countdown-number">19</span>
-            <span class="countdown-label">secs</span>
+          <h3 style="font-size: 28px; margin: 0; background: linear-gradient(to right, #e0e6f0, #4a6fdc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Project Overview</h3>
+        </div>
+        
+        <div style="margin-bottom: 25px; line-height: 1.7;">
+          <h4 style="color: #4a6fdc; font-size: 20px; margin-bottom: 15px; display: flex; align-items: center;">
+            <span style="display: inline-block; width: 10px; height: 10px; background: #4a6fdc; margin-right: 10px; transform: rotate(45deg);"></span>
+            Custom Print E-commerce Platform
+          </h4>
+          <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 20px; border-left: 3px solid #ffb545;">
+            <p style="font-weight: 500; color: #ffb545; margin-bottom: 12px;">Goals:</p>
+            <ol style="padding-left: 20px; margin-bottom: 0;">
+              <li style="margin-bottom: 8px;">Build a fully functional online store for custom-printed products (T-shirts, mugs, etc.).</li>
+              <li style="margin-bottom: 8px;">Include features like product customization, user authentication, payment gateway, and an admin dashboard.</li>
+              <li style="margin-bottom: 0;">Eventually extend the platform into a SaaS solution for other local print stores.</li>
+            </ol>
           </div>
         </div>
-        <div class="notify-form">
-          <div class="form-group">
-            <input type="email" class="form-input" placeholder="Enter your email">
-            <button class="btn btn-primary">Notify Me</button>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 25px;">
+          <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 20px; border-top: 3px solid #4a6fdc;">
+            <h4 style="color: #4a6fdc; font-size: 18px; margin-bottom: 12px; display: flex; align-items: center;">
+              <i class="fas fa-laptop-code" style="margin-right: 10px;"></i>Frontend
+            </h4>
+            <p style="margin-bottom: 0;">HTML5, CSS3, JavaScript, React, Tailwind CSS, Next.js</p>
+          </div>
+          
+          <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 20px; border-top: 3px solid #4a6fdc;">
+            <h4 style="color: #4a6fdc; font-size: 18px; margin-bottom: 12px; display: flex; align-items: center;">
+              <i class="fas fa-server" style="margin-right: 10px;"></i>Backend
+            </h4>
+            <p style="margin-bottom: 0;">Node.js (with Express or Next.js API routes)</p>
+          </div>
+          
+          <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 20px; border-top: 3px solid #4a6fdc;">
+            <h4 style="color: #4a6fdc; font-size: 18px; margin-bottom: 12px; display: flex; align-items: center;">
+              <i class="fas fa-database" style="margin-right: 10px;"></i>Database
+            </h4>
+            <p style="margin-bottom: 0;">MongoDB or PostgreSQL</p>
+          </div>
+          
+          <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 20px; border-top: 3px solid #4a6fdc;">
+            <h4 style="color: #4a6fdc; font-size: 18px; margin-bottom: 12px; display: flex; align-items: center;">
+              <i class="fas fa-cloud-upload-alt" style="margin-right: 10px;"></i>Deployment
+            </h4>
+            <p style="margin-bottom: 0;">Vercel or Netlify for frontend, AWS/Heroku/DigitalOcean for backend</p>
+          </div>
+        </div>
+        
+        <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 20px; border-left: 3px solid #6c63ff;">
+          <div style="display: flex; align-items: center; margin-bottom: 15px;">
+            <i class="fas fa-clock" style="font-size: 20px; margin-right: 15px; color: #6c63ff;"></i>
+            <h4 style="margin: 0; color: #6c63ff; font-size: 18px;">Total Development Time</h4>
+          </div>
+          <p style="margin-bottom: 10px;">Approximately 120-150 working days (5-6 months)</p>
+          <p style="font-style: italic; color: #a0aec0; margin-bottom: 0; font-size: 14px;">Note: The days listed are working days (not necessarily consecutive calendar days). Some tasks can overlap.</p>
+        </div>
+      </div>
+      
+      <h3 style="text-align: center; margin-bottom: 50px; font-size: 28px; background: linear-gradient(to right, #4a6fdc, #6c63ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 2px;">Phase Breakdown</h3>
+      
+      <!-- Phases Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 60px;">
+        <!-- Phase 1 -->
+        <div style="background: linear-gradient(145deg, #1a2233, #111827); border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+          <div style="position: absolute; top: 0; right: 0; background: #4a6fdc; color: white; padding: 8px 20px; border-bottom-left-radius: 16px; font-weight: 600;">5-7 days</div>
+          <div style="position: absolute; top: 15px; left: 15px; background: rgba(74, 111, 220, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid #4a6fdc; font-weight: 700; color: #4a6fdc; box-shadow: 0 0 10px rgba(74, 111, 220, 0.5);">01</div>
+          <div style="padding: 30px 25px 25px 70px;">
+            <h3 style="font-size: 22px; margin-bottom: 20px; color: #e0e6f0;">Requirements & Planning</h3>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+              <p style="color: #6c63ff; font-weight: 500; margin-bottom: 10px;">Tasks:</p>
+              <ol style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Finalize requirements with the client</li>
+                <li style="margin-bottom: 6px;">Choose tech stack definitively</li>
+                <li>Create wireframes and basic UI mockups</li>
+              </ol>
+            </div>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px;">
+              <p style="color: #ffb545; font-weight: 500; margin-bottom: 10px;">Deliverables:</p>
+              <ul style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Project documentation</li>
+                <li>Rough UI wireframes</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Phase 2 -->
+        <div style="background: linear-gradient(145deg, #1a2233, #111827); border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+          <div style="position: absolute; top: 0; right: 0; background: #4a6fdc; color: white; padding: 8px 20px; border-bottom-left-radius: 16px; font-weight: 600;">7 days</div>
+          <div style="position: absolute; top: 15px; left: 15px; background: rgba(74, 111, 220, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid #4a6fdc; font-weight: 700; color: #4a6fdc; box-shadow: 0 0 10px rgba(74, 111, 220, 0.5);">02</div>
+          <div style="padding: 30px 25px 25px 70px;">
+            <h3 style="font-size: 22px; margin-bottom: 20px; color: #e0e6f0;">Environment Setup & Routing</h3>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+              <p style="color: #6c63ff; font-weight: 500; margin-bottom: 10px;">Tasks:</p>
+              <ol style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Initialize Git repository and project structure</li>
+                <li style="margin-bottom: 6px;">Set up Next.js or React router</li>
+                <li>Basic hosting setup</li>
+              </ol>
+            </div>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px;">
+              <p style="color: #ffb545; font-weight: 500; margin-bottom: 10px;">Deliverables:</p>
+              <ul style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Basic skeleton with routing</li>
+                <li>Live development link</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Phase 3 -->
+        <div style="background: linear-gradient(145deg, #1a2233, #111827); border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+          <div style="position: absolute; top: 0; right: 0; background: #4a6fdc; color: white; padding: 8px 20px; border-bottom-left-radius: 16px; font-weight: 600;">20 days</div>
+          <div style="position: absolute; top: 15px; left: 15px; background: rgba(74, 111, 220, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid #4a6fdc; font-weight: 700; color: #4a6fdc; box-shadow: 0 0 10px rgba(74, 111, 220, 0.5);">03</div>
+          <div style="padding: 30px 25px 25px 70px;">
+            <h3 style="font-size: 22px; margin-bottom: 20px; color: #e0e6f0;">Database Schema & Architecture</h3>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+              <p style="color: #6c63ff; font-weight: 500; margin-bottom: 10px;">Tasks:</p>
+              <ol style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Design database schema</li>
+                <li style="margin-bottom: 6px;">Set up the database</li>
+                <li>Plan relationships</li>
+              </ol>
+            </div>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px;">
+              <p style="color: #ffb545; font-weight: 500; margin-bottom: 10px;">Deliverables:</p>
+              <ul style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Final ERD or schema diagram</li>
+                <li>Database connection tested</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Phase 4 -->
+        <div style="background: linear-gradient(145deg, #1a2233, #111827); border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+          <div style="position: absolute; top: 0; right: 0; background: #4a6fdc; color: white; padding: 8px 20px; border-bottom-left-radius: 16px; font-weight: 600;">40 days</div>
+          <div style="position: absolute; top: 15px; left: 15px; background: rgba(74, 111, 220, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid #4a6fdc; font-weight: 700; color: #4a6fdc; box-shadow: 0 0 10px rgba(74, 111, 220, 0.5);">04</div>
+          <div style="padding: 30px 25px 25px 70px;">
+            <h3 style="font-size: 22px; margin-bottom: 20px; color: #e0e6f0;">Frontend UI Development</h3>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+              <p style="color: #6c63ff; font-weight: 500; margin-bottom: 10px;">Tasks:</p>
+              <ol style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Implement Tailwind CSS</li>
+                <li style="margin-bottom: 6px;">Build product pages and UI</li>
+                <li style="margin-bottom: 6px;">Develop shopping cart flow</li>
+                <li>Create responsive layouts</li>
+              </ol>
+            </div>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px;">
+              <p style="color: #ffb545; font-weight: 500; margin-bottom: 10px;">Deliverables:</p>
+              <ul style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Functional frontend pages</li>
+                <li>Design consistency with branding</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Phase 5 -->
+        <div style="background: linear-gradient(145deg, #1a2233, #111827); border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+          <div style="position: absolute; top: 0; right: 0; background: #4a6fdc; color: white; padding: 8px 20px; border-bottom-left-radius: 16px; font-weight: 600;">10 days</div>
+          <div style="position: absolute; top: 15px; left: 15px; background: rgba(74, 111, 220, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid #4a6fdc; font-weight: 700; color: #4a6fdc; box-shadow: 0 0 10px rgba(74, 111, 220, 0.5);">05</div>
+          <div style="padding: 30px 25px 25px 70px;">
+            <h3 style="font-size: 22px; margin-bottom: 20px; color: #e0e6f0;">User Authentication</h3>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+              <p style="color: #6c63ff; font-weight: 500; margin-bottom: 10px;">Tasks:</p>
+              <ol style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Implement registration and login</li>
+                <li style="margin-bottom: 6px;">Set up password reset functionality</li>
+                <li>Create user profile management</li>
+              </ol>
+            </div>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px;">
+              <p style="color: #ffb545; font-weight: 500; margin-bottom: 10px;">Deliverables:</p>
+              <ul style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Secure login system</li>
+                <li>Basic user profile pages</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Phase 6 -->
+        <div style="background: linear-gradient(145deg, #1a2233, #111827); border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+          <div style="position: absolute; top: 0; right: 0; background: #4a6fdc; color: white; padding: 8px 20px; border-bottom-left-radius: 16px; font-weight: 600;">10-15 days</div>
+          <div style="position: absolute; top: 15px; left: 15px; background: rgba(74, 111, 220, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid #4a6fdc; font-weight: 700; color: #4a6fdc; box-shadow: 0 0 10px rgba(74, 111, 220, 0.5);">06</div>
+          <div style="padding: 30px 25px 25px 70px;">
+            <h3 style="font-size: 22px; margin-bottom: 20px; color: #e0e6f0;">Backend API Creation</h3>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+              <p style="color: #6c63ff; font-weight: 500; margin-bottom: 10px;">Tasks:</p>
+              <ol style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Set up routes for data endpoints</li>
+                <li style="margin-bottom: 6px;">Implement CRUD operations</li>
+                <li>Handle error responses and validations</li>
+              </ol>
+            </div>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px;">
+              <p style="color: #ffb545; font-weight: 500; margin-bottom: 10px;">Deliverables:</p>
+              <ul style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Documented API endpoints</li>
+                <li>Integrated backend with frontend</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Phase 7 -->
+        <div style="background: linear-gradient(145deg, #1a2233, #111827); border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+          <div style="position: absolute; top: 0; right: 0; background: #4a6fdc; color: white; padding: 8px 20px; border-bottom-left-radius: 16px; font-weight: 600;">7-10 days</div>
+          <div style="position: absolute; top: 15px; left: 15px; background: rgba(74, 111, 220, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid #4a6fdc; font-weight: 700; color: #4a6fdc; box-shadow: 0 0 10px rgba(74, 111, 220, 0.5);">07</div>
+          <div style="padding: 30px 25px 25px 70px;">
+            <h3 style="font-size: 22px; margin-bottom: 20px; color: #e0e6f0;">Payment Gateway Integration</h3>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+              <p style="color: #6c63ff; font-weight: 500; margin-bottom: 10px;">Tasks:</p>
+              <ol style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Choose a payment provider</li>
+                <li style="margin-bottom: 6px;">Implement secure checkout flow</li>
+                <li>Test with sandbox accounts</li>
+              </ol>
+            </div>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px;">
+              <p style="color: #ffb545; font-weight: 500; margin-bottom: 10px;">Deliverables:</p>
+              <ul style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Working payment gateway</li>
+                <li>Confirmation emails/updates</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Phase 8 -->
+        <div style="background: linear-gradient(145deg, #1a2233, #111827); border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+          <div style="position: absolute; top: 0; right: 0; background: #4a6fdc; color: white; padding: 8px 20px; border-bottom-left-radius: 16px; font-weight: 600;">10-15 days</div>
+          <div style="position: absolute; top: 15px; left: 15px; background: rgba(74, 111, 220, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid #4a6fdc; font-weight: 700; color: #4a6fdc; box-shadow: 0 0 10px rgba(74, 111, 220, 0.5);">08</div>
+          <div style="padding: 30px 25px 25px 70px;">
+            <h3 style="font-size: 22px; margin-bottom: 20px; color: #e0e6f0;">Admin Dashboard</h3>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+              <p style="color: #6c63ff; font-weight: 500; margin-bottom: 10px;">Tasks:</p>
+              <ol style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Create admin login system</li>
+                <li style="margin-bottom: 6px;">Product and order management</li>
+                <li>Analytics overview</li>
+              </ol>
+            </div>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px;">
+              <p style="color: #ffb545; font-weight: 500; margin-bottom: 10px;">Deliverables:</p>
+              <ul style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Admin panel with restricted access</li>
+                <li>Inventory and user management tools</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Phase 9 -->
+        <div style="background: linear-gradient(145deg, #1a2233, #111827); border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+          <div style="position: absolute; top: 0; right: 0; background: #4a6fdc; color: white; padding: 8px 20px; border-bottom-left-radius: 16px; font-weight: 600;">15-20 days</div>
+          <div style="position: absolute; top: 15px; left: 15px; background: rgba(74, 111, 220, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid #4a6fdc; font-weight: 700; color: #4a6fdc; box-shadow: 0 0 10px rgba(74, 111, 220, 0.5);">09</div>
+          <div style="padding: 30px 25px 25px 70px;">
+            <h3 style="font-size: 22px; margin-bottom: 20px; color: #e0e6f0;">Customization Tools</h3>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+              <p style="color: #6c63ff; font-weight: 500; margin-bottom: 10px;">Tasks:</p>
+              <ol style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Build design editor tool</li>
+                <li style="margin-bottom: 6px;">Validate file uploads</li>
+                <li>Create design preview features</li>
+              </ol>
+            </div>
+            <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px;">
+              <p style="color: #ffb545; font-weight: 500; margin-bottom: 10px;">Deliverables:</p>
+              <ul style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+                <li style="margin-bottom: 6px;">Working design tool</li>
+                <li>Integration with order flow</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+       
+       <!-- Phase 10 -->
+      <div style="background: linear-gradient(145deg, #1a2233, #111827); border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+        <div style="position: absolute; top: 0; right: 0; background: #4a6fdc; color: white; padding: 8px 20px; border-bottom-left-radius: 16px; font-weight: 600;">10-15 days</div>
+        <div style="position: absolute; top: 15px; left: 15px; background: rgba(74, 111, 220, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid #4a6fdc; font-weight: 700; color: #4a6fdc; box-shadow: 0 0 10px rgba(74, 111, 220, 0.5);">10</div>
+        <div style="padding: 30px 25px 25px 70px;">
+          <h3 style="font-size: 22px; margin-bottom: 20px; color: #e0e6f0;">Testing & Quality Assurance</h3>
+          <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+            <p style="color: #6c63ff; font-weight: 500; margin-bottom: 10px;">Tasks:</p>
+            <ol style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+              <li style="margin-bottom: 6px;">Functional testing</li>
+              <li style="margin-bottom: 6px;">Integration testing</li>
+              <li style="margin-bottom: 6px;">Performance checks</li>
+              <li>Usability testing</li>
+            </ol>
+          </div>
+          <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px;">
+            <p style="color: #ffb545; font-weight: 500; margin-bottom: 10px;">Deliverables:</p>
+            <ul style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+              <li style="margin-bottom: 6px;">Bug reports and fixes</li>
+              <li>Stable version ready for deployment</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Phase 11 -->
+      <div style="background: linear-gradient(145deg, #1a2233, #111827); border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+        <div style="position: absolute; top: 0; right: 0; background: #4a6fdc; color: white; padding: 8px 20px; border-bottom-left-radius: 16px; font-weight: 600;">5-7 days</div>
+        <div style="position: absolute; top: 15px; left: 15px; background: rgba(74, 111, 220, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid #4a6fdc; font-weight: 700; color: #4a6fdc; box-shadow: 0 0 10px rgba(74, 111, 220, 0.5);">11</div>
+        <div style="padding: 30px 25px 25px 70px;">
+          <h3 style="font-size: 22px; margin-bottom: 20px; color: #e0e6f0;">Deployment & Launch</h3>
+          <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+            <p style="color: #6c63ff; font-weight: 500; margin-bottom: 10px;">Tasks:</p>
+            <ol style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+              <li style="margin-bottom: 6px;">Finalize hosting setup</li>
+              <li style="margin-bottom: 6px;">Set up SSL certificate</li>
+              <li>Final smoke test before go-live</li>
+            </ol>
+          </div>
+          <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px;">
+            <p style="color: #ffb545; font-weight: 500; margin-bottom: 10px;">Deliverables:</p>
+            <ul style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+              <li style="margin-bottom: 6px;">Live production site</li>
+              <li>Documentation for maintenance</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Phase 12 -->
+      <div style="background: linear-gradient(145deg, #1a2233, #111827); border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+        <div style="position: absolute; top: 0; right: 0; background: #4a6fdc; color: white; padding: 8px 20px; border-bottom-left-radius: 16px; font-weight: 600;">Ongoing</div>
+        <div style="position: absolute; top: 15px; left: 15px; background: rgba(74, 111, 220, 0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid #4a6fdc; font-weight: 700; color: #4a6fdc; box-shadow: 0 0 10px rgba(74, 111, 220, 0.5);">12</div>
+        <div style="padding: 30px 25px 25px 70px;">
+          <h3 style="font-size: 22px; margin-bottom: 20px; color: #e0e6f0;">Post-Launch Support</h3>
+          <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+            <p style="color: #6c63ff; font-weight: 500; margin-bottom: 10px;">Tasks:</p>
+            <ol style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+              <li style="margin-bottom: 6px;">Monitor user feedback and analytics</li>
+              <li style="margin-bottom: 6px;">Fix post-launch issues</li>
+              <li>Gather ideas for future improvements</li>
+            </ol>
+          </div>
+          <div style="background: rgba(10, 15, 30, 0.4); border-radius: 10px; padding: 15px;">
+            <p style="color: #ffb545; font-weight: 500; margin-bottom: 10px;">Deliverables:</p>
+            <ul style="padding-left: 20px; margin-bottom: 0; color: #c9d1d9;">
+              <li style="margin-bottom: 6px;">Stable, maintained platform</li>
+              <li>Roadmap for SaaS expansion</li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
-  </section>
+    
+    <!-- Future Roadmap -->
+    <h3 style="text-align: center; margin-bottom: 50px; font-size: 28px; background: linear-gradient(to right, #4a6fdc, #6c63ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 2px;">Future Roadmap</h3>
+    
+    <div style="background: linear-gradient(145deg, #1a2233, #111827); border-radius: 16px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); padding: 40px; margin-bottom: 60px; position: relative; overflow: hidden;">
+      <!-- Decorative element -->
+      <div style="position: absolute; top: 0; right: 0; width: 200px; height: 200px; background: radial-gradient(circle at top right, rgba(108, 99, 255, 0.2), transparent 70%);"></div>
+      
+      <div style="display: flex; flex-direction: column; gap: 30px; position: relative; z-index: 1;">
+        <div style="display: flex; align-items: flex-start; gap: 25px;">
+          <div style="background: linear-gradient(135deg, #4a6fdc, #6c63ff); min-width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 24px; box-shadow: 0 5px 15px rgba(74, 111, 220, 0.3);">1</div>
+          <div>
+            <h4 style="font-size: 24px; margin-bottom: 10px; color: #e0e6f0; display: flex; align-items: center;">
+              <span style="background: linear-gradient(to right, #4a6fdc, #6c63ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Build and Test</span>
+            </h4>
+            <p style="color: #c9d1d9; font-size: 16px; line-height: 1.6;">We'll create the first store for your team to use for a year. You'll test it, generate revenue, and provide feedback.</p>
+          </div>
+        </div>
+        
+        <div style="width: 2px; height: 40px; background: linear-gradient(to bottom, #4a6fdc, #6c63ff); margin-left: 29px;"></div>
+        
+        <div style="display: flex; align-items: flex-start; gap: 25px;">
+          <div style="background: linear-gradient(135deg, #4a6fdc, #6c63ff); min-width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 24px; box-shadow: 0 5px 15px rgba(74, 111, 220, 0.3);">2</div>
+          <div>
+            <h4 style="font-size: 24px; margin-bottom: 10px; color: #e0e6f0; display: flex; align-items: center;">
+              <span style="background: linear-gradient(to right, #4a6fdc, #6c63ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Refine</span>
+            </h4>
+            <p style="color: #c9d1d9; font-size: 16px; line-height: 1.6;">Based on your experience, we'll add or adjust features as needed to optimize the platform for your business needs.</p>
+          </div>
+        </div>
+        
+        <div style="width: 2px; height: 40px; background: linear-gradient(to bottom, #4a6fdc, #6c63ff); margin-left: 29px;"></div>
+        
+        <div style="display: flex; align-items: flex-start; gap: 25px;">
+          <div style="background: linear-gradient(135deg, #4a6fdc, #6c63ff); min-width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 24px; box-shadow: 0 5px 15px rgba(74, 111, 220, 0.3);">3</div>
+          <div>
+            <h4 style="font-size: 24px; margin-bottom: 10px; color: #e0e6f0; display: flex; align-items: center;">
+              <span style="background: linear-gradient(to right, #4a6fdc, #6c63ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Expand</span>
+            </h4>
+            <p style="color: #c9d1d9; font-size: 16px; line-height: 1.6;">Once it's market-ready, we'll scale it into a full SaaS platform for other local print stores, creating additional revenue streams.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Summary Box -->
+    <div style="background: linear-gradient(145deg, #1a2233, #111827); border-radius: 16px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); padding: 40px; margin-bottom: 30px; border-top: 5px solid #6c63ff;">
+      <h3 style="text-align: center; margin-bottom: 40px; font-size: 28px; background: linear-gradient(to right, #4a6fdc, #6c63ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Project Summary</h3>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+        <div style="background: rgba(10, 15, 30, 0.4); border-radius: 12px; padding: 25px; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: radial-gradient(circle at top right, rgba(255, 181, 69, 0.2), transparent 70%);"></div>
+          <div style="display: flex; align-items: flex-start; gap: 15px; position: relative; z-index: 1;">
+            <div style="background: rgba(255, 181, 69, 0.15); min-width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(255, 181, 69, 0.1);">
+              <i class="fas fa-calendar-alt" style="color: #ffb545; font-size: 20px;"></i>
+            </div>
+            <div>
+              <h4 style="font-size: 18px; margin-bottom: 10px; color: #ffb545;">Development Time</h4>
+              <p style="color: #c9d1d9; font-size: 16px;">8 months total (5-6 months active development)</p>
+            </div>
+          </div>
+        </div>
+        
+        <div style="background: rgba(10, 15, 30, 0.4); border-radius: 12px; padding: 25px; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: radial-gradient(circle at top right, rgba(108, 99, 255, 0.2), transparent 70%);"></div>
+          <div style="display: flex; align-items: flex-start; gap: 15px; position: relative; z-index: 1;">
+            <div style="background: rgba(108, 99, 255, 0.15); min-width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(108, 99, 255, 0.1);">
+              <i class="fas fa-gift" style="color: #6c63ff; font-size: 20px;"></i>
+            </div>
+            <div>
+              <h4 style="font-size: 18px; margin-bottom: 10px; color: #6c63ff;">What You'll Get</h4>
+              <p style="color: #c9d1d9; font-size: 16px;">A functional online store with custom design tools, order management, and admin dashboard</p>
+            </div>
+          </div>
+        </div>
+        
+        <div style="background: rgba(10, 15, 30, 0.4); border-radius: 12px; padding: 25px; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: radial-gradient(circle at top right, rgba(74, 111, 220, 0.2), transparent 70%);"></div>
+          <div style="display: flex; align-items: flex-start; gap: 15px; position: relative; z-index: 1;">
+            <div style="background: rgba(74, 111, 220, 0.15); min-width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(74, 111, 220, 0.1);">
+              <i class="fas fa-code" style="color: #4a6fdc; font-size: 20px;"></i>
+            </div>
+            <div>
+              <h4 style="font-size: 18px; margin-bottom: 10px; color: #4a6fdc;">Tech Stack</h4>
+              <p style="color: #c9d1d9; font-size: 16px;">Simple, modern tools like React, Node.js, and MongoDB</p>
+            </div>
+          </div>
+        </div>
+        
+        <div style="background: rgba(10, 15, 30, 0.4); border-radius: 12px; padding: 25px; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: radial-gradient(circle at top right, rgba(74, 111, 220, 0.2), transparent 70%);"></div>
+          <div style="display: flex; align-items: flex-start; gap: 15px; position: relative; z-index: 1;">
+            <div style="background: rgba(74, 111, 220, 0.15); min-width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(74, 111, 220, 0.1);">
+              <i class="fas fa-bullseye" style="color: #4a6fdc; font-size: 20px;"></i>
+            </div>
+            <div>
+              <h4 style="font-size: 18px; margin-bottom: 10px; color: #4a6fdc;">Goal</h4>
+              <p style="color: #c9d1d9; font-size: 16px;">A professional platform to prove the concept before scaling to others</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
   <section id="pricing" class="section">
     <div class="container">
