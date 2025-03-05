@@ -50,7 +50,27 @@
       "dest": "/apps/project/api/index.js"
     },
     {
-      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg))",
+      "src": "/js/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/WorkoutTracker/js/$1"
+    },
+    {
+      "src": "/(styles\\.css)",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/WorkoutTracker/$1"
+    },
+    {
+      "src": "/(.*\\.(png|jpg|jpeg|gif|ico|svg))",
       "has": [
         {
           "type": "host",
