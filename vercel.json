@@ -12,6 +12,10 @@
     {
       "src": "*.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "apps/WorkoutTracker/**/*",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -64,6 +68,16 @@
         }
       ],
       "dest": "/apps/tasks/frontend/task-manager.html"
+    },
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/WorkoutTracker/index.html"
     },
     {
       "src": "/",

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Authentication Section -->
+    <div id="auth-container">
+        <div class="auth-card">
+            <h2>Workout Tracker</h2>
+            <div id="login-form">
+                <h3>Login</h3>
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button id="login-btn">Login</button>
+                <p>Don't have an account? <span id="show-signup">Sign up</span></p>
+            </div>
+            <div id="signup-form" class="hidden">
+                <h3>Sign Up</h3>
+                <input type="email" id="signup-email" placeholder="Email" required>
+                <input type="password" id="signup-password" placeholder="Password" required>
+                <button id="signup-btn">Sign Up</button>
+                <p>Already have an account? <span id="show-login">Login</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Section (Initially Hidden) -->
+    <div id="app-container" class="hidden">
+        <header>
+            <h1>Workout Tracker</h1>
+            <button id="logout-btn">Logout</button>
+        </header>
+
+        <nav>
+            <button id="view-exercises-btn" class="nav-btn active">My Exercises</button>
+            <button id="new-workout-btn" class="nav-btn">New Workout</button>
+            <button id="workout-history-btn" class="nav-btn">Workout History</button>
+        </nav>
+
+        <!-- Exercises Section -->
+        <section id="exercises-section">
+            <div class="section-header">
+                <h2>My Exercises</h2>
+                <button id="add-exercise-btn" class="action-btn">
+                    <i class="fas fa-plus"></i> Add Exercise
+                </button>
+            </div>
+
+            <div id="exercise-form" class="hidden form-container">
+                <h3>Add New Exercise</h3>
+                <input type="text" id="exercise-name" placeholder="Exercise Name" required>
+                <select id="exercise-category">
+                    <option value="strength">Strength</option>
+                    <option value="cardio">Cardio</option>
+                    <option value="flexibility">Flexibility</option>
+                    <option value="other">Other</option>
+                </select>
+                <textarea id="exercise-description" placeholder="Exercise Description (Optional)"></textarea>
+                <div class="button-group">
+                    <button id="save-exercise-btn" class="primary-btn">Save Exercise</button>
+                    <button id="cancel-exercise-btn" class="secondary-btn">Cancel</button>
+                </div>
+            </div>
+
+            <div id="exercises-list" class="list-container"></div>
+        </section>
+
+        <!-- New Workout Section -->
+        <section id="new-workout-section" class="hidden">
+            <div class="section-header">
+                <h2>New Workout</h2>
+                <div class="button-group">
+                    <button id="select-exercises-btn" class="action-btn">
+                        <i class="fas fa-plus"></i> Add Exercises
+                    </button>
+                    <button id="save-workout-btn" class="action-btn">
+                        <i class="fas fa-save"></i> Save Workout
+                    </button>
+                </div>
+            </div>
+
+            <div id="workout-date-container">
+                <label for="workout-date">Workout Date:</label>
+                <input type="date" id="workout-date">
+            </div>
+
+            <div id="workout-name-container">
+                <label for="workout-name">Workout Name:</label>
+                <input type="text" id="workout-name" placeholder="e.g., Leg Day, Upper Body, etc.">
+            </div>
+
+            <div id="exercise-selection" class="hidden form-container">
+                <h3>Select Exercises</h3>
+                <div id="exercise-selection-list" class="checklist-container"></div>
+                <div class="button-group">
+                    <button id="confirm-exercises-btn" class="primary-btn">Add Selected</button>
+                    <button id="cancel-selection-btn" class="secondary-btn">Cancel</button>
+                </div>
+            </div>
+
+            <div id="current-workout" class="list-container"></div>
+        </section>
+
+        <!-- Workout History Section -->
+        <section id="workout-history-section" class="hidden">
+            <h2>Workout History</h2>
+            <div id="workout-history-list" class="list-container"></div>
+        </section>
+    </div>
+
+    <!-- Templates -->
+    <template id="exercise-item-template">
+        <div class="exercise-item">
+            <div class="exercise-header">
+                <h3 class="exercise-name"></h3>
+                <div class="exercise-actions">
+                    <button class="edit-exercise-btn icon-btn"><i class="fas fa-edit"></i></button>
+                    <button class="delete-exercise-btn icon-btn"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="exercise-category"></div>
+            <div class="exercise-description"></div>
+            <div class="exercise-stats">
+                <span class="usage-count">Used in 0 workouts</span>
+            </div>
+        </div>
+    </template>
+
+    <template id="workout-exercise-template">
+        <div class="workout-exercise">
+            <div class="exercise-header">
+                <h3 class="exercise-name"></h3>
+                <div class="exercise-actions">
+                    <button class="history-btn icon-btn" title="View History"><i class="fas fa-history"></i></button>
+                    <button class="add-set-btn icon-btn" title="Add Set"><i class="fas fa-plus"></i></button>
+                    <button class="remove-exercise-btn icon-btn" title="Remove"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="exercise-history hidden">
+                <h4>Previous Data</h4>
+                <div class="history-data"></div>
+            </div>
+            <div class="sets-container"></div>
+        </div>
+    </template>
+
+    <template id="set-template">
+        <div class="set-item">
+            <div class="set-label"></div>
+            <div class="set-inputs">
+                <div class="input-group">
+                    <label>Weight (kg/lbs)</label>
+                    <input type="number" class="weight-input" min="0" step="0.5">
+                </div>
+                <div class="input-group">
+                    <label>Reps</label>
+                    <input type="number" class="reps-input" min="0" step="1">
+                </div>
+                <div class="input-group">
+                    <label>Remarks</label>
+                    <input type="text" class="remarks-input" placeholder="Notes, feelings, etc.">
+                </div>
+            </div>
+            <button class="delete-set-btn icon-btn"><i class="fas fa-trash"></i></button>
+        </div>
+    </template>
+
+    <template id="workout-history-item-template">
+        <div class="workout-history-item">
+            <div class="workout-history-header">
+                <div class="workout-history-info">
+                    <h3 class="workout-name"></h3>
+                    <div class="workout-date"></div>
+                </div>
+                <div class="workout-history-actions">
+                    <button class="view-workout-btn icon-btn"><i class="fas fa-eye"></i></button>
+                </div>
+            </div>
+            <div class="workout-summary"></div>
+            <div class="workout-details hidden"></div>
+        </div>
+    </template>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/exercises.js"></script>
+    <script src="js/workouts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
