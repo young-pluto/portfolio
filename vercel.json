@@ -50,16 +50,6 @@
       "dest": "/apps/project/api/index.js"
     },
     {
-      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg))",
-      "has": [
-        {
-          "type": "host",
-          "value": "fitrack.builtbyapoorv.in"
-        }
-      ],
-      "dest": "/apps/WorkoutTracker/js/$1"
-    },
-    {
       "src": "/(.*)",
       "has": [
         {
@@ -80,24 +70,64 @@
       "dest": "/apps/tasks/frontend/task-manager.html"
     },
     {
-      "src": "/(.*\\.js)",
+      "src": "/firebase-config.js",
       "has": [
         {
           "type": "host",
           "value": "fitrack.builtbyapoorv.in"
         }
       ],
-      "dest": "/apps/WorkoutTracker/js/$1"
+      "dest": "/apps/WorkoutTracker/js/firebase-config.js"
     },
     {
-      "src": "/(styles\\.css)",
+      "src": "/auth.js",
       "has": [
         {
           "type": "host",
           "value": "fitrack.builtbyapoorv.in"
         }
       ],
-      "dest": "/apps/WorkoutTracker/$1"
+      "dest": "/apps/WorkoutTracker/js/auth.js"
+    },
+    {
+      "src": "/exercises.js",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/WorkoutTracker/js/exercises.js"
+    },
+    {
+      "src": "/workouts.js",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/WorkoutTracker/js/workouts.js"
+    },
+    {
+      "src": "/app.js",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/WorkoutTracker/js/app.js"
+    },
+    {
+      "src": "/styles.css",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/WorkoutTracker/styles.css"
     },
     {
       "src": "/(.*)",
