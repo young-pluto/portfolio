@@ -77,7 +77,7 @@
           "value": "fitrack.builtbyapoorv.in"
         }
       ],
-      "dest": "/apps/WorkoutTracker/js/firebase-config.js"
+      "dest": "/apps/WorkoutTracker/firebase-config.js"
     },
     {
       "src": "/auth.js",
@@ -87,7 +87,7 @@
           "value": "fitrack.builtbyapoorv.in"
         }
       ],
-      "dest": "/apps/WorkoutTracker/js/auth.js"
+      "dest": "/apps/WorkoutTracker/auth.js"
     },
     {
       "src": "/exercises.js",
@@ -97,7 +97,7 @@
           "value": "fitrack.builtbyapoorv.in"
         }
       ],
-      "dest": "/apps/WorkoutTracker/js/exercises.js"
+      "dest": "/apps/WorkoutTracker/exercises.js"
     },
     {
       "src": "/workouts.js",
@@ -107,7 +107,7 @@
           "value": "fitrack.builtbyapoorv.in"
         }
       ],
-      "dest": "/apps/WorkoutTracker/js/workouts.js"
+      "dest": "/apps/WorkoutTracker/workouts.js"
     },
     {
       "src": "/app.js",
@@ -117,7 +117,7 @@
           "value": "fitrack.builtbyapoorv.in"
         }
       ],
-      "dest": "/apps/WorkoutTracker/js/app.js"
+      "dest": "/apps/WorkoutTracker/app.js"
     },
     {
       "src": "/styles.css",
