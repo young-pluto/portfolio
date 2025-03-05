@@ -66,6 +66,11 @@ const AppModule = (() => {
 
     // Public methods and properties
     return {
-        init
+        init,
+        initAfterAuth: () => {
+            ExercisesModule.init();
+            WorkoutsModule.init();
+            init();
+        }
     };
 })();

@@ -91,10 +91,8 @@ const AuthModule = (() => {
                 authContainer.classList.add('hidden');
                 appContainer.classList.remove('hidden');
                 
-                // Initialize app modules
-                ExercisesModule.init();
-                WorkoutsModule.init();
-                AppModule.init();
+                // Initialize app modules in the correct order
+                AppModule.initAfterAuth();
             } else {
                 // User is signed out
                 currentUser = null;
@@ -126,4 +124,7 @@ const AuthModule = (() => {
 })();
 
 // Initialize Auth Module
-document.addEventListener('DOMContentLoaded', AuthModule.init);
+document.addEventListener('DOMContentLoaded', () => {
+    AuthModule.init();
+    // Other modules will be initialized when user is authenticated
+});
