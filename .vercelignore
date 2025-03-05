@@ -1,0 +1,7 @@
+# .vercelignore
+
+\!apps/WorkoutTracker/firebase-config.js
+
+\!apps/WorkoutTracker/*.js
+\!apps/WorkoutTracker/*.css
+\!apps/WorkoutTracker/*.html
