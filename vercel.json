@@ -50,6 +50,16 @@
       "dest": "/apps/project/api/index.js"
     },
     {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg))",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/WorkoutTracker/js/$1"
+    },
+    {
       "src": "/(.*)",
       "has": [
         {
@@ -70,24 +80,34 @@
       "dest": "/apps/tasks/frontend/task-manager.html"
     },
     {
+      "src": "/(.*\\.js)",
       "has": [
         {
           "type": "host",
           "value": "fitrack.builtbyapoorv.in"
         }
       ],
-      "src": "/js/(.*)",
       "dest": "/apps/WorkoutTracker/js/$1"
     },
     {
+      "src": "/(styles\\.css)",
       "has": [
         {
           "type": "host",
           "value": "fitrack.builtbyapoorv.in"
         }
       ],
-      "src": "/(.*)",
       "dest": "/apps/WorkoutTracker/$1"
+    },
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/WorkoutTracker/index.html"
     },
     {
       "src": "/",
