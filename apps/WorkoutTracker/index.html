@@ -186,40 +186,16 @@
         </div>
     </template>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-<!-- Inline Firebase Init (temporary fix) -->
-<script>
-  // Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyB-F0C8l_fOhJPpkYsL6Eb6P7GUFcaC9MQ",
-    authDomain: "portfolio-415e1.firebaseapp.com",
-    databaseURL: "https://portfolio-415e1-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "portfolio-415e1",
-    storageBucket: "portfolio-415e1.firebasestorage.app",
-    messagingSenderId: "959081513500",
-    appId: "1:959081513500:web:e1889367df9e24f25355d9"
-  };
-
-
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-
-  // Get references to Firebase services
-  const auth = firebase.auth();
-  const database = firebase.database();
-  
-  console.log("Firebase initialized inline");
-</script>
-
-<!-- App Scripts -->
-<!-- <script src="firebase-config.js"></script> -->
-<script src="auth.js"></script>
-<script src="exercises.js"></script>
-<script src="workouts.js"></script>
-<script src="app.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="firebase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="exercises.js"></script>
+    <script src="workouts.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
