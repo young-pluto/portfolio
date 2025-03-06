@@ -579,9 +579,8 @@ section {
 
 /* Timer Styles */
 .workout-timer {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
+    position: relative; /* Change from fixed to relative */
+    margin: 0 auto 20px; /* Add margin for spacing */
     background-color: var(--card-bg);
     color: var(--text-color);
     padding: 15px;
@@ -591,10 +590,10 @@ section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 1000;
-    min-width: 180px;
+    width: 100%; /* Match button width */
+    max-width: 100%;
+    z-index: 1;
 }
-
 .timer-display {
     font-size: 1.8em;
     font-weight: bold;

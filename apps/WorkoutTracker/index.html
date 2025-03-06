@@ -115,14 +115,16 @@
             <button id="start-workout-btn" class="start-workout-btn hidden">
                 <i class="fas fa-play-circle"></i> Start Workout
             </button>
-            <div id="workout-timer" class="workout-timer hidden">
-                <div class="timer-label">Workout Time</div>
-                <div id="timer-display" class="timer-display">00:00:00</div>
-                <div class="timer-controls">
-                    <button id="pause-timer-btn" class="timer-btn pause"><i class="fas fa-pause"></i> Pause</button>
-                    <button id="reset-timer-btn" class="timer-btn reset"><i class="fas fa-undo"></i> Reset</button>
-                </div>
+
+        <!-- Workout Timer (Initially Hidden) -->
+        <div id="workout-timer" class="workout-timer hidden">
+            <div class="timer-label">Workout Time</div>
+            <div id="timer-display" class="timer-display">00:00:00</div>
+            <div class="timer-controls">
+                <button id="pause-timer-btn" class="timer-btn pause"><i class="fas fa-pause"></i> Pause</button>
+                <button id="reset-timer-btn" class="timer-btn reset"><i class="fas fa-undo"></i> Reset</button>
             </div>
+
         </section>
 
         <!-- Workout History Section -->
@@ -131,16 +133,9 @@
             <div id="workout-history-list" class="list-container"></div>
         </section>
         
-        <!-- Workout Timer (Initially Hidden) -->
-        <!-- <div id="workout-timer" class="workout-timer hidden">
-            <div class="timer-label">Workout Time</div>
-            <div id="timer-display" class="timer-display">00:00:00</div>
-            <div class="timer-controls">
-                <button id="pause-timer-btn" class="timer-btn pause"><i class="fas fa-pause"></i> Pause</button>
-                <button id="reset-timer-btn" class="timer-btn reset"><i class="fas fa-undo"></i> Reset</button>
-            </div>
+
         </div>
-    </div> -->
+    </div>
 
     <!-- Templates -->
     <template id="exercise-item-template">
