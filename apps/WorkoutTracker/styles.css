@@ -765,10 +765,8 @@ section {
     }
     
     .workout-timer {
-        bottom: 10px;
-        right: 10px;
-        left: 10px;
-        width: calc(100% - 20px);
+        width: 100%; /* Full width on mobile */
+        margin: 10px 0 20px; /* Adjust margins */
     }
     .start-workout-btn{
         margin-bottom: 50px;
