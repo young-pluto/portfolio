@@ -6,10 +6,6 @@
       "use": "@vercel/node"
     },
     { 
-      "src": "apps/WorkoutTracker/api/**/*.js",
-      "use": "@vercel/node"
-    },
-    { 
       "src": "apps/**/frontend/**/*",
       "use": "@vercel/static"
     },
@@ -23,16 +19,6 @@
     }
   ],
   "routes": [
-    {
-      "src": "/api/firebase-config",
-      "has": [
-        {
-          "type": "host",
-          "value": "fitrack.builtbyapoorv.in"
-        }
-      ],
-      "dest": "/apps/WorkoutTracker/api/firebase-config.js"
-    },
     {
       "src": "/api/auth/(login|register)",
       "has": [
@@ -62,16 +48,6 @@
         }
       ],
       "dest": "/apps/project/api/index.js"
-    },
-    {
-      "src": "/firebase-client.js",
-      "has": [
-        {
-          "type": "host",
-          "value": "fitrack.builtbyapoorv.in"
-        }
-      ],
-      "dest": "/apps/WorkoutTracker/firebase-client.js"
     },
     {
       "src": "/(.*)",
