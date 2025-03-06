@@ -1,4 +1,4 @@
-// Workouts Module
+// Workouts Module with improved exercise selection display
 const WorkoutsModule = (() => {
     // DOM Elements
     const newWorkoutSection = document.getElementById('new-workout-section');
@@ -219,6 +219,13 @@ const WorkoutsModule = (() => {
                 label.htmlFor = `select-exercise-${exercise.id}`;
                 label.textContent = exercise.name;
                 
+                // Ensure proper styling and layout
+                item.style.display = 'flex';
+                item.style.alignItems = 'center'; 
+                item.style.width = '100%';
+                checkbox.style.marginRight = '12px';
+                label.style.flex = '1';
+                
                 item.appendChild(checkbox);
                 item.appendChild(label);
                 exerciseSelectionList.appendChild(item);
@@ -242,7 +249,7 @@ const WorkoutsModule = (() => {
         items.forEach(item => {
             const exerciseName = item.dataset.name;
             if (exerciseName.includes(searchTerm)) {
-                item.style.display = '';
+                item.style.display = 'flex';
             } else {
                 item.style.display = 'none';
             }

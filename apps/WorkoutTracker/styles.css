@@ -2,18 +2,18 @@
 :root {
     --primary-color: #4a6de5;
     --primary-dark: #3a5bd4;
-    --secondary-color: #2a2d3a;
-    --text-color: #e0e0e0;
-    --light-gray: #353a50;
-    --gray: #5a5f73;
-    --dark-gray: #b0b0b0;
+    --secondary-color: #f5f8ff;
+    --text-color: #2a3142;
+    --light-gray: #f0f3fa;
+    --gray: #d9dfe9;
+    --dark-gray: #7f8ba3;
     --error-color: #e74c3c;
     --success-color: #2ecc71;
     --warning-color: #f39c12;
     --border-radius: 8px;
-    --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    --card-bg: #1e2130;
-    --input-bg: #252a3b;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --card-bg: #ffffff;
+    --input-bg: #f5f8ff;
     --highlight: #5a6de5;
 }
 
@@ -25,7 +25,7 @@
 }
 
 body {
-    background-color: var(--secondary-color);
+    background: linear-gradient(135deg, #f5f8ff 0%, #e7eeff 100%);
     color: var(--text-color);
     line-height: 1.6;
 }
@@ -41,7 +41,7 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: 20px;
-    background: linear-gradient(135deg, #1e2130 0%, #2a2d3a 100%);
+    background: linear-gradient(135deg, #e9effd 0%, #f5f8ff 100%);
 }
 
 .auth-card {
@@ -51,14 +51,14 @@ body {
     width: 100%;
     max-width: 400px;
     padding: 30px;
-    border: 1px solid #3a3f52;
+    border: 1px solid var(--gray);
 }
 
 .auth-card h2 {
     text-align: center;
     margin-bottom: 20px;
     color: var(--primary-color);
-    text-shadow: 0 0 10px rgba(74, 109, 229, 0.3);
+    text-shadow: 0 0 10px rgba(74, 109, 229, 0.1);
 }
 
 .auth-card h3 {
@@ -90,7 +90,7 @@ body {
 
 .auth-card button:hover {
     background-color: var(--primary-dark);
-    box-shadow: 0 0 15px rgba(74, 109, 229, 0.5);
+    box-shadow: 0 0 15px rgba(74, 109, 229, 0.3);
 }
 
 .auth-card p {
@@ -133,7 +133,7 @@ header {
 
 header h1 {
     color: var(--primary-color);
-    text-shadow: 0 0 10px rgba(74, 109, 229, 0.3);
+    text-shadow: 0 0 10px rgba(74, 109, 229, 0.1);
 }
 
 #logout-btn {
@@ -149,7 +149,7 @@ header h1 {
 #logout-btn:hover {
     background-color: var(--primary-color);
     color: white;
-    box-shadow: 0 0 15px rgba(74, 109, 229, 0.5);
+    box-shadow: 0 0 15px rgba(74, 109, 229, 0.3);
 }
 
 nav {
@@ -173,7 +173,7 @@ nav {
 }
 
 .nav-btn:hover {
-    background-color: #2a2f40;
+    background-color: var(--light-gray);
 }
 
 .nav-btn.active {
@@ -211,7 +211,7 @@ section {
 
 .action-btn:hover {
     background-color: var(--primary-dark);
-    box-shadow: 0 0 15px rgba(74, 109, 229, 0.5);
+    box-shadow: 0 0 15px rgba(74, 109, 229, 0.3);
 }
 
 .icon-btn {
@@ -245,7 +245,7 @@ section {
 
 .primary-btn:hover {
     background-color: var(--primary-dark);
-    box-shadow: 0 0 15px rgba(74, 109, 229, 0.5);
+    box-shadow: 0 0 15px rgba(74, 109, 229, 0.3);
 }
 
 .secondary-btn {
@@ -259,16 +259,16 @@ section {
 }
 
 .secondary-btn:hover {
-    background-color: #2a2f40;
-    box-shadow: 0 0 15px rgba(74, 109, 229, 0.3);
+    background-color: var(--light-gray);
+    box-shadow: 0 0 15px rgba(74, 109, 229, 0.1);
 }
 
 .form-container {
-    background-color: #252a3b;
+    background-color: var(--input-bg);
     padding: 20px;
     border-radius: var(--border-radius);
     margin-bottom: 20px;
-    border: 1px solid #3a3f52;
+    border: 1px solid var(--gray);
 }
 
 .form-container h3 {
@@ -285,7 +285,7 @@ section {
     border: 1px solid var(--gray);
     border-radius: var(--border-radius);
     font-size: 16px;
-    background-color: var(--input-bg);
+    background-color: var(--card-bg);
     color: var(--text-color);
 }
 
@@ -302,17 +302,17 @@ section {
 
 /* Exercise Items */
 .exercise-item {
-    background-color: #252a3b;
+    background-color: var(--input-bg);
     border-radius: var(--border-radius);
     padding: 20px;
     box-shadow: var(--shadow);
-    border: 1px solid #3a3f52;
+    border: 1px solid var(--gray);
     transition: transform 0.2s, box-shadow 0.3s;
 }
 
 .exercise-item:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .exercise-header {
@@ -329,7 +329,7 @@ section {
 
 .exercise-name {
     color: var(--primary-color);
-    text-shadow: 0 0 8px rgba(74, 109, 229, 0.3);
+    text-shadow: 0 0 8px rgba(74, 109, 229, 0.1);
     font-size: 1.2em;
 }
 
@@ -341,7 +341,7 @@ section {
     border-radius: 20px;
     font-size: 14px;
     margin-bottom: 10px;
-    box-shadow: 0 0 10px rgba(74, 109, 229, 0.3);
+    box-shadow: 0 0 10px rgba(74, 109, 229, 0.1);
 }
 
 .exercise-description {
@@ -352,26 +352,26 @@ section {
 .exercise-stats {
     font-size: 14px;
     color: var(--dark-gray);
-    border-top: 1px solid #3a3f52;
+    border-top: 1px solid var(--gray);
     padding-top: 10px;
 }
 
 /* Workout Exercise Styles */
 .workout-exercise {
-    background-color: #252a3b;
+    background-color: var(--input-bg);
     border-radius: var(--border-radius);
     padding: 20px;
     box-shadow: var(--shadow);
     margin-bottom: 20px;
-    border: 1px solid #3a3f52;
+    border: 1px solid var(--gray);
 }
 
 .exercise-history {
-    background-color: var(--input-bg);
+    background-color: var(--card-bg);
     padding: 15px;
     border-radius: var(--border-radius);
     margin: 10px 0 15px;
-    border: 1px solid #3a3f52;
+    border: 1px solid var(--gray);
 }
 
 .exercise-history h4 {
@@ -388,10 +388,10 @@ section {
 .set-item {
     display: flex;
     align-items: center;
-    background-color: var(--input-bg);
+    background-color: var(--card-bg);
     padding: 15px;
     border-radius: var(--border-radius);
-    border: 1px solid #3a3f52;
+    border: 1px solid var(--gray);
 }
 
 .set-label {
@@ -420,7 +420,7 @@ section {
 .input-group input {
     width: 100%;
     padding: 8px;
-    border: 1px solid #3a3f52;
+    border: 1px solid var(--gray);
     border-radius: var(--border-radius);
     background-color: var(--card-bg);
     color: var(--text-color);
@@ -428,11 +428,11 @@ section {
 
 /* Workout History Styles */
 .workout-history-item {
-    background-color: #252a3b;
+    background-color: var(--input-bg);
     border-radius: var(--border-radius);
     padding: 20px;
     box-shadow: var(--shadow);
-    border: 1px solid #3a3f52;
+    border: 1px solid var(--gray);
     transition: transform 0.2s;
 }
 
@@ -465,7 +465,7 @@ section {
 .workout-details {
     margin-top: 15px;
     padding-top: 15px;
-    border-top: 1px solid #3a3f52;
+    border-top: 1px solid var(--gray);
     animation: fadeIn 0.3s ease-in-out;
 }
 
@@ -475,7 +475,7 @@ section {
 
 .workout-details-list li {
     padding: 8px 0;
-    border-bottom: 1px solid #3a3f52;
+    border-bottom: 1px solid var(--gray);
 }
 
 .workout-details-list li:last-child {
@@ -489,7 +489,7 @@ section {
 .set-details {
     margin: 5px 0 5px 20px;
     padding: 5px;
-    background-color: var(--input-bg);
+    background-color: var(--card-bg);
     border-radius: 4px;
     font-size: 0.9em;
 }
@@ -498,23 +498,23 @@ section {
 .checklist-container {
     max-height: 300px;
     overflow-y: auto;
-    border: 1px solid #3a3f52;
+    border: 1px solid var(--gray);
     border-radius: var(--border-radius);
     padding: 10px;
     margin-bottom: 15px;
-    background-color: var(--input-bg);
+    background-color: var(--card-bg);
 }
 
 .checklist-item {
     display: flex;
     align-items: center;
     padding: 10px;
-    border-bottom: 1px solid #3a3f52;
+    border-bottom: 1px solid var(--gray);
     transition: background-color 0.2s;
 }
 
 .checklist-item:hover {
-    background-color: #2a2f40;
+    background-color: var(--light-gray);
 }
 
 .checklist-item:last-child {
@@ -528,6 +528,29 @@ section {
 .checklist-item label {
     flex: 1;
     cursor: pointer;
+}
+
+/* Fix exercise selection positioning */
+.checklist-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+}
+
+.checklist-item input[type="checkbox"] {
+    margin-right: 12px;
+    width: 18px;
+    height: 18px;
+}
+
+.checklist-item label {
+    font-weight: 400;
+    color: var(--text-color);
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    display: block;
+    width: calc(100% - 30px);
 }
 
 /* Form Layout Helpers */
@@ -547,7 +570,7 @@ section {
 #workout-name {
     width: 100%;
     padding: 12px;
-    border: 1px solid #3a3f52;
+    border: 1px solid var(--gray);
     border-radius: var(--border-radius);
     font-size: 16px;
     background-color: var(--input-bg);
@@ -578,7 +601,7 @@ section {
     margin: 5px 0;
     color: var(--primary-color);
     font-family: 'Courier New', monospace;
-    text-shadow: 0 0 10px rgba(74, 109, 229, 0.5);
+    text-shadow: 0 0 10px rgba(74, 109, 229, 0.1);
 }
 
 .timer-label {
@@ -626,9 +649,9 @@ section {
 .exercise-search input {
     width: 100%;
     padding: 12px 40px 12px 12px;
-    border: 1px solid #3a3f52;
+    border: 1px solid var(--gray);
     border-radius: var(--border-radius);
-    background-color: var(--input-bg);
+    background-color: var(--card-bg);
     color: var(--text-color);
     font-size: 16px;
 }
@@ -663,7 +686,7 @@ section {
 .start-workout-btn:hover {
     background-color: #27ae60;
     transform: translateY(-3px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
 .start-workout-btn i {
@@ -674,22 +697,28 @@ section {
 #exercise-selection {
     position: relative;
     z-index: 10;
+    width: 100%;
 }
 
 .exercise-selection-list {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
-.exercise-selection-item {
+/* Fix for the exercise name display in selection */
+#exercise-selection-list {
+    width: 100%;
+}
+
+#exercise-selection-list .checklist-item {
     display: flex;
     align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #3a3f52;
+    width: 100%;
 }
 
-.exercise-selection-name {
-    margin-left: 10px;
+#exercise-selection-list label {
+    width: auto;
     flex: 1;
 }
 
