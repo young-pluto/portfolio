@@ -295,19 +295,28 @@ const WorkoutsModule = (() => {
         } else {
             // Ending the workout - ask if user wants to save
             if (currentWorkoutExercises.length > 0) {
-                const confirmSave = confirm("Would you like to save this workout?");
+                // Show custom confirm dialog
+                const customDialog = document.getElementById('custom-confirm-dialog');
+                const yesBtn = document.getElementById('dialog-yes-btn');
+                const noBtn = document.getElementById('dialog-no-btn');
                 
-                if (confirmSave) {
-                    // User wants to save - call the saveWorkout function
+                customDialog.classList.remove('hidden');
+                
+                // Handle Yes button
+                yesBtn.onclick = () => {
+                    customDialog.classList.add('hidden');
                     saveWorkout();
-                    // No need to manually end workout here as saveWorkout already resets things
-                } else {
-                    // User doesn't want to save - just end workout
+                };
+                
+                // Handle No button
+                noBtn.onclick = () => {
+                    customDialog.classList.add('hidden');
+                    // Just end workout without saving
                     isWorkoutActive = false;
                     TimerModule.hideTimer();
                     startWorkoutBtn.classList.remove('active');
                     startWorkoutBtn.innerHTML = '<i class="fas fa-play-circle"></i> Start Workout';
-                }
+                };
             } else {
                 // No exercises to save, just end workout
                 isWorkoutActive = false;
