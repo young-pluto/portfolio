@@ -21,6 +21,7 @@
             </div>
             <div id="signup-form" class="hidden">
                 <h3>Sign Up</h3>
+                <input type="text" id="signup-name" placeholder="Your Name" required>
                 <input type="email" id="signup-email" placeholder="Email" required>
                 <input type="password" id="signup-password" placeholder="Password" required>
                 <button id="signup-btn">Sign Up</button>
@@ -31,6 +32,8 @@
 
     <!-- Main App Section (Initially Hidden) -->
     <div id="app-container" class="hidden">
+        <div id="welcome-message" class="welcome-message"></div>
+        
         <header>
             <h1>Workout Tracker</h1>
             <button id="logout-btn">Logout</button>
@@ -96,6 +99,10 @@
 
             <div id="exercise-selection" class="hidden form-container">
                 <h3>Select Exercises</h3>
+                <div class="exercise-search">
+                    <input type="text" id="exercise-search-input" placeholder="Search exercises...">
+                    <i class="fas fa-search"></i>
+                </div>
                 <div id="exercise-selection-list" class="checklist-container"></div>
                 <div class="button-group">
                     <button id="confirm-exercises-btn" class="primary-btn">Add Selected</button>
@@ -104,13 +111,27 @@
             </div>
 
             <div id="current-workout" class="list-container"></div>
+            
+            <button id="start-workout-btn" class="start-workout-btn hidden">
+                <i class="fas fa-play-circle"></i> Start Workout
+            </button>
         </section>
 
         <!-- Workout History Section -->
         <section id="workout-history-section" class="hidden">
-            <h2>Workout History</h2>
+            <h2 id="workout-history-title">Workout History</h2>
             <div id="workout-history-list" class="list-container"></div>
         </section>
+        
+        <!-- Workout Timer (Initially Hidden) -->
+        <div id="workout-timer" class="workout-timer hidden">
+            <div class="timer-label">Workout Time</div>
+            <div id="timer-display" class="timer-display">00:00:00</div>
+            <div class="timer-controls">
+                <button id="pause-timer-btn" class="timer-btn pause"><i class="fas fa-pause"></i> Pause</button>
+                <button id="reset-timer-btn" class="timer-btn reset"><i class="fas fa-undo"></i> Reset</button>
+            </div>
+        </div>
     </div>
 
     <!-- Templates -->
@@ -219,6 +240,7 @@
 <script src="auth.js"></script>
 <script src="exercises.js"></script>
 <script src="workouts.js"></script>
+<script src="timer.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

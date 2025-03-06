@@ -37,6 +37,8 @@ const ExercisesModule = (() => {
                 });
                 
                 renderExercisesList();
+            } else {
+                exercisesList.innerHTML = '<div class="no-exercises-message">No exercises added yet. Click the "Add Exercise" button to create your first exercise.</div>';
             }
         });
     };
@@ -46,9 +48,12 @@ const ExercisesModule = (() => {
         exercisesList.innerHTML = '';
         
         if (exercises.length === 0) {
-            exercisesList.innerHTML = '<p>No exercises added yet. Click the "Add Exercise" button to create your first exercise.</p>';
+            exercisesList.innerHTML = '<div class="no-exercises-message">No exercises added yet. Click the "Add Exercise" button to create your first exercise.</div>';
             return;
         }
+        
+        // Sort exercises by name
+        exercises.sort((a, b) => a.name.localeCompare(b.name));
         
         exercises.forEach(exercise => {
             const exerciseItem = createExerciseElement(exercise);
@@ -68,7 +73,7 @@ const ExercisesModule = (() => {
         if (exercise.description) {
             exerciseItem.querySelector('.exercise-description').textContent = exercise.description;
         } else {
-            exerciseItem.querySelector('.exercise-description').remove();
+            exerciseItem.querySelector('.exercise-description').classList.add('hidden');
         }
         
         // Set usage count

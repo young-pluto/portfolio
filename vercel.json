@@ -80,6 +80,16 @@
       "dest": "/apps/WorkoutTracker/firebase-config.js"
     },
     {
+      "src": "/timer.js",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/WorkoutTracker/timer.js"
+    },
+    {
       "src": "/auth.js",
       "has": [
         {

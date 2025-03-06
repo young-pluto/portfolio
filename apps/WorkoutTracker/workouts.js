@@ -8,16 +8,20 @@ const WorkoutsModule = (() => {
     const workoutName = document.getElementById('workout-name');
     const exerciseSelection = document.getElementById('exercise-selection');
     const exerciseSelectionList = document.getElementById('exercise-selection-list');
+    const exerciseSearchInput = document.getElementById('exercise-search-input');
     const confirmExercisesBtn = document.getElementById('confirm-exercises-btn');
     const cancelSelectionBtn = document.getElementById('cancel-selection-btn');
+    const startWorkoutBtn = document.getElementById('start-workout-btn');
     const currentWorkout = document.getElementById('current-workout');
     const workoutHistorySection = document.getElementById('workout-history-section');
     const workoutHistoryList = document.getElementById('workout-history-list');
+    const workoutHistoryTitle = document.getElementById('workout-history-title');
 
     // State
     let selectedExercises = [];
     let currentWorkoutExercises = [];
     let workoutHistory = [];
+    let isWorkoutActive = false;
 
     // Firebase references
     const getWorkoutsRef = () => {
@@ -47,8 +51,16 @@ const WorkoutsModule = (() => {
                 workoutHistory.sort((a, b) => b.timestamp - a.timestamp);
                 
                 renderWorkoutHistory();
+            } else {
+                workoutHistoryList.innerHTML = '<p>No workout history yet. Start a new workout to see your history here.</p>';
             }
         });
+        
+        // Update history title with user's name
+        const userData = AuthModule.getUserData();
+        if (userData && userData.name) {
+            workoutHistoryTitle.textContent = `${userData.name}'s Workout History`;
+        }
     };
 
     // Render workout history
@@ -101,7 +113,37 @@ const WorkoutsModule = (() => {
                 const setCount = exercise.sets ? Object.keys(exercise.sets).length : 0;
                 
                 const exerciseItem = document.createElement('li');
+                exerciseItem.className = 'exercise-detail';
                 exerciseItem.innerHTML = `<strong>${exercise.name}</strong>: ${setCount} set${setCount === 1 ? '' : 's'}`;
+                
+                // Add set details
+                if (exercise.sets && Object.keys(exercise.sets).length > 0) {
+                    const setsContainer = document.createElement('div');
+                    setsContainer.className = 'sets-details-container';
+                    
+                    Object.values(exercise.sets).forEach((set, index) => {
+                        const setDetail = document.createElement('div');
+                        setDetail.className = 'set-details';
+                        
+                        let setInfo = `Set ${index + 1}: `;
+                        
+                        if (set.weight || set.reps) {
+                            setInfo += `<strong>${set.weight || 0}</strong> kg/lbs × <strong>${set.reps || 0}</strong> reps`;
+                        } else {
+                            setInfo += 'No data recorded';
+                        }
+                        
+                        if (set.remarks) {
+                            setInfo += ` <span class="set-remarks">(${set.remarks})</span>`;
+                        }
+                        
+                        setDetail.innerHTML = setInfo;
+                        setsContainer.appendChild(setDetail);
+                    });
+                    
+                    exerciseItem.appendChild(setsContainer);
+                }
+                
                 exercisesList.appendChild(exerciseItem);
             });
             
@@ -131,6 +173,15 @@ const WorkoutsModule = (() => {
         // Clear current workout exercises
         currentWorkoutExercises = [];
         currentWorkout.innerHTML = '';
+        
+        // Hide start workout button
+        startWorkoutBtn.classList.add('hidden');
+        
+        // Reset workout active state
+        isWorkoutActive = false;
+        
+        // Hide timer
+        TimerModule.hideTimer();
     };
 
     // Open exercise selection dialog
@@ -150,6 +201,7 @@ const WorkoutsModule = (() => {
             allExercises.forEach(exercise => {
                 const item = document.createElement('div');
                 item.className = 'checklist-item';
+                item.dataset.name = exercise.name.toLowerCase();
                 
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
@@ -176,6 +228,25 @@ const WorkoutsModule = (() => {
         }
         
         exerciseSelection.classList.remove('hidden');
+        
+        // Reset search input
+        exerciseSearchInput.value = '';
+        filterExercises('');
+    };
+
+    // Filter exercises in selection list
+    const filterExercises = (searchTerm) => {
+        const items = exerciseSelectionList.querySelectorAll('.checklist-item');
+        searchTerm = searchTerm.toLowerCase();
+        
+        items.forEach(item => {
+            const exerciseName = item.dataset.name;
+            if (exerciseName.includes(searchTerm)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
     };
 
     // Close exercise selection dialog
@@ -199,6 +270,25 @@ const WorkoutsModule = (() => {
         });
         
         closeExerciseSelection();
+        
+        // Show start workout button if exercises are selected
+        if (currentWorkoutExercises.length > 0) {
+            startWorkoutBtn.classList.remove('hidden');
+        }
+    };
+
+    // Start workout timer
+    const startWorkout = () => {
+        if (!isWorkoutActive) {
+            isWorkoutActive = true;
+            TimerModule.startTimer();
+            startWorkoutBtn.innerHTML = '<i class="fas fa-stop-circle"></i> End Workout';
+        } else {
+            // End workout
+            isWorkoutActive = false;
+            TimerModule.hideTimer();
+            startWorkoutBtn.innerHTML = '<i class="fas fa-play-circle"></i> Start Workout';
+        }
     };
 
     // Add exercise to current workout
@@ -214,6 +304,9 @@ const WorkoutsModule = (() => {
         // Create exercise element
         const exerciseElement = createWorkoutExerciseElement(exercise);
         currentWorkout.appendChild(exerciseElement);
+        
+        // Show start workout button if not already shown
+        startWorkoutBtn.classList.remove('hidden');
     };
 
     // Create workout exercise element from template
@@ -366,6 +459,17 @@ const WorkoutsModule = (() => {
             
             // Remove from array
             currentWorkoutExercises = currentWorkoutExercises.filter(exercise => exercise.id !== exerciseId);
+            
+            // Hide start workout button if no exercises remain
+            if (currentWorkoutExercises.length === 0) {
+                startWorkoutBtn.classList.add('hidden');
+                
+                // Also stop timer if active
+                if (isWorkoutActive) {
+                    isWorkoutActive = false;
+                    TimerModule.hideTimer();
+                }
+            }
         }
     };
 
@@ -457,6 +561,12 @@ const WorkoutsModule = (() => {
         confirmExercisesBtn.addEventListener('click', confirmExerciseSelection);
         cancelSelectionBtn.addEventListener('click', closeExerciseSelection);
         saveWorkoutBtn.addEventListener('click', saveWorkout);
+        startWorkoutBtn.addEventListener('click', startWorkout);
+        
+        // Exercise search functionality
+        exerciseSearchInput.addEventListener('input', (e) => {
+            filterExercises(e.target.value);
+        });
         
         // Load workout history
         loadWorkoutHistory();

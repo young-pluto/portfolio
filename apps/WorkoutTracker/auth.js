@@ -10,9 +10,11 @@ const AuthModule = (() => {
     const loginBtn = document.getElementById('login-btn');
     const signupBtn = document.getElementById('signup-btn');
     const logoutBtn = document.getElementById('logout-btn');
+    const welcomeMessage = document.getElementById('welcome-message');
 
     // Current user state
     let currentUser = null;
+    let userData = null;
 
     // Show signup form
     const showSignup = () => {
@@ -28,10 +30,11 @@ const AuthModule = (() => {
 
     // Handle signup
     const handleSignup = async () => {
+        const name = document.getElementById('signup-name').value.trim();
         const email = document.getElementById('signup-email').value;
         const password = document.getElementById('signup-password').value;
 
-        if (!email || !password) {
+        if (!name || !email || !password) {
             alert('Please fill in all fields');
             return;
         }
@@ -40,13 +43,15 @@ const AuthModule = (() => {
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
             
-            // Create user node in database
+            // Create user node in database with name
             await database.ref(`users/${user.uid}`).set({
+                name: name,
                 email: user.email,
                 createdAt: firebase.database.ServerValue.TIMESTAMP
             });
 
             alert('Account created successfully! You are now logged in.');
+            document.getElementById('signup-name').value = '';
             document.getElementById('signup-email').value = '';
             document.getElementById('signup-password').value = '';
         } catch (error) {
@@ -82,20 +87,61 @@ const AuthModule = (() => {
         }
     };
 
+    // Load user data
+    const loadUserData = async (userId) => {
+        try {
+            const userRef = database.ref(`users/${userId}`);
+            const snapshot = await userRef.once('value');
+            return snapshot.val();
+        } catch (error) {
+            console.error('Error loading user data:', error);
+            return null;
+        }
+    };
+
+    // Update welcome message
+    const updateWelcomeMessage = () => {
+        if (userData && userData.name) {
+            const greeting = getGreeting();
+            welcomeMessage.innerHTML = `<h3>${greeting}, ${userData.name}!</h3><p>Excited to see you back. Ready for today's workout?</p>`;
+            
+            // Update workout history title
+            const workoutHistoryTitle = document.getElementById('workout-history-title');
+            if (workoutHistoryTitle) {
+                workoutHistoryTitle.textContent = `${userData.name}'s Workout History`;
+            }
+        } else {
+            welcomeMessage.innerHTML = '';
+        }
+    };
+
+    // Get appropriate greeting based on time of day
+    const getGreeting = () => {
+        const hour = new Date().getHours();
+        if (hour < 12) return "Good morning";
+        if (hour < 18) return "Good afternoon";
+        return "Good evening";
+    };
+
     // Auth state change listener
     const initAuthListener = () => {
-        auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged(async (user) => {
             if (user) {
                 // User is signed in
                 currentUser = user;
+                userData = await loadUserData(user.uid);
+                
+                // Update UI
                 authContainer.classList.add('hidden');
                 appContainer.classList.remove('hidden');
+                updateWelcomeMessage();
                 
                 // Initialize app modules in the correct order
                 AppModule.initAfterAuth();
             } else {
                 // User is signed out
                 currentUser = null;
+                userData = null;
                 appContainer.classList.add('hidden');
                 authContainer.classList.remove('hidden');
                 showLogin(); // Reset to login form
@@ -119,7 +165,8 @@ const AuthModule = (() => {
     // Public methods and properties
     return {
         init,
-        getCurrentUser: () => currentUser
+        getCurrentUser: () => currentUser,
+        getUserData: () => userData
     };
 })();
 
