@@ -289,11 +289,13 @@ const WorkoutsModule = (() => {
         if (!isWorkoutActive) {
             isWorkoutActive = true;
             TimerModule.startTimer();
+            startWorkoutBtn.classList.add('active');
             startWorkoutBtn.innerHTML = '<i class="fas fa-stop-circle"></i> End Workout';
         } else {
             // End workout
             isWorkoutActive = false;
             TimerModule.hideTimer();
+            startWorkoutBtn.classList.remove('active');
             startWorkoutBtn.innerHTML = '<i class="fas fa-play-circle"></i> Start Workout';
         }
     };

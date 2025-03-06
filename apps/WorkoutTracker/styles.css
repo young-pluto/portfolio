@@ -689,6 +689,14 @@ section {
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
+.start-workout-btn.active {
+    background-color: var(--error-color);
+}
+
+.start-workout-btn.active:hover {
+    background-color: #c0392b;
+}
+
 .start-workout-btn i {
     font-size: 1.2em;
 }
@@ -761,6 +769,9 @@ section {
         bottom: 10px;
         right: 10px;
         left: 10px;
-        width: calc(100% - 20px);
+        width: calc(60% - 20px);
+    }
+    .start-workout-btn{
+        margin-bottom: 50px;
     }
 }
