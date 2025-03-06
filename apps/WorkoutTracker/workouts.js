@@ -287,19 +287,36 @@ const WorkoutsModule = (() => {
     // Start workout timer
     const startWorkout = () => {
         if (!isWorkoutActive) {
+            // Starting the workout
             isWorkoutActive = true;
             TimerModule.startTimer();
             startWorkoutBtn.classList.add('active');
             startWorkoutBtn.innerHTML = '<i class="fas fa-stop-circle"></i> End Workout';
         } else {
-            // End workout
-            isWorkoutActive = false;
-            TimerModule.hideTimer();
-            startWorkoutBtn.classList.remove('active');
-            startWorkoutBtn.innerHTML = '<i class="fas fa-play-circle"></i> Start Workout';
+            // Ending the workout - ask if user wants to save
+            if (currentWorkoutExercises.length > 0) {
+                const confirmSave = confirm("Would you like to save this workout?");
+                
+                if (confirmSave) {
+                    // User wants to save - call the saveWorkout function
+                    saveWorkout();
+                    // No need to manually end workout here as saveWorkout already resets things
+                } else {
+                    // User doesn't want to save - just end workout
+                    isWorkoutActive = false;
+                    TimerModule.hideTimer();
+                    startWorkoutBtn.classList.remove('active');
+                    startWorkoutBtn.innerHTML = '<i class="fas fa-play-circle"></i> Start Workout';
+                }
+            } else {
+                // No exercises to save, just end workout
+                isWorkoutActive = false;
+                TimerModule.hideTimer();
+                startWorkoutBtn.classList.remove('active');
+                startWorkoutBtn.innerHTML = '<i class="fas fa-play-circle"></i> Start Workout';
+            }
         }
     };
-
     // Add exercise to current workout
     const addExerciseToWorkout = (exercise) => {
         // Check if exercise is already in workout
