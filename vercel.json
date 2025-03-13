@@ -64,6 +64,16 @@
       "has": [
         {
           "type": "host",
+          "value": "travel.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/Travel/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
           "value": "tasks.builtbyapoorv.in"
         }
       ],
