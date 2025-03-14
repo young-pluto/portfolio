@@ -473,6 +473,7 @@ header p {
     color: var(--text-secondary);
 }
 
+
 /* Animations */
 @keyframes fadeIn {
     from { opacity: 0; }

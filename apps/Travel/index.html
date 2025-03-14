@@ -323,68 +323,65 @@
             });
         }
 
-        // Create item element
-        function createItemElement(item, dbPath) {
-            const itemElement = document.createElement('div');
-            itemElement.className = 'trip-item';
-            itemElement.dataset.id = item.id;
-            
-            // Main item content
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'item-content';
-            
-            // Item name
-            const nameSpan = document.createElement('span');
-            nameSpan.className = 'item-name';
-            nameSpan.textContent = item.name;
-            contentDiv.appendChild(nameSpan);
-            
-            // URL link if exists
-            if (item.url) {
-                const urlLink = document.createElement('a');
-                urlLink.href = item.url;
-                urlLink.className = 'item-url';
-                urlLink.target = '_blank';
-                urlLink.innerHTML = '<i class="fas fa-external-link-alt"></i>';
-                urlLink.title = 'Open link';
-                
-                // Add event listener to show preview
-                urlLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    showLinkPreview(item.url);
-                });
-                
-                contentDiv.appendChild(urlLink);
-            }
-            
-            itemElement.appendChild(contentDiv);
-            
-            // Actions div
-            const actionsDiv = document.createElement('div');
-            actionsDiv.className = 'item-actions';
-            
-            // Like button
-            const likeBtn = document.createElement('button');
-            likeBtn.className = 'like-btn';
-            likeBtn.innerHTML = `<i class="fas fa-heart"></i> <span>${item.likes || 0}</span>`;
-            likeBtn.addEventListener('click', function() {
-                likeItem(item.id, dbPath);
-            });
-            actionsDiv.appendChild(likeBtn);
-            
-            // Delete button
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'delete-btn';
-            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-            deleteBtn.addEventListener('click', function() {
-                deleteItem(item.id, dbPath);
-            });
-            actionsDiv.appendChild(deleteBtn);
-            
-            itemElement.appendChild(actionsDiv);
-            
-            return itemElement;
-        }
+// Create item element - modified version
+function createItemElement(item, dbPath) {
+    const itemElement = document.createElement('div');
+    itemElement.className = 'trip-item';
+    itemElement.dataset.id = item.id;
+    
+    // Main item content
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'item-content';
+    
+    // Item name
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'item-name';
+    nameSpan.textContent = item.name;
+    contentDiv.appendChild(nameSpan);
+    
+    // URL link if exists
+    if (item.url) {
+        const urlLink = document.createElement('a');
+        urlLink.href = item.url;
+        urlLink.className = 'item-url';
+        urlLink.target = '_blank'; // Open in new tab
+        urlLink.rel = 'noopener noreferrer'; // Security best practice
+        urlLink.innerHTML = '<i class="fas fa-external-link-alt"></i>';
+        urlLink.title = 'Open link in new tab';
+        
+        // No event listener needed - default link behavior will open in new tab
+        
+        contentDiv.appendChild(urlLink);
+    }
+    
+    itemElement.appendChild(contentDiv);
+    
+    // Actions div
+    const actionsDiv = document.createElement('div');
+    actionsDiv.className = 'item-actions';
+    
+    // Like button
+    const likeBtn = document.createElement('button');
+    likeBtn.className = 'like-btn';
+    likeBtn.innerHTML = `<i class="fas fa-heart"></i> <span>${item.likes || 0}</span>`;
+    likeBtn.addEventListener('click', function() {
+        likeItem(item.id, dbPath);
+    });
+    actionsDiv.appendChild(likeBtn);
+    
+    // Delete button
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-btn';
+    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+    deleteBtn.addEventListener('click', function() {
+        deleteItem(item.id, dbPath);
+    });
+    actionsDiv.appendChild(deleteBtn);
+    
+    itemElement.appendChild(actionsDiv);
+    
+    return itemElement;
+}
 
         // Like an item
         function likeItem(itemId, dbPath) {
@@ -417,53 +414,6 @@
                     });
             }
         }
-
-        // Show link preview
-        function showLinkPreview(url) {
-            // Clear previous preview
-            previewContainer.innerHTML = '';
-            
-            // Create iframe
-            const iframe = document.createElement('iframe');
-            iframe.src = url;
-            iframe.width = '100%';
-            iframe.height = '400px';
-            iframe.frameBorder = '0';
-            
-            // Add loading message
-            const loadingMessage = document.createElement('p');
-            loadingMessage.textContent = 'Loading preview...';
-            loadingMessage.className = 'loading-message';
-            previewContainer.appendChild(loadingMessage);
-            
-            // Add iframe
-            previewContainer.appendChild(iframe);
-            
-            // Show modal
-            previewModal.style.display = 'block';
-            
-            // Hide loading message when iframe loads
-            iframe.onload = function() {
-                loadingMessage.style.display = 'none';
-            };
-            
-            // Handle load errors
-            iframe.onerror = function() {
-                loadingMessage.textContent = 'Could not load preview. Please try opening the link directly.';
-            };
-        }
-
-        // Close modal
-        closeModal.addEventListener('click', function() {
-            previewModal.style.display = 'none';
-        });
-
-        // Close modal when clicking outside
-        window.addEventListener('click', function(event) {
-            if (event.target === previewModal) {
-                previewModal.style.display = 'none';
-            }
-        });
 
         // Expand the first section by default
         document.querySelector('.toggle-btn').click();
