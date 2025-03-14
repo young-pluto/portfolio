@@ -3,9 +3,470 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Goa Trip Planner</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABMlJREFUWEe1V11oHFUUPufOJJs0bXY3QUEtRbEPRR+kIFqraPpioT+gpRSxKoIPKvjsg/gqvvjkiyD4ICJUQbAKIlQQo6iIf9UitA9t0NZaNdtmd5Nsdmdm7/HO3b272d3J/tjEB2Z2Zu6953zf+c655w7BDT7ozLZJYZrbiLGtxNhWANgCABsty22+UgHA5wCJrwFpgDC6TgLbIk2t0bBkCSY6ELq2CwTsIYYPABCr5/MC5gDhGAg8TyE7dXrXxg/r6Vz3EmR0ZBMJdkgA7G+0o7JeHwCegKC9K9xydS6MfE0CETo6n8xaELtREDwaZlgtvQC8OYLoo93Ja5+F0VcVELp2FAQ8WstgDJLnCHA0O185d3rzQG8Qqwq0egJCJNyBd9DYbHJTzNm4gNTJeEK6jNXO/6dCTbqwb2HWSr03FO+6EggnEuA6tUdX0zsyDrZIrTp9X0CEzu3MMMdVvDTSZNjZZpLRfXRb15eubiABbu7zdm7o3BcRG/zQa3nOAvGhL0cA8Hka6hoMegcSwHcvI5Mzq4VwSTHgPtvuzrdbfXtGqTsKCIZoJYGPgiPX3sGDNjBFXX3R4f6roIyOj4LAvtI44kxf9PrOnLM+DhiLUYIEYgLo+7tJ8A58G84nJqrNiQRkdNwHAnbwLALCvpvnZ3/yH+ZynIzxOX1eLBNfXq+HbY9MWbCcbkM1qwgCH/TF1wwdGh4J/rV2AuwgPzzz9OVvuXG3w9c7n1Qd1qPNM8zZwBM1yt3h/qshEuAn1ze/ZrzXM5itAA+fCOB2+Pz27clkXClrIcBzvE6N9ZnpQ3wVbhwUx4lRYFzVaGDvnZnKLU4+AQHbx4KJkUGjcQJU1XP78VxeZ8ePAMIhfo6R0C7ZF+s5aM3OLlUKcAnwQlIvAaPDPWrsrlT/P0V3vIoklIecjHFXYNR1CfCMYEGdl2oBYFwOJzbfVV4e/AT4EyShWcSQjz2RgMqSqxeS+qoEQCG1nIzxkG9UTYCgBCu1LVkLAUZiIKoJuB2esY2FQiqCqF1OuqmqW21NeHkhAAQKuiDRYWTW6FJXT08j9eAlYCCmQ3RgzaXGGw0C8PNfpEpfm+vxzFBZs+uBQ8Cqq/XfSYBXhI/QIHXFkgkbFuuohdUQ4E2sRkBkQWKdtpJ2kJNxekMAKQ9aTsbojO5YtVqzTgJcEta1CgOrgE+EkI+HrBNVBNiY6gfv8SdgeNEI8xBGzwl4O+ZaklwS2m1jLVWtASdjPKp+VxGg9rSpK7akGtDcmMuhkPYUEHfD3O2k5JUgKStmr/u+SoA6QiVlTiM0Ug09Zbs1y5Rn06N5+xBfBcoiHlUlmJlkY1PXeZt+uRJW3q1PxZrhncLCVK9Znh+Xx6sIYLdXe9wP19JYEJZajISPVKfVZUG5DZX0lKZMEQF9n0OU3Y/BaNeMM33Zl6nqD/hqXlG5IyowPVttpJxcrZA4jYjDNNI1FLRVIQHsq1XTtaSP0SG4Rh87OM7r0ivUfXAU0QTABxPdMmltj7Xbedf44vfAJOi52cnZs2F9C/2HhBuLxRJRZtb7j4koOhWzS+bY5e7FG+nf/wCm0ltWEiAF9QAAAABJRU5ErkJggg==">
 </head>
 <body>
-    GOA!
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <div id="app-container">
+        <header>
+            <h1>Let's Go GOA!</h1>
+            <div class="subtitle">
+                <h2>Trip Planning Hub</h2>
+                <p>Hey guys! I've created this interactive web page so we can all input our feedback, ideas, and suggestions for the upcoming Goa trip. Let's make this an amazing adventure!</p>
+            </div>
+        </header>
+
+        <div class="content-wrapper">
+            <main>
+                <!-- Places to Visit Section -->
+                <section class="trip-section" id="places-section">
+                    <div class="section-header">
+                        <h3>Places to Visit <i class="fas fa-map-marker-alt"></i></h3>
+                        <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="section-content">
+                        <p class="section-description">Add any places you have in mind! While planning our itinerary, we can check them off our list.</p>
+                        
+                        <div class="items-container" id="places-container">
+                            <!-- Items will be loaded here -->
+                        </div>
+                        
+                        <div class="add-item-form">
+                            <input type="text" id="place-name" placeholder="Place name" class="item-input">
+                            <input type="text" id="place-url" placeholder="URL (optional)" class="url-input">
+                            <button class="add-btn" id="add-place-btn">Add Place</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Activities Section -->
+                <section class="trip-section" id="activities-section">
+                    <div class="section-header">
+                        <h3>Activities to Do <i class="fas fa-hiking"></i></h3>
+                        <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="section-content">
+                        <p class="section-description">Share any activities you'd like to try! From water sports to cultural experiences, let's make a list of everything we want to do.</p>
+                        
+                        <div class="items-container" id="activities-container">
+                            <!-- Items will be loaded here -->
+                        </div>
+                        
+                        <div class="add-item-form">
+                            <input type="text" id="activity-name" placeholder="Activity name" class="item-input">
+                            <input type="text" id="activity-url" placeholder="URL (optional)" class="url-input">
+                            <button class="add-btn" id="add-activity-btn">Add Activity</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Accommodations Section -->
+                <section class="trip-section" id="accommodations-section">
+                    <div class="section-header">
+                        <h3>Accommodations <i class="fas fa-bed"></i></h3>
+                        <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="section-content">
+                        <p class="section-description">Share your accommodation ideas! Hotels, hostels, villas - add links so we can all check them out.</p>
+                        
+                        <div class="items-container" id="accommodations-container">
+                            <!-- Items will be loaded here -->
+                        </div>
+                        
+                        <div class="add-item-form">
+                            <input type="text" id="accommodation-name" placeholder="Accommodation name" class="item-input">
+                            <input type="text" id="accommodation-url" placeholder="URL (optional)" class="url-input">
+                            <button class="add-btn" id="add-accommodation-btn">Add Accommodation</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Food Places Section -->
+                <section class="trip-section" id="food-section">
+                    <div class="section-header">
+                        <h3>Food Places <i class="fas fa-utensils"></i></h3>
+                        <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="section-content">
+                        <p class="section-description">Foodie adventures await! Share restaurants, cafes, street food spots, or local delicacies you want to try.</p>
+                        
+                        <div class="items-container" id="food-container">
+                            <!-- Items will be loaded here -->
+                        </div>
+                        
+                        <div class="add-item-form">
+                            <input type="text" id="food-name" placeholder="Food place name" class="item-input">
+                            <input type="text" id="food-url" placeholder="URL (optional)" class="url-input">
+                            <button class="add-btn" id="add-food-btn">Add Food Place</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Other Things Section -->
+                <section class="trip-section" id="other-section">
+                    <div class="section-header">
+                        <h3>Other Ideas <i class="fas fa-lightbulb"></i></h3>
+                        <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="section-content">
+                        <p class="section-description">Any other brilliant ideas? Shopping spots, nightlife recommendations, or unique experiences - drop them here!</p>
+                        
+                        <div class="items-container" id="other-container">
+                            <!-- Items will be loaded here -->
+                        </div>
+                        
+                        <div class="add-item-form">
+                            <input type="text" id="other-name" placeholder="Idea name" class="item-input">
+                            <input type="text" id="other-url" placeholder="URL (optional)" class="url-input">
+                            <button class="add-btn" id="add-other-btn">Add Idea</button>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Side Menu - Things to Bring -->
+            <aside id="side-menu">
+                <div class="side-menu-header">
+                    <h3>Things to Bring <i class="fas fa-suitcase"></i></h3>
+                </div>
+                <p class="section-description">Not mandatory, but nice-to-haves for a smoother trip!</p>
+                
+                <div class="items-container" id="things-container">
+                    <!-- Items will be loaded here -->
+                </div>
+                
+                <div class="add-item-form">
+                    <input type="text" id="thing-name" placeholder="Item name" class="item-input">
+                    <button class="add-btn" id="add-thing-btn">Add Item</button>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Link Preview Modal -->
+    <div id="preview-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="preview-container">
+                <!-- Preview content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-F0C8l_fOhJPpkYsL6Eb6P7GUFcaC9MQ",
+            authDomain: "portfolio-415e1.firebaseapp.com",
+            databaseURL: "https://portfolio-415e1-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "portfolio-415e1",
+            storageBucket: "portfolio-415e1.firebasestorage.app",
+            messagingSenderId: "959081513500",
+            appId: "1:959081513500:web:e1889367df9e24f25355d9"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // DOM Elements
+        const sections = {
+            places: {
+                container: document.getElementById('places-container'),
+                nameInput: document.getElementById('place-name'),
+                urlInput: document.getElementById('place-url'),
+                addBtn: document.getElementById('add-place-btn'),
+                dbPath: 'goa-trip/places'
+            },
+            activities: {
+                container: document.getElementById('activities-container'),
+                nameInput: document.getElementById('activity-name'),
+                urlInput: document.getElementById('activity-url'),
+                addBtn: document.getElementById('add-activity-btn'),
+                dbPath: 'goa-trip/activities'
+            },
+            accommodations: {
+                container: document.getElementById('accommodations-container'),
+                nameInput: document.getElementById('accommodation-name'),
+                urlInput: document.getElementById('accommodation-url'),
+                addBtn: document.getElementById('add-accommodation-btn'),
+                dbPath: 'goa-trip/accommodations'
+            },
+            food: {
+                container: document.getElementById('food-container'),
+                nameInput: document.getElementById('food-name'),
+                urlInput: document.getElementById('food-url'),
+                addBtn: document.getElementById('add-food-btn'),
+                dbPath: 'goa-trip/food'
+            },
+            other: {
+                container: document.getElementById('other-container'),
+                nameInput: document.getElementById('other-name'),
+                urlInput: document.getElementById('other-url'),
+                addBtn: document.getElementById('add-other-btn'),
+                dbPath: 'goa-trip/other'
+            },
+            things: {
+                container: document.getElementById('things-container'),
+                nameInput: document.getElementById('thing-name'),
+                urlInput: null, // No URL for things to bring
+                addBtn: document.getElementById('add-thing-btn'),
+                dbPath: 'goa-trip/things'
+            }
+        };
+
+        const previewModal = document.getElementById('preview-modal');
+        const previewContainer = document.getElementById('preview-container');
+        const closeModal = document.querySelector('.close-modal');
+
+        // Initialize toggle buttons for sections
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const sectionContent = this.parentElement.nextElementSibling;
+                this.classList.toggle('active');
+                sectionContent.classList.toggle('active');
+                
+                if (this.classList.contains('active')) {
+                    this.querySelector('i').className = 'fas fa-chevron-up';
+                } else {
+                    this.querySelector('i').className = 'fas fa-chevron-down';
+                }
+            });
+        });
+
+        // Initialize sections and load data
+        for (const [key, section] of Object.entries(sections)) {
+            // Set up event listeners for add buttons
+            if (section.addBtn) {
+                section.addBtn.addEventListener('click', () => {
+                    addItem(section);
+                });
+            }
+            
+            // Load initial data
+            loadItems(section);
+        }
+
+        // Add new item to database
+        function addItem(section) {
+            const nameValue = section.nameInput.value.trim();
+            if (!nameValue) return;
+
+            const urlValue = section.urlInput ? section.urlInput.value.trim() : '';
+            
+            // Create item data
+            const itemData = {
+                name: nameValue,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                likes: 0
+            };
+            
+            if (urlValue) {
+                itemData.url = urlValue;
+            }
+
+            // Add to database
+            const itemsRef = database.ref(section.dbPath);
+            itemsRef.push(itemData)
+                .then(() => {
+                    // Clear inputs
+                    section.nameInput.value = '';
+                    if (section.urlInput) {
+                        section.urlInput.value = '';
+                    }
+                })
+                .catch(error => {
+                    console.error(`Error adding item: ${error.message}`);
+                    alert(`Error adding item: ${error.message}`);
+                });
+        }
+
+        // Load items from database
+        function loadItems(section) {
+            const itemsRef = database.ref(section.dbPath);
+            
+            itemsRef.on('value', (snapshot) => {
+                const container = section.container;
+                container.innerHTML = ''; // Clear container
+                
+                const data = snapshot.val();
+                if (!data) {
+                    container.innerHTML = '<p class="no-items-message">No items added yet. Be the first to contribute!</p>';
+                    return;
+                }
+                
+                // Convert to array and sort by timestamp (newest first)
+                const items = Object.keys(data).map(key => ({
+                    id: key,
+                    ...data[key]
+                })).sort((a, b) => b.timestamp - a.timestamp);
+                
+                items.forEach(item => {
+                    const itemElement = createItemElement(item, section.dbPath);
+                    container.appendChild(itemElement);
+                });
+            });
+        }
+
+        // Create item element
+        function createItemElement(item, dbPath) {
+            const itemElement = document.createElement('div');
+            itemElement.className = 'trip-item';
+            itemElement.dataset.id = item.id;
+            
+            // Main item content
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'item-content';
+            
+            // Item name
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'item-name';
+            nameSpan.textContent = item.name;
+            contentDiv.appendChild(nameSpan);
+            
+            // URL link if exists
+            if (item.url) {
+                const urlLink = document.createElement('a');
+                urlLink.href = item.url;
+                urlLink.className = 'item-url';
+                urlLink.target = '_blank';
+                urlLink.innerHTML = '<i class="fas fa-external-link-alt"></i>';
+                urlLink.title = 'Open link';
+                
+                // Add event listener to show preview
+                urlLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showLinkPreview(item.url);
+                });
+                
+                contentDiv.appendChild(urlLink);
+            }
+            
+            itemElement.appendChild(contentDiv);
+            
+            // Actions div
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'item-actions';
+            
+            // Like button
+            const likeBtn = document.createElement('button');
+            likeBtn.className = 'like-btn';
+            likeBtn.innerHTML = `<i class="fas fa-heart"></i> <span>${item.likes || 0}</span>`;
+            likeBtn.addEventListener('click', function() {
+                likeItem(item.id, dbPath);
+            });
+            actionsDiv.appendChild(likeBtn);
+            
+            // Delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteBtn.addEventListener('click', function() {
+                deleteItem(item.id, dbPath);
+            });
+            actionsDiv.appendChild(deleteBtn);
+            
+            itemElement.appendChild(actionsDiv);
+            
+            return itemElement;
+        }
+
+        // Like an item
+        function likeItem(itemId, dbPath) {
+            const itemRef = database.ref(`${dbPath}/${itemId}`);
+            
+            // Get current likes
+            itemRef.once('value', (snapshot) => {
+                const item = snapshot.val();
+                if (item) {
+                    // Increment likes
+                    const currentLikes = item.likes || 0;
+                    itemRef.update({
+                        likes: currentLikes + 1
+                    });
+                }
+            });
+        }
+
+        // Delete an item
+        function deleteItem(itemId, dbPath) {
+            if (confirm('Are you sure you want to delete this item?')) {
+                const itemRef = database.ref(`${dbPath}/${itemId}`);
+                itemRef.remove()
+                    .then(() => {
+                        console.log('Item deleted successfully');
+                    })
+                    .catch(error => {
+                        console.error(`Error deleting item: ${error.message}`);
+                        alert(`Error deleting item: ${error.message}`);
+                    });
+            }
+        }
+
+        // Show link preview
+        function showLinkPreview(url) {
+            // Clear previous preview
+            previewContainer.innerHTML = '';
+            
+            // Create iframe
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.width = '100%';
+            iframe.height = '400px';
+            iframe.frameBorder = '0';
+            
+            // Add loading message
+            const loadingMessage = document.createElement('p');
+            loadingMessage.textContent = 'Loading preview...';
+            loadingMessage.className = 'loading-message';
+            previewContainer.appendChild(loadingMessage);
+            
+            // Add iframe
+            previewContainer.appendChild(iframe);
+            
+            // Show modal
+            previewModal.style.display = 'block';
+            
+            // Hide loading message when iframe loads
+            iframe.onload = function() {
+                loadingMessage.style.display = 'none';
+            };
+            
+            // Handle load errors
+            iframe.onerror = function() {
+                loadingMessage.textContent = 'Could not load preview. Please try opening the link directly.';
+            };
+        }
+
+        // Close modal
+        closeModal.addEventListener('click', function() {
+            previewModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === previewModal) {
+                previewModal.style.display = 'none';
+            }
+        });
+
+        // Expand the first section by default
+        document.querySelector('.toggle-btn').click();
+    </script>
 </body>
 </html>
