@@ -64,16 +64,6 @@
       "dest": "/apps/project/frontend/project.html"
     },
     {
-      "src": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "travel.builtbyapoorv.in"
-        }
-      ],
-      "dest": "/apps/Travel/index.html"
-    },
-    {
       "src": "/styles.css",
       "has": [
         {
@@ -82,6 +72,16 @@
         }
       ],
       "dest": "/apps/Travel/styles.css"
+    },
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "travel.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/Travel/index.html"
     },
     {
       "src": "/(.*)",
