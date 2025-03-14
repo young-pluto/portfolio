@@ -2,16 +2,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#00b4d8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Primary Meta Tags -->
     <title>Goa Trip Planner</title>
+    <meta name="title" content="Goa Trip Planner">
+    <meta name="description" content="Let's plan our amazing Goa trip together! Add places to visit, activities, food spots and more.">
+    
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://goa.builtbyapoorv.in/">
+    <meta property="og:title" content="Goa Trip Planner">
+    <meta property="og:description" content="Let's plan our amazing Goa trip together! Add places to visit, activities, food spots and more.">
+    <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/portfolio-415e1.appspot.com/o/IMG_4648.JPG?alt=media">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://goa.builtbyapoorv.in/">
+    <meta property="twitter:title" content="Goa Trip Planner">
+    <meta property="twitter:description" content="Let's plan our amazing Goa trip together! Add places to visit, activities, food spots and more.">
+    <meta property="twitter:image" content="https://firebasestorage.googleapis.com/v0/b/portfolio-415e1.appspot.com/o/IMG_4648.JPG?alt=media">
+    
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABMlJREFUWEe1V11oHFUUPufOJJs0bXY3QUEtRbEPRR+kIFqraPpioT+gpRSxKoIPKvjsg/gqvvjkiyD4ICJUQbAKIlQQo6iIf9UitA9t0NZaNdtmd5Nsdmdm7/HO3b272d3J/tjEB2Z2Zu6953zf+c655w7BDT7ozLZJYZrbiLGtxNhWANgCABsty22+UgHA5wCJrwFpgDC6TgLbIk2t0bBkCSY6ELq2CwTsIYYPABCr5/MC5gDhGAg8TyE7dXrXxg/r6Vz3EmR0ZBMJdkgA7G+0o7JeHwCegKC9K9xydS6MfE0CETo6n8xaELtREDwaZlgtvQC8OYLoo93Ja5+F0VcVELp2FAQ8WstgDJLnCHA0O185d3rzQG8Qqwq0egJCJNyBd9DYbHJTzNm4gNTJeEK6jNXO/6dCTbqwb2HWSr03FO+6EggnEuA6tUdX0zsyDrZIrTp9X0CEzu3MMMdVvDTSZNjZZpLRfXRb15eubiABbu7zdm7o3BcRG/zQa3nOAvGhL0cA8Hka6hoMegcSwHcvI5Mzq4VwSTHgPtvuzrdbfXtGqTsKCIZoJYGPgiPX3sGDNjBFXX3R4f6roIyOj4LAvtI44kxf9PrOnLM+DhiLUYIEYgLo+7tJ8A58G84nJqrNiQRkdNwHAnbwLALCvpvnZ3/yH+ZynIzxOX1eLBNfXq+HbY9MWbCcbkM1qwgCH/TF1wwdGh4J/rV2AuwgPzzz9OVvuXG3w9c7n1Qd1qPNM8zZwBM1yt3h/qshEuAn1ze/ZrzXM5itAA+fCOB2+Pz27clkXClrIcBzvE6N9ZnpQ3wVbhwUx4lRYFzVaGDvnZnKLU4+AQHbx4KJkUGjcQJU1XP78VxeZ8ePAMIhfo6R0C7ZF+s5aM3OLlUKcAnwQlIvAaPDPWrsrlT/P0V3vIoklIecjHFXYNR1CfCMYEGdl2oBYFwOJzbfVV4e/AT4EyShWcSQjz2RgMqSqxeS+qoEQCG1nIzxkG9UTYCgBCu1LVkLAUZiIKoJuB2esY2FQiqCqF1OuqmqW21NeHkhAAQKuiDRYWTW6FJXT08j9eAlYCCmQ3RgzaXGGw0C8PNfpEpfm+vxzFBZs+uBQ8Cqq/XfSYBXhI/QIHXFkgkbFuuohdUQ4E2sRkBkQWKdtpJ2kJNxekMAKQ9aTsbojO5YtVqzTgJcEta1CgOrgE+EkI+HrBNVBNiY6gfv8SdgeNEI8xBGzwl4O+ZaklwS2m1jLVWtASdjPKp+VxGg9rSpK7akGtDcmMuhkPYUEHfD3O2k5JUgKStmr/u+SoA6QiVlTiM0Ug09Zbs1y5Rn06N5+xBfBcoiHlUlmJlkY1PXeZt+uRJW3q1PxZrhncLCVK9Znh+Xx6sIYLdXe9wP19JYEJZajISPVKfVZUG5DZX0lKZMEQF9n0OU3Y/BaNeMM33Zl6nqD/hqXlG5IyowPVttpJxcrZA4jYjDNNI1FLRVIQHsq1XTtaSP0SG4Rh87OM7r0ivUfXAU0QTABxPdMmltj7Xbedf44vfAJOi52cnZs2F9C/2HhBuLxRJRZtb7j4koOhWzS+bY5e7FG+nf/wCm0ltWEiAF9QAAAABJRU5ErkJggg==">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABMlJREFUWEe1V11oHFUUPufOJJs0bXY3QUEtRbEPRR+kIFqraPpioT+gpRSxKoIPKvjsg/gqvvjkiyD4ICJUQbAKIlQQo6iIf9UitA9t0NZaNdtmd5Nsdmdm7/HO3b272d3J/tjEB2Z2Zu6953zf+c655w7BDT7ozLZJYZrbiLGtxNhWANgCABsty22+UgHA5wCJrwFpgDC6TgLbIk2t0bBkCSY6ELq2CwTsIYYPABCr5/MC5gDhGAg8TyE7dXrXxg/r6Vz3EmR0ZBMJdkgA7G+0o7JeHwCegKC9K9xydS6MfE0CETo6n8xaELtREDwaZlgtvQC8OYLoo93Ja5+F0VcVELp2FAQ8WctgDJLnCHA0O185d3rzQG8Qqwq0egJCJNyBd9DYbHJTzNm4gNTJeEK6jNXO/6dCTbqwb2HWSr03FO+6EggnEuA6tUdX0zsyDrZIrTp9X0CEzu3MMMdVvDTSZNjZZpLRfXRb15eubiABbu7zdm7o3BcRG/zQa3nOAvGhL0cA8Hka6hoMegcSwHcvI5Mzq4VwSTHgPtvuzrdbfXtGqTsKCIZoJYGPgiPX3sGDNjBFXX3R4f6roIyOj4LAvtI44kxf9PrOnLM+DhiLUYIEYgLo+7tJ8A58G84nJqrNiQRkdNwHAnbwLALCvpvnZ3/yH+ZynIzxOX1eLBNfXq+HbY9MWbCcbkM1qwgCH/TF1wwdGh4J/rV2AuwgPzzz9OVvuXG3w9c7n1Qd1qPNM8zZwBM1yt3h/qshEuAn1ze/ZrzXM5itAA+fCOB2+Pz27clkXClrIcBzvE6N9ZnpQ3wVbhwUx4lRYFzVaGDvnZnKLU4+AQHbx4KJkUGjcQJU1XP78VxeZ8ePAMIhfo6R0C7ZF+s5aM3OLlUKcAnwQlIvAaPDPWrsrlT/P0V3vIoklIecjHFXYNR1CfCMYEGdl2oBYFwOJzbfVV4e/AT4EyShWcSQjz2RgMqSqxeS+qoEQCG1nIzxkG9UTYCgBCu1LVkLAUZiIKoJuB2esY2FQiqCqF1OuqmqW21NeHkhAAQKuiDRYWTW6FJXT08j9eAlYCCmQ3RgzaXGGw0C8PNfpEpfm+vxzFBZs+uBQ8Cqq/XfSYBXhI/QIHXFkgkbFuuohdUQ4E2sRkBkQWKdtpJ2kJNxekMAKQ9aTsbojO5YtVqzTgJcEta1CgOrgE+EkI+HrBNVBNiY6gfv8SdgeNEI8xBGzwl4O+ZaklwS2m1jLVWtASdjPKp+VxGg9rSpK7akGtDcmMuhkPYUEHfD3O2k5JUgKStmr/u+SoA6QiVlTiM0Ug09Zbs1y5Rn06N5+xBfBcoiHlUlmJlkY1PXeZt+uRJW3q1PxZrhncLCVK9Znh+Xx6sIYLdXe9wP19JYEJZajISPVKfVZUG5DZX0lKZMEQF9n0OU3Y/BaNeMM33Zl6nqD/hqXlG5IyowPVttpJxcrZA4jYjDNNI1FLRVIQHsq1XTtaSP0SG4Rh87OM7r0ivUfXAU0QTABxPdMmltj7Xbedf44vfAJOi52cnZs2F9C/2HhBuLxRJRZtb7j4koOhWzS+bY5e7FG+nf/wCm0ltWEiAF9QAAAABJRU5ErkJggg==">
 </head>
 <body>
+    <!-- User Selection Overlay -->
+    <div id="user-selection-overlay" class="overlay">
+        <div class="overlay-content">
+            <h2>Who are you?</h2>
+            <p>Please select your name to continue</p>
+            <div class="user-options">
+                <button class="user-option" data-user="Nisha">Nisha</button>
+                <button class="user-option" data-user="Apoorv">Apoorv</button>
+                <button class="user-option" data-user="Ayush">Ayush</button>
+                <button class="user-option" data-user="Ayushi">Ayushi</button>
+            </div>
+        </div>
+    </div>
+
     <div class="wave-container">
         <div class="wave"></div>
         <div class="wave"></div>
@@ -20,6 +58,11 @@
 
     <div id="app-container">
         <header>
+            <div class="user-display">
+                <span id="current-user-label">Planning as: </span>
+                <span id="current-user"></span>
+                <button id="change-user-btn" title="Change User"><i class="fas fa-user-edit"></i></button>
+            </div>
             <h1>Let's Go GOA!</h1>
             <div class="subtitle">
                 <h2>Trip Planning Hub</h2>
@@ -154,16 +197,6 @@
         </div>
     </div>
 
-    <!-- Link Preview Modal -->
-    <div id="preview-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <div id="preview-container">
-                <!-- Preview content will be loaded here -->
-            </div>
-        </div>
-    </div>
-
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -183,6 +216,51 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+
+        // User selection and management
+        let currentUser = "";
+        const userSelectionOverlay = document.getElementById('user-selection-overlay');
+        const currentUserElement = document.getElementById('current-user');
+        const changeUserBtn = document.getElementById('change-user-btn');
+
+        // Show user selection overlay
+        function showUserSelection() {
+            userSelectionOverlay.style.display = 'flex';
+        }
+
+        // Hide user selection overlay
+        function hideUserSelection() {
+            userSelectionOverlay.style.display = 'none';
+        }
+
+        // Set the current user
+        function setCurrentUser(username) {
+            currentUser = username;
+            currentUserElement.textContent = username;
+            localStorage.setItem('goaTripUser', username);
+            hideUserSelection();
+        }
+
+        // Initialize user selection
+        function initUserSelection() {
+            // Check if user was previously selected
+            const savedUser = localStorage.getItem('goaTripUser');
+            if (savedUser) {
+                setCurrentUser(savedUser);
+            } else {
+                showUserSelection();
+            }
+
+            // Add event listeners to user option buttons
+            document.querySelectorAll('.user-option').forEach(button => {
+                button.addEventListener('click', function() {
+                    setCurrentUser(this.dataset.user);
+                });
+            });
+
+            // Change user button
+            changeUserBtn.addEventListener('click', showUserSelection);
+        }
 
         // DOM Elements
         const sections = {
@@ -230,10 +308,6 @@
             }
         };
 
-        const previewModal = document.getElementById('preview-modal');
-        const previewContainer = document.getElementById('preview-container');
-        const closeModal = document.querySelector('.close-modal');
-
         // Initialize toggle buttons for sections
         document.querySelectorAll('.toggle-btn').forEach(btn => {
             btn.addEventListener('click', function() {
@@ -254,7 +328,12 @@
             // Set up event listeners for add buttons
             if (section.addBtn) {
                 section.addBtn.addEventListener('click', () => {
-                    addItem(section);
+                    if (currentUser) {
+                        addItem(section);
+                    } else {
+                        alert('Please select who you are before adding items.');
+                        showUserSelection();
+                    }
                 });
             }
             
@@ -273,7 +352,8 @@
             const itemData = {
                 name: nameValue,
                 timestamp: firebase.database.ServerValue.TIMESTAMP,
-                likes: 0
+                likes: 0,
+                addedBy: currentUser // Add user who created the item
             };
             
             if (urlValue) {
@@ -323,65 +403,80 @@
             });
         }
 
-// Create item element - modified version
-function createItemElement(item, dbPath) {
-    const itemElement = document.createElement('div');
-    itemElement.className = 'trip-item';
-    itemElement.dataset.id = item.id;
-    
-    // Main item content
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'item-content';
-    
-    // Item name
-    const nameSpan = document.createElement('span');
-    nameSpan.className = 'item-name';
-    nameSpan.textContent = item.name;
-    contentDiv.appendChild(nameSpan);
-    
-    // URL link if exists
-    if (item.url) {
-        const urlLink = document.createElement('a');
-        urlLink.href = item.url;
-        urlLink.className = 'item-url';
-        urlLink.target = '_blank'; // Open in new tab
-        urlLink.rel = 'noopener noreferrer'; // Security best practice
-        urlLink.innerHTML = '<i class="fas fa-external-link-alt"></i>';
-        urlLink.title = 'Open link in new tab';
-        
-        // No event listener needed - default link behavior will open in new tab
-        
-        contentDiv.appendChild(urlLink);
-    }
-    
-    itemElement.appendChild(contentDiv);
-    
-    // Actions div
-    const actionsDiv = document.createElement('div');
-    actionsDiv.className = 'item-actions';
-    
-    // Like button
-    const likeBtn = document.createElement('button');
-    likeBtn.className = 'like-btn';
-    likeBtn.innerHTML = `<i class="fas fa-heart"></i> <span>${item.likes || 0}</span>`;
-    likeBtn.addEventListener('click', function() {
-        likeItem(item.id, dbPath);
-    });
-    actionsDiv.appendChild(likeBtn);
-    
-    // Delete button
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'delete-btn';
-    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-    deleteBtn.addEventListener('click', function() {
-        deleteItem(item.id, dbPath);
-    });
-    actionsDiv.appendChild(deleteBtn);
-    
-    itemElement.appendChild(actionsDiv);
-    
-    return itemElement;
-}
+        // Create item element
+        function createItemElement(item, dbPath) {
+            const itemElement = document.createElement('div');
+            itemElement.className = 'trip-item';
+            itemElement.dataset.id = item.id;
+            
+            // Main item content
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'item-content';
+            
+            // Item name
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'item-name';
+            nameSpan.textContent = item.name;
+            contentDiv.appendChild(nameSpan);
+            
+            // URL link if exists
+            if (item.url) {
+                const urlLink = document.createElement('a');
+                urlLink.href = item.url;
+                urlLink.className = 'item-url';
+                urlLink.target = '_blank';
+                urlLink.rel = 'noopener noreferrer';
+                urlLink.innerHTML = '<i class="fas fa-external-link-alt"></i>';
+                urlLink.title = 'Open link in new tab';
+                contentDiv.appendChild(urlLink);
+            }
+            
+            itemElement.appendChild(contentDiv);
+            
+            // Added by info
+            if (item.addedBy) {
+                const addedByDiv = document.createElement('div');
+                addedByDiv.className = 'added-by';
+                addedByDiv.innerHTML = `Added by: <span>${item.addedBy}</span>`;
+                itemElement.appendChild(addedByDiv);
+            }
+            
+            // Actions div
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'item-actions';
+            
+            // Like button
+            const likeBtn = document.createElement('button');
+            likeBtn.className = 'like-btn';
+            likeBtn.innerHTML = `<i class="fas fa-heart"></i> <span>${item.likes || 0}</span>`;
+            likeBtn.addEventListener('click', function() {
+                if (currentUser) {
+                    likeItem(item.id, dbPath);
+                } else {
+                    alert('Please select who you are before liking items.');
+                    showUserSelection();
+                }
+            });
+            actionsDiv.appendChild(likeBtn);
+            
+            // Delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteBtn.addEventListener('click', function() {
+                if (currentUser) {
+                    deleteItem(item.id, dbPath);
+                } else {
+                    alert('Please select who you are before deleting items.');
+                    showUserSelection();
+                }
+            });
+            actionsDiv.appendChild(deleteBtn);
+            
+            itemElement.appendChild(actionsDiv);
+            
+            return itemElement;
+        }
 
         // Like an item
         function likeItem(itemId, dbPath) {
@@ -415,8 +510,47 @@ function createItemElement(item, dbPath) {
             }
         }
 
-        // Expand the first section by default
-        document.querySelector('.toggle-btn').click();
+        // Initialize the app
+        window.addEventListener('DOMContentLoaded', function() {
+            // Initialize user selection
+            initUserSelection();
+            
+            // Expand the first section by default
+            document.querySelector('.toggle-btn').click();
+        });
     </script>
+    <!-- Add this button right before the closing body tag -->
+
+<button id="theme-toggle" aria-label="Toggle dark mode">
+    <i class="fas fa-moon moon"></i>
+    <i class="fas fa-sun sun"></i>
+</button>
+
+<!-- Add this script right before the closing body tag -->
+<script>
+    // Theme toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const themeToggle = document.getElementById('theme-toggle');
+        
+        // Check for saved theme preference or default to light
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+        }
+        
+        // Toggle theme when button is clicked
+        themeToggle.addEventListener('click', function() {
+            if (document.body.classList.contains('dark-theme')) {
+                // Switch to light theme
+                document.body.classList.remove('dark-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                // Switch to dark theme
+                document.body.classList.add('dark-theme');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    });
+</script>
 </body>
 </html>
