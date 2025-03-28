@@ -20,7 +20,11 @@
     {
       "src": "apps/Travel/**/*",
       "use": "@vercel/static"
-    }
+    },
+    { 
+  "src": "apps/practice/**/*",
+  "use": "@vercel/static"
+}
   ],
   "routes": [
     {
@@ -172,6 +176,16 @@
         }
       ],
       "dest": "/apps/WorkoutTracker/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "practice.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/practice/index.html"
     },
     {
       "src": "/",

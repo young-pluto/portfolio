@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background-color: gray;
+        }
+        @keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.removing {
+    animation: fadeOut 0.3s ease-out;
+}
+    </style>
+</head>
+<body>
+    <h2>List</h2>
+    <input type="text" id="input-container">
+    <button id="add-button">Add</button>
+    <button id="remove-all-btn">Remove all</button>
+    <button id="remove-item-Btn">Remove first item</button>
+    <button id="remove-item-btn">Remove Last item</button>
+    <input type="number" id="remove-input" placeholder="enter item number to delete">
+    <button onclick="removeSpecificItem()">Enter</button>
+    <button id="sort-button">Sort Alphabetically</button>
+    <button id="display-btn">Display new list</button>
+    <input type="number" id="list-size" placeholder="Enter List Size">
+    <button id="list-creator">Create List</button>
+    <button id="remove-newList-Btn">Remove New List</button>
+    <ol type="1" id="items-list"></ol>
+    <br>
+    <ol type="1" id="new-list"></ol>
+    <br>
+    <ol type="1" id="custom-list"></ol>
+    <div id="container"></div>
+
+    <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+
+        // Firebase configuration - using the same config from your workout tracker
+        const firebaseConfig = {
+        apiKey: "AIzaSyB-F0C8l_fOhJPpkYsL6Eb6P7GUFcaC9MQ",
+        authDomain: "portfolio-415e1.firebaseapp.com",
+        databaseURL: "https://portfolio-415e1-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "portfolio-415e1",
+        storageBucket: "portfolio-415e1.firebasestorage.app",
+        messagingSenderId: "959081513500",
+        appId: "1:959081513500:web:e1889367df9e24f25355d9"
+    };
+
+  // initialize firebase 
+  firebase.initializeApp(firebaseConfig); 
+
+  // getting reference to Database 
+  const database = firebase.database(); 
+
+  const listRef = database.ref('todo_list_items');
+  console.log("firebase Initialised");
+</script>
+
+<script>
+
+    const addButton = document.getElementById('add-button');
+    const inputValue = document.getElementById('input-container');
+    const itemsList = document.getElementById('items-list'); 
+    const removeAllBtn = document.getElementById('remove-all-btn');
+    const removeItemBtn = document.getElementById('remove-item-btn');
+    const removeItembtn = document.getElementById('remove-item-Btn');
+    const removeInputValue = document.getElementById('remove-input');
+    const exerciseArray = [];
+    const testArray = [];
+
+    document.addEventListener('DOMContentLoaded', function(){
+        loadItemsFromFirebase();
+    });
+
+    function loadItemsFromFirebase(){
+        listRef.once('value').then(function(snapshot){
+            itemsList.innerHTML = '';
+            exerciseArray.length = 0;
+            testArray.length = 0;
+
+            const data = snapshot.val();
+
+            if(data){
+                const items = Object.values(data);
+
+                items.forEach(function(item){
+                    exerciseArray.push(item);
+                    testArray.push(item);
+
+                    createListItem(item);
+                });
+                console.log("Items loaded from Firebase:", exerciseArray);
+            } else {
+                console.log("No items found in Firebase");
+            }
+        })
+        .catch(function(error){
+            console.error("Error loading items from Firebase", error);
+        });
+    }
+
+    function createListItem(inputValueTrimmed){
+        const li = document.createElement('li');
+        const textSpan = document.createElement('span');
+        const spaceSpan = document.createElement('span');
+        spaceSpan.textContent = " ";
+    
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = "X";
+        deleteBtn.addEventListener('click', function(){
+            const index = exerciseArray.indexOf(inputValueTrimmed);
+
+            if(index>-1){
+                exerciseArray.splice(index,1);
+                testArray.splice(index,1);
+            }
+            console.log("current array", exerciseArray);
+            li.remove();
+        });
+
+        li.appendChild(textSpan);
+        li.appendChild(spaceSpan);
+        li.appendChild(deleteBtn);
+        itemsList.appendChild(li);
+
+    }
+    
+   async function addItems(){
+        const inputValueTrimmed = inputValue.value.trim();
+
+
+                if(inputValueTrimmed !== ''){
+                
+                try{
+
+                    await addItemToFirebase(inputValueTrimmed);
+            
+            exerciseArray.push(inputValueTrimmed);
+            testArray.push(inputValueTrimmed);
+
+           createListItem(inputValueTrimmed);
+            inputValue.value = '';
+            inputValue.focus();
+            console.log("Item added successfully:", inputValueTrimmed);
+        } catch(error){
+            console.log("Error adding item:", error);
+        }
+              
+    }
+}
+
+function addItemToFirebase(item){
+    return listRef.push(item);
+}
+
+    function removeItem(){
+        if(itemsList.firstChild){
+            itemsList.removeChild(itemsList.lastChild);
+        }
+        exerciseArray.pop();   
+    }
+
+    function removeFirstItem(){
+        if(itemsList.firstChild){
+            itemsList.removeChild(itemsList.firstChild);
+        }
+        exerciseArray.splice(0, 1);
+    }
+
+    function removeAllItem(){
+        while(itemsList.firstChild){
+            itemsList.removeChild(itemsList.lastChild);
+        }
+        itemsList.innerHTML = ''
+       while(exerciseArray.length >=1){
+        exerciseArray.pop(); 
+       }
+    }
+
+    function removeSpecificItem(){
+        const indexToRemove = parseInt(removeInputValue.value)-1;
+
+        const items = itemsList.getElementsByTagName('li');
+
+        if(indexToRemove >=0 && indexToRemove < items.length){
+            items[indexToRemove].remove();
+            exerciseArray.splice(indexToRemove, 1);
+            removeInputValue.value = '';
+            removeInputValue.focus();
+        }
+        else{
+            alert("Please enter a valid item number between 1 and " + items.length);
+        }
+    }
+
+    removeItemBtn.addEventListener('click', removeItem);
+    removeAllBtn.addEventListener('click', removeAllItem);
+    removeItembtn.addEventListener('click', removeFirstItem);
+
+    removeInputValue.addEventListener('keypress', function(event){
+        if(event.key == 'Enter'){
+            removeSpecificItem(); 
+        }
+    });
+
+    addButton.addEventListener('click', addItems);
+    inputValue.addEventListener('keypress', function(event){
+        if(event.key === 'Enter'){
+            addItems();
+        }
+    })
+
+
+</script>
+<script>
+    const sortButton = document.getElementById('sort-button');
+
+    sortButton.addEventListener('click', function(){
+        exerciseArray.sort();
+
+        itemsList.innerHTML = ''; // this //
+
+        exerciseArray.forEach(function(exercise){
+            const li = document.createElement('li');
+            const textSpan = document.createElement('span');
+            const spaceSpan = document.createElement('span');
+            spaceSpan.textContent = " ";
+            textSpan.textContent = exercise;
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = "X";
+            deleteBtn.addEventListener('click', function(){
+                const index = exerciseArray.indexOf(exercise);
+
+                if(index>-1){
+                    exerciseArray.splice(index,1);
+                }
+                li.remove();
+            });
+            li.appendChild(textSpan);
+            li.appendChild(spaceSpan);
+            li.appendChild(deleteBtn);
+            itemsList.appendChild(li);
+        });
+    });
+   
+    const newList = document.getElementById('new-list');
+    const displaybtn = document.getElementById('display-btn');
+
+    
+    displaybtn.addEventListener('click', function(){
+        if(displaybtn.textContent === 'display new list'){
+      exerciseArray.forEach(function(currentValue){
+        const li = document.createElement('li');
+        const textSpan = document.createElement('span');
+
+        textSpan.textContent = currentValue;
+        li.append(textSpan);
+        newList.appendChild(li);
+
+      });
+    displaybtn.textContent = 'hide new list'
+    }
+    else{
+        displaybtn.textContent = 'display new list';
+        while(newList.firstChild){
+            newList.removeChild(newList.lastChild); 
+        }
+    }
+    });
+
+    document.addEventListener('DOMContentLoaded', function(){
+const createList = document.getElementById('list-creator');
+
+createList.addEventListener('click',  function(){
+    const customListsize = document.getElementById('list-size');
+    const listSize = customListsize.value.trim(); 
+    const customList = document.getElementById('custom-list'); 
+    for(let i=0; i<listSize; i++){
+    const li = document.createElement('li');
+    const textSpan = document.createElement('span');
+    textSpan.textContent = 'Element name';
+    const spaceSpan = document.createElement('span');
+    const breakSpan = document.createElement('br');
+    spaceSpan.textContent = ' '; 
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = 'x';
+    deleteBtn.addEventListener('click', function(){
+        li.classList.add('removing');
+        breakSpan.classList.add('removing');
+
+        setTimeout(()=> {
+            li.remove();
+        breakSpan.remove(); 
+        },300);
+
+    });
+    
+    const data = document.createElement('input'); 
+
+    
+       li.appendChild(textSpan);
+       li.appendChild(spaceSpan);
+       li.appendChild(data);
+       li.appendChild(spaceSpan); 
+       li.appendChild(deleteBtn);
+       customList.appendChild(li);
+       customList.appendChild(breakSpan);
+       
+       
+    }
+});
+});
+
+const removeNewListButton = document.getElementById('remove-newList-Btn');
+
+removeNewListButton.addEventListener('click', function(){
+    const customList = document.getElementById('custom-list');
+    customList.innerHTML = ''; 
+    const random = document.createElement('span');
+   random.innerHTML= '<strong>Hey</strong> <em>Italic </em>';
+   const randomBox = document.getElementById('container');
+   randomBox.appendChild(random);
+});
+
+</script>
+</body>
+</html>
