@@ -51,7 +51,7 @@
 
 <script>
 
-        // Firebase configuration - using the same config from your workout tracker
+        // Firebase configuration 
         const firebaseConfig = {
         apiKey: "AIzaSyB-F0C8l_fOhJPpkYsL6Eb6P7GUFcaC9MQ",
         authDomain: "portfolio-415e1.firebaseapp.com",
@@ -119,6 +119,7 @@
         const li = document.createElement('li');
         const textSpan = document.createElement('span');
         const spaceSpan = document.createElement('span');
+        textSpan.textContent = inputValueTrimmed;
         spaceSpan.textContent = " ";
     
         const deleteBtn = document.createElement('button');
@@ -169,10 +170,35 @@ function addItemToFirebase(item){
     return listRef.push(item);
 }
 
-    function removeItem(){
-        if(itemsList.firstChild){
-            itemsList.removeChild(itemsList.lastChild);
+function deleteItemFromFirebase(){
+     listRef.once('value').then(function(snapshot){
+          const data = snapshot.val();
+
+          if(data){
+            let keyToDelete = null;
+            Object.entries(data).forEach(([key],value)=>{
+                if(value === item){
+                    keyToDelete = key;
+                }
+            });
+            if(keyToDelete){
+                return listRef.child(keyToDelete).remove();
+            }
+          }
+     })
+     .catch(function(error){
+        console.error("Error Deleting item from firebase", error);
+     });
+}
+
+
+   async function removeItem(){
+        if(itemsList.lastChild){
+            const lastItem = exerciseArray[exerciseArray.length - 1];
+           
+            await deleteItemFromFirebase(lastItem);
         }
+        itemsList.removeChild(itemsList.lastChild);
         exerciseArray.pop();   
     }
 
