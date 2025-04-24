@@ -1,7 +1,3 @@
-/**
- * Authentication Module
- * Handles user authentication and authorization
- */
 const AuthModule = (() => {
     // DOM Elements
     const loginForm = document.getElementById('login-form');
@@ -23,8 +19,6 @@ const AuthModule = (() => {
       if (e) e.preventDefault();
       
       try {
-        console.log('Network status:', navigator.onLine);
-        
         const email = loginEmail.value.trim();
         const password = loginPassword.value;
         
@@ -41,13 +35,6 @@ const AuthModule = (() => {
         console.log('Login successful:', userCredential.user.uid);
         
       } catch (error) {
-        console.group('Login Error');
-        console.error('Full error object:', error);
-        console.log('Error code:', error.code);
-        console.log('Error message:', error.message);
-        console.groupEnd();
-        
-        // Detailed error messaging
         let userMessage = 'An unexpected error occurred';
         
         switch (error.code) {
@@ -75,19 +62,6 @@ const AuthModule = (() => {
     };
   
     /**
-     * Handles user logout
-     */
-    const handleLogout = async () => {
-      try {
-        await auth.signOut();
-        redirectToLogin();
-      } catch (error) {
-        console.error('Logout error:', error);
-        alert('Error logging out: ' + error.message);
-      }
-    };
-  
-    /**
      * Displays login error messages
      */
     const showLoginMessage = (message, isError = true) => {
@@ -95,23 +69,16 @@ const AuthModule = (() => {
         loginMessage.textContent = message;
         loginMessage.className = 'login-message';
         
-        // Remove any existing timeout
-        if (loginMessage.messageTimeout) {
-          clearTimeout(loginMessage.messageTimeout);
-        }
-        
         if (isError) {
           loginMessage.classList.add('error');
         }
         
         // Auto-clear message after 5 seconds
-        loginMessage.messageTimeout = setTimeout(() => {
+        setTimeout(() => {
           loginMessage.textContent = '';
           loginMessage.className = 'login-message';
         }, 5000);
       }
-      
-      console.log(isError ? 'Login Error:' : 'Login Message:', message);
     };
   
     /**
@@ -119,19 +86,19 @@ const AuthModule = (() => {
      */
     const loadUserData = async (userId) => {
       try {
-        // Fetch user data from users node
+        // Check users node first
         const userRef = database.ref(`users/${userId}`);
-        const snapshot = await userRef.once('value');
-        const userData = snapshot.val();
+        const userSnapshot = await userRef.once('value');
+        let userData = userSnapshot.val();
         
-        console.log('Loaded user data:', userData);
-        
+        // If not found, check coaches node
         if (!userData) {
-          console.error('No user data found for UID:', userId);
-          return { role: 'unknown' };
+          const coachRef = database.ref(`coaches/${userId}`);
+          const coachSnapshot = await coachRef.once('value');
+          userData = coachSnapshot.val();
         }
         
-        return userData;
+        return userData || { role: 'unknown' };
       } catch (error) {
         console.error('Error loading user data:', error);
         return { role: 'unknown' };
@@ -139,140 +106,76 @@ const AuthModule = (() => {
     };
   
     /**
-     * Redirects user based on role
-     */
-    const redirectBasedOnRole = (role) => {
-        console.group('Redirect Debugging');
-        console.log('Current Role:', role);
-        console.log('Current Path:', window.location.pathname);
-        console.log('Current URL:', window.location.href);
-        
-        try {
-          // Absolute path redirection
-          if (role === 'coach') {
-            console.log('Attempting to redirect to coach dashboard');
-            
-            // Multiple redirection strategies
-            window.location.replace('coach-dashboard.html');
-            
-            // Fallback methods
-            setTimeout(() => {
-              window.location.href = 'coach-dashboard.html';
-            }, 100);
-            
-            setTimeout(() => {
-              window.open('coach-dashboard.html', '_self');
-            }, 200);
-          } else if (role === 'client') {
-            console.log('Attempting to redirect to client dashboard');
-            
-            window.location.replace('client-dashboard.html');
-            
-            setTimeout(() => {
-              window.location.href = 'client-dashboard.html';
-            }, 100);
-            
-            setTimeout(() => {
-              window.open('client-dashboard.html', '_self');
-            }, 200);
-          }
-        } catch (error) {
-          console.error('Redirection Error:', error);
-        } finally {
-          console.groupEnd();
-        }
-      };
-  
-    /**
-     * Redirects to login page
-     */
-    const redirectToLogin = () => {
-      window.location.href = 'index.html';
-    };
-  
-    /**
      * Auth state change listener
      */
-// Modify initAuthListener to add more debugging
-const initAuthListener = () => {
-    auth.onAuthStateChanged(async (user) => {
-      console.group('Auth State Change Detailed');
-      console.log('User Object:', user);
-      
-      const loadingOverlay = document.getElementById('loading-overlay');
-      
-      if (user) {
-        try {
-          // Comprehensive user data loading
-          const userRef = database.ref(`users/${user.uid}`);
-          const snapshot = await userRef.once('value');
-          userData = snapshot.val();
-          
-          console.log('Loaded User Data:', userData);
-          
-          // Fallback to coaches node if not found in users
-          if (!userData) {
-            const coachRef = database.ref(`coaches/${user.uid}`);
-            const coachSnapshot = await coachRef.once('value');
-            userData = coachSnapshot.val();
-          }
-          
-          console.log('Final User Data:', userData);
-          
-          // Ensure role is extracted
-          userRole = userData ? userData.role : null;
-          
-          console.log('Extracted User Role:', userRole);
-          
-          // Hide loading overlay explicitly
-          if (loadingOverlay) {
-            loadingOverlay.classList.add('hidden');
-          }
-          
-          // Redirect with comprehensive checks
-          if (userRole) {
-            redirectBasedOnRole(userRole);
-          } else {
-            console.error('No role found for user');
-            await auth.signOut();
-          }
-        } catch (error) {
-          console.error('Comprehensive Auth Error:', error);
-          
-          // Ensure loading overlay is hidden
-          if (loadingOverlay) {
-            loadingOverlay.classList.add('hidden');
-          }
-          
-          await auth.signOut();
-        } finally {
-          console.groupEnd();
+    const initAuthListener = () => {
+      auth.onAuthStateChanged(async (user) => {
+        const loadingOverlay = document.getElementById('loading-overlay');
+        
+        if (loadingOverlay) {
+          loadingOverlay.classList.remove('hidden');
         }
-      }
-    });
-  };
+        
+        if (user) {
+          try {
+            // Load user data
+            userData = await loadUserData(user.uid);
+            currentUser = user;
+            userRole = userData.role;
+            
+            // Redirect based on role
+            if (userRole === 'coach') {
+              window.location.href = 'coach-dashboard.html';
+            } else if (userRole === 'client') {
+              window.location.href = 'client-dashboard.html';
+            } else {
+              showLoginMessage('Invalid user role');
+              await auth.signOut();
+            }
+          } catch (error) {
+            console.error('Authentication error:', error);
+            showLoginMessage('Authentication failed');
+            await auth.signOut();
+          } finally {
+            if (loadingOverlay) {
+              loadingOverlay.classList.add('hidden');
+            }
+          }
+        } else {
+          // User is signed out
+          currentUser = null;
+          userData = null;
+          userRole = null;
+          
+          if (loadingOverlay) {
+            loadingOverlay.classList.add('hidden');
+          }
+        }
+      });
+    };
   
     /**
      * Initialize Auth Module
      */
     const init = () => {
-      // Add event listeners
-      if (loginForm) loginForm.addEventListener('submit', handleLogin);
-      if (loginBtn) loginBtn.addEventListener('click', handleLogin);
-      if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
+      // Prevent default form submission and attach login handler
+      if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          handleLogin();
+        });
+      }
+      
+      if (loginBtn) {
+        loginBtn.addEventListener('click', handleLogin);
+      }
       
       // Initialize auth state listener
       initAuthListener();
     };
   
-    /**
-     * Public methods and properties
-     */
     return {
-      init,
-      getCurrentUser: () => currentUser,
-      getUserData: () => userData,
-      getUserRole: () => userRole
+      init
     };
   })();
   
