@@ -142,32 +142,28 @@ const AuthModule = (() => {
      * Redirects user based on role
      */
     const redirectBasedOnRole = (role) => {
-        console.group('Forced Redirect Debug');
-        console.log('Current Role:', role);
-        console.log('Current Location:', window.location);
-        
-        try {
-          // Force a hard redirect
-          if (role === 'coach') {
-            console.log('Attempting absolute redirect to coach dashboard');
-            window.location.replace(window.location.origin + '/coach-dashboard.html');
-            
-            // Backup navigation methods
-            setTimeout(() => {
-              window.location.href = 'coach-dashboard.html';
-            }, 100);
-            
-            setTimeout(() => {
-              window.open('coach-dashboard.html', '_self');
-            }, 200);
-          }
-        } catch (error) {
-          console.error('Absolute redirection error:', error);
-        } finally {
-          console.groupEnd();
-        }
-      };
+      // Get current page
+      const currentPath = window.location.pathname;
+      const isLoginPage = currentPath.endsWith('index.html') || currentPath.endsWith('/');
       
+      console.log('Redirecting based on role:', role);
+      console.log('Current path:', currentPath);
+      
+      if (role === 'coach') {
+        if (!currentPath.includes('coach-dashboard.html')) {
+          window.location.href = 'coach-dashboard.html';
+        }
+      } else if (role === 'client') {
+        if (!currentPath.includes('client-dashboard.html')) {
+          window.location.href = 'client-dashboard.html';
+        }
+      } else {
+        // Unknown role or not authorized
+        if (!isLoginPage) {
+          redirectToLogin();
+        }
+      }
+    };
   
     /**
      * Redirects to login page
