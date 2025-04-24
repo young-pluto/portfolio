@@ -24,6 +24,10 @@
     { 
   "src": "apps/practice/**/*",
   "use": "@vercel/static"
+},
+{
+  "src": "apps/fitness-coach-portal/**/*",
+  "use": "@vercel/static"
 }
   ],
   "routes": [
@@ -186,6 +190,56 @@
         }
       ],
       "dest": "/apps/practice/index.html"
+    },
+    {
+      "src": "/css/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "coaching.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/fitness-coach-portal/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "coaching.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/fitness-coach-portal/js/$1"
+    },
+    {
+      "src": "/client-dashboard",
+      "has": [
+        {
+          "type": "host",
+          "value": "coaching.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/fitness-coach-portal/client-dashboard.html"
+    },
+    {
+      "src": "/coach-dashboard",
+      "has": [
+        {
+          "type": "host",
+          "value": "coaching.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/fitness-coach-portal/coach-dashboard.html"
+    },
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "coaching.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/fitness-coach-portal/index.html"
     },
     {
       "src": "/",
