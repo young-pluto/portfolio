@@ -19,60 +19,37 @@ const AuthModule = (() => {
     /**
      * Handles user login
      */
-    const handleLogin = async (e) => {
-      if (e) e.preventDefault();
+ // Modify handleLogin to include forced navigation
+const handleLogin = async (e) => {
+    if (e) e.preventDefault();
+    
+    try {
+      const email = loginEmail.value.trim();
+      const password = loginPassword.value;
       
-      try {
-        console.log('Network status:', navigator.onLine);
-        
-        const email = loginEmail.value.trim();
-        const password = loginPassword.value;
-        
-        if (!email || !password) {
-          showLoginMessage('Please enter both email and password');
-          return;
-        }
-        
-        showLoginMessage('Signing in...', false);
-        
-        // Sign in with Firebase Auth
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        
-        console.log('Login successful:', userCredential.user.uid);
-        
-      } catch (error) {
-        console.group('Login Error');
-        console.error('Full error object:', error);
-        console.log('Error code:', error.code);
-        console.log('Error message:', error.message);
-        console.groupEnd();
-        
-        // Detailed error messaging
-        let userMessage = 'An unexpected error occurred';
-        
-        switch (error.code) {
-          case 'auth/network-request-failed':
-            userMessage = 'Network error. Please check your connection.';
-            break;
-          case 'auth/too-many-requests':
-            userMessage = 'Too many login attempts. Please try again later.';
-            break;
-          case 'auth/invalid-credential':
-            userMessage = 'Invalid email or password';
-            break;
-          case 'auth/user-not-found':
-            userMessage = 'No user found with this email';
-            break;
-          case 'auth/wrong-password':
-            userMessage = 'Incorrect password';
-            break;
-          default:
-            userMessage = error.message || 'Login failed';
-        }
-        
-        showLoginMessage(userMessage);
+      if (!email || !password) {
+        showLoginMessage('Please enter both email and password');
+        return;
       }
-    };
+      
+      showLoginMessage('Signing in...', false);
+      
+      // Sign in with Firebase Auth
+      const userCredential = await auth.signInWithEmailAndPassword(email, password);
+      
+      console.log('Login successful:', userCredential.user.uid);
+      
+      // Force immediate redirect
+      const userData = await loadUserData(userCredential.user.uid);
+      if (userData.role === 'coach') {
+        window.location.replace(window.location.origin + '/coach-dashboard.html');
+      }
+      
+    } catch (error) {
+      console.error('Login error:', error);
+      showLoginMessage(error.message || 'Login failed');
+    }
+  };
   
     /**
      * Handles user logout
@@ -142,28 +119,32 @@ const AuthModule = (() => {
      * Redirects user based on role
      */
     const redirectBasedOnRole = (role) => {
-      // Get current page
-      const currentPath = window.location.pathname;
-      const isLoginPage = currentPath.endsWith('index.html') || currentPath.endsWith('/');
+        console.group('Forced Redirect Debug');
+        console.log('Current Role:', role);
+        console.log('Current Location:', window.location);
+        
+        try {
+          // Force a hard redirect
+          if (role === 'coach') {
+            console.log('Attempting absolute redirect to coach dashboard');
+            window.location.replace(window.location.origin + '/coach-dashboard.html');
+            
+            // Backup navigation methods
+            setTimeout(() => {
+              window.location.href = 'coach-dashboard.html';
+            }, 100);
+            
+            setTimeout(() => {
+              window.open('coach-dashboard.html', '_self');
+            }, 200);
+          }
+        } catch (error) {
+          console.error('Absolute redirection error:', error);
+        } finally {
+          console.groupEnd();
+        }
+      };
       
-      console.log('Redirecting based on role:', role);
-      console.log('Current path:', currentPath);
-      
-      if (role === 'coach') {
-        if (!currentPath.includes('coach-dashboard.html')) {
-          window.location.href = 'coach-dashboard.html';
-        }
-      } else if (role === 'client') {
-        if (!currentPath.includes('client-dashboard.html')) {
-          window.location.href = 'client-dashboard.html';
-        }
-      } else {
-        // Unknown role or not authorized
-        if (!isLoginPage) {
-          redirectToLogin();
-        }
-      }
-    };
   
     /**
      * Redirects to login page
