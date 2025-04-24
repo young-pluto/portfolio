@@ -1514,6 +1514,21 @@ const CoachModule = (() => {
    * Initialize Coach Module
    */
   const init = (userProfileData) => {
+    // ABORT INITIALIZATION IF TOO MANY RELOADS
+    if (window.disableModuleInitialization) {
+      console.warn('Module initialization disabled due to reload loop detection');
+      // Show a message to the user that functionality is limited
+      const welcomeNameElement = document.getElementById('welcome-name');
+      if (welcomeNameElement) {
+        welcomeNameElement.textContent = "Coach (Limited Mode)";
+      }
+      
+      // Still initialize basic tab navigation for usability
+      initTabNavigation();
+      return;
+    }
+    
+    // Rest of your initialization code remains the same
     // Store user data
     currentUser = AuthModule.getCurrentUser();
     userData = userProfileData;
@@ -1529,16 +1544,19 @@ const CoachModule = (() => {
     
     // Initialize client management
     initClientManagement();
-
-      // Conditionally initialize ExercisesModule
-  if (typeof ExercisesModule !== 'undefined') {
-    try {
-      ExercisesModule.init();
-    } catch (error) {
-      console.error('Error initializing ExercisesModule:', error);
+  
+    // Conditionally initialize ExercisesModule - WRAP IN TIMEOUT
+    if (typeof ExercisesModule !== 'undefined') {
+      try {
+        // Delay ExercisesModule initialization slightly to break potential cyclic dependencies
+        setTimeout(() => {
+          ExercisesModule.init();
+        }, 100);
+      } catch (error) {
+        console.error('Error initializing ExercisesModule:', error);
+        window.disableModuleInitialization = true; // Disable further initialization if this fails
+      }
     }
-  }
-    
     // Handle workspace building buttons
     if (createWorkoutPlanBtn) {
       createWorkoutPlanBtn.addEventListener('click', () => {
