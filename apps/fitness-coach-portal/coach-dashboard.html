@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Dashboard - FitCoach Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/coach.css">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loader"></div>
+    </div>
+
+    <div id="app-container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="logo-container">
+                    <h1>FitCoach</h1>
+                    <span class="coach-badge">Coach Portal</span>
+                </div>
+                <div class="user-menu">
+                    <div class="user-info">
+                        <span id="user-name">Loading...</span>
+                    </div>
+                    <button id="logout-btn" class="icon-btn" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-container coach-dashboard">
+            <nav class="dashboard-nav">
+                <div class="nav-tabs">
+                    <button id="home-tab" class="nav-tab active">
+                        <i class="fas fa-home"></i> Dashboard
+                    </button>
+                    <button id="clients-tab" class="nav-tab">
+                        <i class="fas fa-users"></i> Clients
+                    </button>
+                    <button id="exercises-tab" class="nav-tab">
+                        <i class="fas fa-dumbbell"></i> Exercise Library
+                    </button>
+                    <button id="plans-tab" class="nav-tab">
+                        <i class="fas fa-clipboard-list"></i> Plans
+                    </button>
+                    <button id="settings-tab" class="nav-tab">
+                        <i class="fas fa-cog"></i> Settings
+                    </button>
+                </div>
+            </nav>
+
+            <main class="dashboard-content">
+                <!-- Home Section -->
+                <section id="home-section" class="dashboard-section active">
+                    <div class="section-header">
+                        <h2>Coach Dashboard</h2>
+                        <div class="date-display" id="current-date">
+                            Loading...
+                        </div>
+                    </div>
+
+                    <div class="welcome-message">
+                        <h3>Welcome, <span id="welcome-name">Coach</span>!</h3>
+                        <p>Manage your clients, create workout plans, and track their progress.</p>
+                    </div>
+
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="total-clients">0</div>
+                                <div class="stat-label">Total Clients</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="active-plans">0</div>
+                                <div class="stat-label">Active Plans</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="workouts-logged">0</div>
+                                <div class="stat-label">Workouts This Week</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-activity-container">
+                        <h3>Recent Client Activity</h3>
+                        <div class="recent-activity" id="recent-client-activity">
+                            <div class="placeholder-content">Loading recent activity...</div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h3>Quick Actions</h3>
+                        <div class="action-buttons">
+                            <button id="add-client-quick" class="action-btn">
+                                <i class="fas fa-user-plus"></i>
+                                <span>Add New Client</span>
+                            </button>
+                            <button id="create-plan-quick" class="action-btn">
+                                <i class="fas fa-file-medical"></i>
+                                <span>Create Workout Plan</span>
+                            </button>
+                            <button id="create-diet-quick" class="action-btn">
+                                <i class="fas fa-utensils"></i>
+                                <span>Create Diet Plan</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Clients Section -->
+                <section id="clients-section" class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Client Management</h2>
+                        <div class="section-actions">
+                            <button id="add-client-btn" class="primary-btn">
+                                <i class="fas fa-user-plus"></i> Add New Client
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="clients-search">
+                        <div class="search-input">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="client-search" placeholder="Search clients...">
+                        </div>
+                    </div>
+
+                    <div class="clients-container">
+                        <div class="clients-list" id="clients-list">
+                            <div class="placeholder-content">Loading clients...</div>
+                        </div>
+
+                        <div class="client-details" id="client-details">
+                            <div class="no-selection-message">
+                                <i class="fas fa-user-circle"></i>
+                                <p>Select a client to view details</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Exercise Library Section -->
+                <section id="exercises-section" class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Exercise Library</h2>
+                        <div class="section-actions">
+                            <button id="add-exercise-btn" class="primary-btn">
+                                <i class="fas fa-plus"></i> Add Exercise
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="exercises-filters">
+                        <div class="search-input">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="exercise-search" placeholder="Search exercises...">
+                        </div>
+                        <div class="category-filter">
+                            <label for="category-select">Filter by Category:</label>
+                            <select id="category-select">
+                                <option value="all">All Categories</option>
+                                <option value="chest">Chest</option>
+                                <option value="back">Back</option>
+                                <option value="legs">Legs</option>
+                                <option value="shoulders">Shoulders</option>
+                                <option value="arms">Arms</option>
+                                <option value="core">Core</option>
+                                <option value="cardio">Cardio</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="exercises-container">
+                        <div class="exercises-list" id="exercises-list">
+                            <div class="placeholder-content">Loading exercises...</div>
+                        </div>
+                    </div>
+
+                    <!-- Exercise Form Modal -->
+                    <div id="exercise-form-modal" class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 id="exercise-form-title">Add New Exercise</h3>
+                                <button class="close-modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="exercise-form">
+                                    <div class="form-group">
+                                        <label for="exercise-name">Exercise Name*</label>
+                                        <input type="text" id="exercise-name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exercise-category">Category*</label>
+                                        <select id="exercise-category" required>
+                                            <option value="">Select Category</option>
+                                            <option value="chest">Chest</option>
+                                            <option value="back">Back</option>
+                                            <option value="legs">Legs</option>
+                                            <option value="shoulders">Shoulders</option>
+                                            <option value="arms">Arms</option>
+                                            <option value="core">Core</option>
+                                            <option value="cardio">Cardio</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exercise-instructions">Instructions</label>
+                                        <textarea id="exercise-instructions" rows="5"></textarea>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="button" id="cancel-exercise-btn" class="secondary-btn">Cancel</button>
+                                        <button type="submit" id="save-exercise-btn" class="primary-btn">Save Exercise</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Plans Section -->
+                <section id="plans-section" class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Workout & Diet Plans</h2>
+                        <div class="section-actions">
+                            <button id="create-workout-plan-btn" class="primary-btn">
+                                <i class="fas fa-dumbbell"></i> Create Workout Plan
+                            </button>
+                            <button id="create-diet-plan-btn" class="primary-btn">
+                                <i class="fas fa-utensils"></i> Create Diet Plan
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="plans-tabs">
+                        <button class="plan-tab active" data-tab="workout-plans">Workout Plans</button>
+                        <button class="plan-tab" data-tab="diet-plans">Diet Plans</button>
+                    </div>
+
+                    <div class="plans-container">
+                        <div id="workout-plans" class="plan-tab-content active">
+                            <div class="plans-list" id="workout-plans-list">
+                                <div class="placeholder-content">Loading workout plans...</div>
+                            </div>
+                        </div>
+
+                        <div id="diet-plans" class="plan-tab-content">
+                            <div class="plans-list" id="diet-plans-list">
+                                <div class="placeholder-content">Loading diet plans...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Workout Plan Form Modal -->
+                    <div id="workout-plan-modal" class="modal">
+                        <div class="modal-content large-modal">
+                            <div class="modal-header">
+                                <h3 id="workout-plan-form-title">Create Workout Plan</h3>
+                                <button class="close-modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="workout-plan-form">
+                                    <div class="form-group">
+                                        <label for="workout-plan-name">Plan Name*</label>
+                                        <input type="text" id="workout-plan-name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="workout-plan-description">Description</label>
+                                        <textarea id="workout-plan-description" rows="2"></textarea>
+                                    </div>
+                                    
+                                    <div class="workout-days-container">
+                                        <h4>Workout Days</h4>
+                                        <div class="workout-days-tabs" id="workout-days-tabs">
+                                            <button type="button" class="day-tab active" data-day="day1">Day 1</button>
+                                            <button type="button" class="day-tab" data-day="day2">Day 2</button>
+                                            <button type="button" class="day-tab" data-day="day3">Day 3</button>
+                                            <button type="button" class="day-tab" data-day="day4">Day 4</button>
+                                            <button type="button" class="day-tab" data-day="day5">Day 5</button>
+                                            <button type="button" class="day-tab" data-day="day6">Day 6</button>
+                                            <button type="button" class="day-tab" data-day="day7">Day 7</button>
+                                        </div>
+                                        
+                                        <div class="workout-day-content" id="workout-day-content">
+                                            <div class="day-form active" data-day="day1">
+                                                <div class="form-group">
+                                                    <label for="day1-name">Day Name</label>
+                                                    <input type="text" id="day1-name" value="Day 1" placeholder="e.g., Chest & Triceps">
+                                                </div>
+                                                <div class="day-exercises">
+                                                    <h5>Exercises</h5>
+                                                    <button type="button" class="add-day-exercise secondary-btn" data-day="day1">
+                                                        <i class="fas fa-plus"></i> Add Exercise
+                                                    </button>
+                                                    <div class="day-exercises-list" id="day1-exercises"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Other days will be similar, initialized via JavaScript -->
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-actions">
+                                        <button type="button" id="cancel-workout-plan-btn" class="secondary-btn">Cancel</button>
+                                        <button type="submit" id="save-workout-plan-btn" class="primary-btn">Save Workout Plan</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Diet Plan Form Modal -->
+                    <div id="diet-plan-modal" class="modal">
+                        <div class="modal-content large-modal">
+                            <div class="modal-header">
+                                <h3 id="diet-plan-form-title">Create Diet Plan</h3>
+                                <button class="close-modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="diet-plan-form">
+                                    <div class="form-group">
+                                        <label for="diet-plan-name">Plan Name*</label>
+                                        <input type="text" id="diet-plan-name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="diet-plan-description">Description</label>
+                                        <textarea id="diet-plan-description" rows="2"></textarea>
+                                    </div>
+                                    
+                                    <div class="meals-container">
+                                        <h4>Meals</h4>
+                                        <button type="button" id="add-meal-btn" class="secondary-btn">
+                                            <i class="fas fa-plus"></i> Add Meal
+                                        </button>
+                                        <div id="meals-list" class="meals-list"></div>
+                                    </div>
+                                    
+                                    <div class="form-actions">
+                                        <button type="button" id="cancel-diet-plan-btn" class="secondary-btn">Cancel</button>
+                                        <button type="submit" id="save-diet-plan-btn" class="primary-btn">Save Diet Plan</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings-section" class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Settings</h2>
+                    </div>
+
+                    <div class="settings-container">
+                        <div class="settings-card">
+                            <h3>Account Information</h3>
+                            <div class="form-group">
+                                <label for="coach-name">Name</label>
+                                <input type="text" id="coach-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="coach-email">Email</label>
+                                <input type="email" id="coach-email" disabled>
+                            </div>
+                            <div class="form-actions">
+                                <button id="update-account-btn" class="primary-btn">Update Account</button>
+                            </div>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3>Password Management</h3>
+                            <div class="form-group">
+                                <label for="current-password">Current Password</label>
+                                <input type="password" id="current-password">
+                            </div>
+                            <div class="form-group">
+                                <label for="new-password">New Password</label>
+                                <input type="password" id="new-password">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm-password">Confirm New Password</label>
+                                <input type="password" id="confirm-password">
+                            </div>
+                            <div class="form-actions">
+                                <button id="change-password-btn" class="primary-btn">Change Password</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Templates -->
+    <template id="client-card-template">
+        <div class="client-card">
+            <div class="client-info">
+                <h3 class="client-name"></h3>
+                <p class="client-email"></p>
+            </div>
+            <div class="client-status"></div>
+        </div>
+    </template>
+
+    <template id="client-detail-template">
+        <div class="client-detail-content">
+            <div class="client-header">
+                <h3 class="client-name"></h3>
+                <div class="client-actions">
+                    <button class="edit-client-btn secondary-btn">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
+                </div>
+            </div>
+            
+            <div class="client-tabs">
+                <button class="client-tab active" data-tab="profile">Profile</button>
+                <button class="client-tab" data-tab="workouts">Workouts</button>
+                <button class="client-tab" data-tab="nutrition">Nutrition</button>
+                <button class="client-tab" data-tab="progress">Progress</button>
+                <button class="client-tab" data-tab="logs">Logs</button>
+            </div>
+            
+            <div class="client-tab-content">
+                <!-- Profile Tab Content -->
+                <div id="profile-tab-content" class="tab-content active">
+                    <div class="profile-info">
+                        <div class="info-group">
+                            <label>Email</label>
+                            <div class="info-value client-email"></div>
+                        </div>
+                        <div class="info-group">
+                            <label>Age</label>
+                            <div class="info-value client-age"></div>
+                        </div>
+                        <div class="info-group">
+                            <label>Weight</label>
+                            <div class="info-value client-weight"></div>
+                        </div>
+                        <div class="info-group">
+                            <label>Height</label>
+                            <div class="info-value client-height"></div>
+                        </div>
+                        <div class="info-group full-width">
+                            <label>Goals</label>
+                            <div class="info-value client-goals"></div>
+                        </div>
+                        <div class="info-group full-width">
+                            <label>Notes</label>
+                            <div class="info-value client-notes"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Workouts Tab Content -->
+                <div id="workouts-tab-content" class="tab-content">
+                    <div class="assigned-workouts">
+                        <div class="assigned-header">
+                            <h4>Assigned Workout Plan</h4>
+                            <button class="assign-workout-btn secondary-btn">
+                                <i class="fas fa-plus"></i> Assign Plan
+                            </button>
+                        </div>
+                        <div class="current-workout-plan"></div>
+                    </div>
+                </div>
+                
+                <!-- Nutrition Tab Content -->
+                <div id="nutrition-tab-content" class="tab-content">
+                    <div class="assigned-diet">
+                        <div class="assigned-header">
+                            <h4>Assigned Diet Plan</h4>
+                            <button class="assign-diet-btn secondary-btn">
+                                <i class="fas fa-plus"></i> Assign Plan
+                            </button>
+                        </div>
+                        <div class="current-diet-plan"></div>
+                    </div>
+                </div>
+                
+                <!-- Progress Tab Content -->
+                <div id="progress-tab-content" class="tab-content">
+                    <div class="progress-charts">
+                        <div class="chart-container">
+                            <h4>Weight Progress</h4>
+                            <canvas class="weight-chart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h4>Workout Volume</h4>
+                            <canvas class="volume-chart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h4>Mood & Energy</h4>
+                            <canvas class="mood-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Logs Tab Content -->
+                <div id="logs-tab-content" class="tab-content">
+                    <div class="client-logs">
+                        <div class="logs-filter">
+                            <div class="form-group">
+                                <label for="logs-filter-type">Type</label>
+                                <select id="logs-filter-type">
+                                    <option value="all">All Logs</option>
+                                    <option value="workout">Workouts</option>
+                                    <option value="mood">Mood</option>
+                                    <option value="cardio">Cardio</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="logs-filter-date">Date Range</label>
+                                <select id="logs-filter-date">
+                                    <option value="week">Last 7 Days</option>
+                                    <option value="month">Last 30 Days</option>
+                                    <option value="3months">Last 3 Months</option>
+                                    <option value="all">All Time</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="logs-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="exercise-card-template">
+        <div class="exercise-card">
+            <div class="exercise-info">
+                <h3 class="exercise-name"></h3>
+                <div class="exercise-category"></div>
+            </div>
+            <div class="exercise-actions">
+                <button class="edit-exercise-btn icon-btn" title="Edit">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="delete-exercise-btn icon-btn" title="Delete">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <template id="plan-card-template">
+        <div class="plan-card">
+            <div class="plan-info">
+                <h3 class="plan-name"></h3>
+                <p class="plan-description"></p>
+            </div>
+            <div class="plan-actions">
+                <button class="view-plan-btn icon-btn" title="View">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="edit-plan-btn icon-btn" title="Edit">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="delete-plan-btn icon-btn" title="Delete">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <template id="day-exercise-template">
+        <div class="day-exercise">
+            <div class="exercise-name-select">
+                <select class="exercise-select"></select>
+            </div>
+            <div class="exercise-details">
+                <div class="input-group">
+                    <label>Sets</label>
+                    <input type="number" class="sets-input" min="1" value="3">
+                </div>
+                <div class="input-group">
+                    <label>Reps</label>
+                    <input type="text" class="reps-input" placeholder="e.g., 8-10" value="8-12">
+                </div>
+                <div class="input-group">
+                    <label>Notes</label>
+                    <input type="text" class="notes-input" placeholder="Optional instructions">
+                </div>
+            </div>
+            <button class="remove-exercise-btn icon-btn" title="Remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </template>
+
+    <template id="meal-template">
+        <div class="meal-item">
+            <div class="meal-header">
+                <div class="input-group">
+                    <label>Meal Name</label>
+                    <input type="text" class="meal-name-input" placeholder="e.g., Breakfast">
+                </div>
+                <button class="remove-meal-btn icon-btn" title="Remove Meal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="meal-foods">
+                <h5>Foods</h5>
+                <button class="add-food-btn secondary-btn">
+                    <i class="fas fa-plus"></i> Add Food
+                </button>
+                <div class="foods-list"></div>
+            </div>
+            <div class="meal-notes">
+                <label>Notes</label>
+                <textarea class="meal-notes-input" rows="2" placeholder="Any additional instructions or notes"></textarea>
+            </div>
+        </div>
+    </template>
+
+    <template id="food-item-template">
+        <div class="food-item">
+            <div class="food-name">
+                <input type="text" class="food-name-input" placeholder="Food name">
+            </div>
+            <div class="food-macros">
+                <div class="input-group">
+                    <label>Qty</label>
+                    <input type="text" class="food-quantity-input" placeholder="e.g., 100g">
+                </div>
+                <div class="input-group">
+                    <label>Protein</label>
+                    <input type="number" class="food-protein-input" placeholder="g">
+                </div>
+                <div class="input-group">
+                    <label>Carbs</label>
+                    <input type="number" class="food-carbs-input" placeholder="g">
+                </div>
+                <div class="input-group">
+                    <label>Fat</label>
+                    <input type="number" class="food-fat-input" placeholder="g">
+                </div>
+                <div class="input-group">
+                    <label>Cals</label>
+                    <input type="number" class="food-calories-input" placeholder="kcal">
+                </div>
+            </div>
+            <button class="remove-food-btn icon-btn" title="Remove Food">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </template>
+
+    <!-- Client Form Modal -->
+    <div id="client-form-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="client-form-title">Add New Client</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="client-form">
+                    <div class="form-group">
+                        <label for="client-name">Full Name*</label>
+                        <input type="text" id="client-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="client-email">Email*</label>
+                        <input type="email" id="client-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="client-password">Password*</label>
+                        <input type="password" id="client-password" required>
+                        <small>Minimum 6 characters</small>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="client-age">Age</label>
+                            <input type="number" id="client-age" min="0">
+                        </div>
+                        <div class="form-group half">
+                            <label for="client-weight">Weight (kg)</label>
+                            <input type="number" id="client-weight" step="0.1" min="0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="client-height">Height (cm)</label>
+                            <input type="number" id="client-height" min="0">
+                        </div>
+                        <div class="form-group half">
+                            <label for="client-gender">Gender</label>
+                            <select id="client-gender">
+                                <option value="">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="client-goals">Goals</label>
+                        <textarea id="client-goals" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="client-notes">Coach Notes</label>
+                        <textarea id="client-notes" rows="3"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="cancel-client-btn" class="secondary-btn">Cancel</button>
+                        <button type="submit" id="save-client-btn" class="primary-btn">Save Client</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="assign-plan-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="assign-plan-title">Assign Plan</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="plan-select">Select Plan</label>
+                    <select id="plan-select"></select>
+                </div>
+                <div class="form-actions">
+                    <button id="cancel-assign-btn" class="secondary-btn">Cancel</button>
+                    <button id="confirm-assign-btn" class="primary-btn">Assign Plan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <!-- Chart.js for Progress Charts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/coach.js"></script>
+    <script src="js/exercises.js"></script>
+    <script src="js/workouts.js"></script>
+    <script src="js/diet.js"></script>
+</body>
+</html>

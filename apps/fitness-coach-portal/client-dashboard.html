@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard - FitCoach Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loader"></div>
+    </div>
+
+    <div id="app-container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="logo-container">
+                    <h1>FitCoach</h1>
+                </div>
+                <div class="user-menu">
+                    <div class="user-info">
+                        <span id="user-name">Loading...</span>
+                    </div>
+                    <button id="logout-btn" class="icon-btn" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-container">
+            <nav class="dashboard-nav">
+                <div class="nav-tabs">
+                    <button id="home-tab" class="nav-tab active">
+                        <i class="fas fa-home"></i> Home
+                    </button>
+                    <button id="workouts-tab" class="nav-tab">
+                        <i class="fas fa-dumbbell"></i> Workouts
+                    </button>
+                    <button id="log-workout-tab" class="nav-tab">
+                        <i class="fas fa-clipboard-list"></i> Log Workout
+                    </button>
+                    <button id="diet-tab" class="nav-tab">
+                        <i class="fas fa-utensils"></i> Diet
+                    </button>
+                    <button id="progress-tab" class="nav-tab">
+                        <i class="fas fa-chart-line"></i> Progress
+                    </button>
+                    <button id="mood-tab" class="nav-tab">
+                        <i class="fas fa-smile"></i> Mood
+                    </button>
+                    <button id="profile-tab" class="nav-tab">
+                        <i class="fas fa-user"></i> Profile
+                    </button>
+                </div>
+            </nav>
+
+            <main class="dashboard-content">
+                <!-- Home Section -->
+                <section id="home-section" class="dashboard-section active">
+                    <div class="section-header">
+                        <h2>Dashboard</h2>
+                        <div class="date-display" id="current-date">
+                            Loading...
+                        </div>
+                    </div>
+
+                    <div class="welcome-message">
+                        <h3>Welcome, <span id="welcome-name">Client</span>!</h3>
+                        <p>Track your progress, log workouts, and stay on top of your fitness journey.</p>
+                    </div>
+
+                    <div class="dashboard-cards">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Today's Workout</h3>
+                                <i class="fas fa-dumbbell"></i>
+                            </div>
+                            <div class="card-content" id="today-workout-preview">
+                                <div class="placeholder-content">Loading workout data...</div>
+                            </div>
+                            <button class="secondary-btn" id="view-workout-btn">
+                                View Full Workout
+                            </button>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Today's Nutrition</h3>
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div class="card-content" id="today-nutrition-preview">
+                                <div class="placeholder-content">Loading nutrition data...</div>
+                            </div>
+                            <button class="secondary-btn" id="view-nutrition-btn">
+                                View Full Plan
+                            </button>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Mood Tracker</h3>
+                                <i class="fas fa-smile"></i>
+                            </div>
+                            <div class="card-content" id="mood-tracker-preview">
+                                <p>How are you feeling today?</p>
+                                <div class="mood-quick-input">
+                                    <div class="mood-emoji" data-value="1">😞</div>
+                                    <div class="mood-emoji" data-value="2">😕</div>
+                                    <div class="mood-emoji" data-value="3">😐</div>
+                                    <div class="mood-emoji" data-value="4">🙂</div>
+                                    <div class="mood-emoji" data-value="5">😄</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-activity">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-list" id="recent-activity-list">
+                            <div class="placeholder-content">Loading recent activity...</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Workouts Section -->
+                <section id="workouts-section" class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Weekly Workout Plan</h2>
+                    </div>
+
+                    <div class="workout-plan-container">
+                        <div class="workout-days" id="workout-days-tabs">
+                            <!-- Days will be added dynamically -->
+                        </div>
+
+                        <div class="workout-content" id="workout-content">
+                            <div class="placeholder-content">Select a day to view your workout</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Log Workout Section -->
+                <section id="log-workout-section" class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Log Your Workout</h2>
+                        <div class="section-actions">
+                            <button id="save-workout-log-btn" class="primary-btn">
+                                <i class="fas fa-save"></i> Save Workout
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="log-workout-container">
+                        <div class="log-date-container">
+                            <label for="log-date">Workout Date:</label>
+                            <input type="date" id="log-date">
+                        </div>
+
+                        <div class="log-exercises-container">
+                            <div class="log-header">
+                                <h3>Exercises</h3>
+                                <button id="add-exercise-btn" class="secondary-btn">
+                                    <i class="fas fa-plus"></i> Add Exercise
+                                </button>
+                            </div>
+
+                            <div id="exercise-selection" class="exercise-selection hidden">
+                                <div class="exercise-search">
+                                    <input type="text" id="exercise-search" placeholder="Search exercises...">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div id="exercise-list" class="exercise-list">
+                                    <!-- Exercise list will be populated dynamically -->
+                                </div>
+                            </div>
+
+                            <div id="logged-exercises" class="logged-exercises">
+                                <!-- Logged exercises will appear here -->
+                                <div class="empty-state">
+                                    <p>No exercises logged yet. Click "Add Exercise" to start logging your workout.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="log-cardio-container">
+                            <div class="log-header">
+                                <h3>Cardio</h3>
+                            </div>
+                            <div class="cardio-inputs">
+                                <div class="input-group">
+                                    <label for="cardio-type">Type</label>
+                                    <select id="cardio-type">
+                                        <option value="">Select type</option>
+                                        <option value="walking">Walking</option>
+                                        <option value="running">Running</option>
+                                        <option value="cycling">Cycling</option>
+                                        <option value="swimming">Swimming</option>
+                                        <option value="elliptical">Elliptical</option>
+                                        <option value="stairmaster">Stairmaster</option>
+                                        <option value="rowing">Rowing</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="cardio-duration">Duration (minutes)</label>
+                                    <input type="number" id="cardio-duration" min="0">
+                                </div>
+                                <div class="input-group">
+                                    <label for="cardio-distance">Distance (km/mi)</label>
+                                    <input type="number" id="cardio-distance" min="0" step="0.01">
+                                </div>
+                                <div class="input-group">
+                                    <label for="cardio-steps">Steps</label>
+                                    <input type="number" id="cardio-steps" min="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Diet Section -->
+                <section id="diet-section" class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Nutrition Plan</h2>
+                    </div>
+
+                    <div class="diet-plan-container">
+                        <div class="meal-plan" id="meal-plan">
+                            <!-- Meal plan will be populated dynamically -->
+                            <div class="placeholder-content">Loading meal plan...</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Progress Section -->
+                <section id="progress-section" class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Progress Tracking</h2>
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-card">
+                            <div class="card-header">
+                                <h3>Body Weight</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="weight-input">
+                                    <label for="current-weight">Update Current Weight:</label>
+                                    <div class="weight-input-group">
+                                        <input type="number" id="current-weight" step="0.1" min="0">
+                                        <select id="weight-unit">
+                                            <option value="kg">kg</option>
+                                            <option value="lbs">lbs</option>
+                                        </select>
+                                        <button id="save-weight-btn" class="primary-btn">Save</button>
+                                    </div>
+                                </div>
+                                <div class="weight-chart-container">
+                                    <canvas id="weight-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="progress-card">
+                            <div class="card-header">
+                                <h3>Workout History</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="workout-history" id="workout-history">
+                                    <div class="placeholder-content">Loading workout history...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mood Section -->
+                <section id="mood-section" class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Mood & Energy Tracker</h2>
+                    </div>
+
+                    <div class="mood-container">
+                        <div class="mood-input-card">
+                            <div class="card-header">
+                                <h3>Today's Mood & Energy</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="mood-date-container">
+                                    <label for="mood-date">Date:</label>
+                                    <input type="date" id="mood-date">
+                                </div>
+
+                                <div class="mood-slider-container">
+                                    <label>Overall Mood:</label>
+                                    <div class="mood-emoji-container">
+                                        <div class="mood-emoji-option" data-value="1">😞</div>
+                                        <div class="mood-emoji-option" data-value="2">😕</div>
+                                        <div class="mood-emoji-option" data-value="3">😐</div>
+                                        <div class="mood-emoji-option" data-value="4">🙂</div>
+                                        <div class="mood-emoji-option" data-value="5">😄</div>
+                                    </div>
+                                    <input type="range" id="mood-slider" min="1" max="5" step="1" value="3">
+                                </div>
+
+                                <div class="energy-slider-container">
+                                    <label>Energy Level:</label>
+                                    <div class="energy-level-indicators">
+                                        <span>Low</span>
+                                        <span>Medium</span>
+                                        <span>High</span>
+                                    </div>
+                                    <input type="range" id="energy-slider" min="1" max="5" step="1" value="3">
+                                </div>
+
+                                <div class="mood-notes">
+                                    <label for="mood-notes-input">Notes:</label>
+                                    <textarea id="mood-notes-input" placeholder="How are you feeling today? Any factors affecting your mood or energy?"></textarea>
+                                </div>
+
+                                <button id="save-mood-btn" class="primary-btn">
+                                    <i class="fas fa-save"></i> Save
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mood-history-card">
+                            <div class="card-header">
+                                <h3>Mood History</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="mood-chart-container">
+                                    <canvas id="mood-chart"></canvas>
+                                </div>
+                                <div class="mood-history" id="mood-history">
+                                    <div class="placeholder-content">Loading mood history...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Profile Section -->
+                <section id="profile-section" class="dashboard-section">
+                    <div class="section-header">
+                        <h2>Your Profile</h2>
+                    </div>
+
+                    <div class="profile-container">
+                        <div class="profile-card">
+                            <div class="profile-info">
+                                <div class="profile-field">
+                                    <label>Name</label>
+                                    <div id="profile-name" class="profile-value">Loading...</div>
+                                </div>
+                                <div class="profile-field">
+                                    <label>Email</label>
+                                    <div id="profile-email" class="profile-value">Loading...</div>
+                                </div>
+                                <div class="profile-field">
+                                    <label>Age</label>
+                                    <div id="profile-age" class="profile-value">Loading...</div>
+                                </div>
+                                <div class="profile-field">
+                                    <label>Weight</label>
+                                    <div id="profile-weight" class="profile-value">Loading...</div>
+                                </div>
+                                <div class="profile-field">
+                                    <label>Height</label>
+                                    <div id="profile-height" class="profile-value">Loading...</div>
+                                </div>
+                                <div class="profile-field full-width">
+                                    <label>Goals</label>
+                                    <div id="profile-goals" class="profile-value">Loading...</div>
+                                </div>
+                                <div class="profile-field full-width">
+                                    <label>Notes from Coach</label>
+                                    <div id="profile-notes" class="profile-value">Loading...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Templates -->
+    <template id="exercise-log-template">
+        <div class="logged-exercise">
+            <div class="exercise-header">
+                <h4 class="exercise-name"></h4>
+                <div class="exercise-actions">
+                    <button class="add-set-btn icon-btn" title="Add Set">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="remove-exercise-btn icon-btn" title="Remove Exercise">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="sets-container"></div>
+        </div>
+    </template>
+
+    <template id="exercise-set-template">
+        <div class="exercise-set">
+            <div class="set-label"></div>
+            <div class="set-inputs">
+                <div class="input-group">
+                    <label>Weight</label>
+                    <input type="number" class="weight-input" min="0" step="0.5">
+                </div>
+                <div class="input-group">
+                    <label>Reps</label>
+                    <input type="number" class="reps-input" min="0" step="1">
+                </div>
+                <div class="input-group">
+                    <label>Notes</label>
+                    <input type="text" class="notes-input" placeholder="Optional">
+                </div>
+                <button class="remove-set-btn icon-btn" title="Remove Set">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <template id="workout-day-template">
+        <div class="workout-day">
+            <h3 class="day-name"></h3>
+            <div class="workout-exercises"></div>
+        </div>
+    </template>
+
+    <template id="workout-exercise-template">
+        <div class="workout-exercise">
+            <div class="exercise-name"></div>
+            <div class="exercise-details">
+                <div class="exercise-sets-reps"></div>
+                <div class="exercise-notes"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="meal-plan-template">
+        <div class="meal">
+            <div class="meal-header">
+                <h3 class="meal-name"></h3>
+                <div class="meal-macros"></div>
+            </div>
+            <div class="meal-foods"></div>
+            <div class="meal-notes"></div>
+        </div>
+    </template>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <!-- Chart.js for Progress Charts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/client.js"></script>
+    <script src="js/workouts.js"></script>
+    <script src="js/logs.js"></script>
+    <script src="js/diet.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/mood.js"></script>
+</body>
+</html>
