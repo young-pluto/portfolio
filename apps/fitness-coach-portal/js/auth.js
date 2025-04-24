@@ -20,59 +20,70 @@ const AuthModule = (() => {
      * Handles user login
      */
     const handleLogin = async (e) => {
-      if (e) e.preventDefault();
+        if (e) e.preventDefault();
+        
+        try {
+          console.log('Network status:', navigator.onLine);
+          
+          const email = loginEmail.value.trim();
+          const password = loginPassword.value;
+          
+          if (!email || !password) {
+            showLoginMessage('Please enter both email and password');
+            return;
+          }
+          
+          showLoginMessage('Signing in...', false);
+          
+          // Sign in with Firebase Auth
+          const userCredential = await auth.signInWithEmailAndPassword(email, password);
+          const user = userCredential.user;
+          
+          console.log('Login successful:', user.uid);
       
-      try {
-        console.log('Network status:', navigator.onLine);
-        
-        const email = loginEmail.value.trim();
-        const password = loginPassword.value;
-        
-        if (!email || !password) {
-          showLoginMessage('Please enter both email and password');
-          return;
+          // 🚀 Fetch role and redirect
+          const userData = await loadUserData(user.uid);
+          const role = userData.role;
+          
+          if (role) {
+            redirectBasedOnRole(role);
+          } else {
+            showLoginMessage('User role not set. Please contact support.');
+          }
+      
+        } catch (error) {
+          console.group('Login Error');
+          console.error('Full error object:', error);
+          console.log('Error code:', error.code);
+          console.log('Error message:', error.message);
+          console.groupEnd();
+          
+          // Handle login errors
+          let userMessage = 'An unexpected error occurred';
+          switch (error.code) {
+            case 'auth/network-request-failed':
+              userMessage = 'Network error. Please check your connection.';
+              break;
+            case 'auth/too-many-requests':
+              userMessage = 'Too many login attempts. Please try again later.';
+              break;
+            case 'auth/invalid-credential':
+              userMessage = 'Invalid email or password';
+              break;
+            case 'auth/user-not-found':
+              userMessage = 'No user found with this email';
+              break;
+            case 'auth/wrong-password':
+              userMessage = 'Incorrect password';
+              break;
+            default:
+              userMessage = error.message || 'Login failed';
+          }
+          
+          showLoginMessage(userMessage);
         }
-        
-        showLoginMessage('Signing in...', false);
-        
-        // Sign in with Firebase Auth
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        
-        console.log('Login successful:', userCredential.user.uid);
-        
-      } catch (error) {
-        console.group('Login Error');
-        console.error('Full error object:', error);
-        console.log('Error code:', error.code);
-        console.log('Error message:', error.message);
-        console.groupEnd();
-        
-        // Detailed error messaging
-        let userMessage = 'An unexpected error occurred';
-        
-        switch (error.code) {
-          case 'auth/network-request-failed':
-            userMessage = 'Network error. Please check your connection.';
-            break;
-          case 'auth/too-many-requests':
-            userMessage = 'Too many login attempts. Please try again later.';
-            break;
-          case 'auth/invalid-credential':
-            userMessage = 'Invalid email or password';
-            break;
-          case 'auth/user-not-found':
-            userMessage = 'No user found with this email';
-            break;
-          case 'auth/wrong-password':
-            userMessage = 'Incorrect password';
-            break;
-          default:
-            userMessage = error.message || 'Login failed';
-        }
-        
-        showLoginMessage(userMessage);
-      }
-    };
+      };
+      
   
     /**
      * Handles user logout
