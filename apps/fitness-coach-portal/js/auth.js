@@ -188,71 +188,62 @@ const AuthModule = (() => {
      */
     const initAuthListener = () => {
         auth.onAuthStateChanged(async (user) => {
-          // Show loading overlay
           const loadingOverlay = document.getElementById('loading-overlay');
           if (loadingOverlay) loadingOverlay.classList.remove('hidden');
-          
+      
           console.group('Auth State Change');
           console.log('User object:', user);
-          
+      
           if (user) {
             try {
-              // Load user data
-              userData = await loadUserData(user.uid);
               currentUser = user;
+              userData = await loadUserData(user.uid);
               userRole = userData.role;
-              
+      
               console.log('Loaded User Data:', userData);
               console.log('User Role:', userRole);
-              
-              // Validate role
+      
               if (!userRole) {
                 console.error('No role found for user');
                 showLoginMessage('User role not configured. Please contact support.');
                 await auth.signOut();
+                redirectToLogin();
                 return;
               }
-              
-              // Hide loading overlay
-              if (loadingOverlay) loadingOverlay.classList.add('hidden');
-              
-              // Redirect based on role
+      
+              // ✅ User is valid and role exists
               redirectBasedOnRole(userRole);
-              
             } catch (error) {
-              console.error('Error in auth state change:', error);
-              
-              // Ensure loading overlay is hidden
-              if (loadingOverlay) loadingOverlay.classList.add('hidden');
-              
-              // Show error message
+              console.error('Error during auth state handling:', error);
               showLoginMessage('Authentication failed. Please try again.');
-              
-              // Sign out if there's an error
               await auth.signOut();
               redirectToLogin();
             } finally {
+              if (loadingOverlay) loadingOverlay.classList.add('hidden');
               console.groupEnd();
             }
-          } else {
-            // User is signed out
+          } 
+          
+          else if (user === null) {
+            // No user is signed in
             currentUser = null;
             userData = null;
             userRole = null;
-            
-            // Hide loading overlay
+      
             if (loadingOverlay) loadingOverlay.classList.add('hidden');
-            
-            console.groupEnd();
-            
-            // Redirect to login if not on login page
+            console.warn('No authenticated user found');
+      
             const currentPath = window.location.pathname;
-            if (!currentPath.endsWith('index.html') && !currentPath.endsWith('/')) {
+            const isLoginPage = currentPath.endsWith('index.html') || currentPath.endsWith('/');
+            if (!isLoginPage) {
               redirectToLogin();
             }
+      
+            console.groupEnd();
           }
         });
       };
+      
   
     /**
      * Initialize Auth Module
