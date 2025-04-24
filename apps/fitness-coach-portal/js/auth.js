@@ -142,28 +142,46 @@ const AuthModule = (() => {
      * Redirects user based on role
      */
     const redirectBasedOnRole = (role) => {
-      // Get current page
-      const currentPath = window.location.pathname;
-      const isLoginPage = currentPath.endsWith('index.html') || currentPath.endsWith('/');
-      
-      console.log('Redirecting based on role:', role);
-      console.log('Current path:', currentPath);
-      
-      if (role === 'coach') {
-        if (!currentPath.includes('coach-dashboard.html')) {
-          window.location.href = 'coach-dashboard.html';
+        console.group('Redirect Debugging');
+        console.log('Current Role:', role);
+        console.log('Current Path:', window.location.pathname);
+        console.log('Current URL:', window.location.href);
+        
+        try {
+          // Absolute path redirection
+          if (role === 'coach') {
+            console.log('Attempting to redirect to coach dashboard');
+            
+            // Multiple redirection strategies
+            window.location.replace('coach-dashboard.html');
+            
+            // Fallback methods
+            setTimeout(() => {
+              window.location.href = 'coach-dashboard.html';
+            }, 100);
+            
+            setTimeout(() => {
+              window.open('coach-dashboard.html', '_self');
+            }, 200);
+          } else if (role === 'client') {
+            console.log('Attempting to redirect to client dashboard');
+            
+            window.location.replace('client-dashboard.html');
+            
+            setTimeout(() => {
+              window.location.href = 'client-dashboard.html';
+            }, 100);
+            
+            setTimeout(() => {
+              window.open('client-dashboard.html', '_self');
+            }, 200);
+          }
+        } catch (error) {
+          console.error('Redirection Error:', error);
+        } finally {
+          console.groupEnd();
         }
-      } else if (role === 'client') {
-        if (!currentPath.includes('client-dashboard.html')) {
-          window.location.href = 'client-dashboard.html';
-        }
-      } else {
-        // Unknown role or not authorized
-        if (!isLoginPage) {
-          redirectToLogin();
-        }
-      }
-    };
+      };
   
     /**
      * Redirects to login page
@@ -175,73 +193,64 @@ const AuthModule = (() => {
     /**
      * Auth state change listener
      */
-    const initAuthListener = () => {
-        auth.onAuthStateChanged(async (user) => {
-          // Show loading overlay
-          const loadingOverlay = document.getElementById('loading-overlay');
-          if (loadingOverlay) loadingOverlay.classList.remove('hidden');
+// Modify initAuthListener to add more debugging
+const initAuthListener = () => {
+    auth.onAuthStateChanged(async (user) => {
+      console.group('Auth State Change Detailed');
+      console.log('User Object:', user);
+      
+      const loadingOverlay = document.getElementById('loading-overlay');
+      
+      if (user) {
+        try {
+          // Comprehensive user data loading
+          const userRef = database.ref(`users/${user.uid}`);
+          const snapshot = await userRef.once('value');
+          userData = snapshot.val();
           
-          console.group('Auth State Change');
-          console.log('User object:', user);
+          console.log('Loaded User Data:', userData);
           
-          if (user) {
-            try {
-              // Load user data
-              userData = await loadUserData(user.uid);
-              currentUser = user;
-              userRole = userData.role;
-              
-              console.log('Loaded User Data:', userData);
-              console.log('User Role:', userRole);
-              
-              // Validate role
-              if (!userRole) {
-                console.error('No role found for user');
-                showLoginMessage('User role not configured. Please contact support.');
-                await auth.signOut();
-                return;
-              }
-              
-              // Hide loading overlay
-              if (loadingOverlay) loadingOverlay.classList.add('hidden');
-              
-              // Redirect based on role
-              redirectBasedOnRole(userRole);
-              
-            } catch (error) {
-              console.error('Error in auth state change:', error);
-              
-              // Ensure loading overlay is hidden
-              if (loadingOverlay) loadingOverlay.classList.add('hidden');
-              
-              // Show error message
-              showLoginMessage('Authentication failed. Please try again.');
-              
-              // Sign out if there's an error
-              await auth.signOut();
-              redirectToLogin();
-            } finally {
-              console.groupEnd();
-            }
-          } else {
-            // User is signed out
-            currentUser = null;
-            userData = null;
-            userRole = null;
-            
-            // Hide loading overlay
-            if (loadingOverlay) loadingOverlay.classList.add('hidden');
-            
-            console.groupEnd();
-            
-            // Redirect to login if not on login page
-            const currentPath = window.location.pathname;
-            if (!currentPath.endsWith('index.html') && !currentPath.endsWith('/')) {
-              redirectToLogin();
-            }
+          // Fallback to coaches node if not found in users
+          if (!userData) {
+            const coachRef = database.ref(`coaches/${user.uid}`);
+            const coachSnapshot = await coachRef.once('value');
+            userData = coachSnapshot.val();
           }
-        });
-      };
+          
+          console.log('Final User Data:', userData);
+          
+          // Ensure role is extracted
+          userRole = userData ? userData.role : null;
+          
+          console.log('Extracted User Role:', userRole);
+          
+          // Hide loading overlay explicitly
+          if (loadingOverlay) {
+            loadingOverlay.classList.add('hidden');
+          }
+          
+          // Redirect with comprehensive checks
+          if (userRole) {
+            redirectBasedOnRole(userRole);
+          } else {
+            console.error('No role found for user');
+            await auth.signOut();
+          }
+        } catch (error) {
+          console.error('Comprehensive Auth Error:', error);
+          
+          // Ensure loading overlay is hidden
+          if (loadingOverlay) {
+            loadingOverlay.classList.add('hidden');
+          }
+          
+          await auth.signOut();
+        } finally {
+          console.groupEnd();
+        }
+      }
+    });
+  };
   
     /**
      * Initialize Auth Module
