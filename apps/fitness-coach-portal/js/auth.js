@@ -150,18 +150,15 @@ const AuthModule = (() => {
       console.log('Current path:', currentPath);
       
       if (role === 'coach') {
-        if (!currentPath.includes('coach-dashboard.html')) {
-          window.location.href = 'coach-dashboard.html';
-        }
+        console.log('Coach role detected');
+        window.location.href = 'coach-dashboard.html';
       } else if (role === 'client') {
-        if (!currentPath.includes('client-dashboard.html')) {
-          window.location.href = 'client-dashboard.html';
-        }
+        console.log('Client role detected');
+        window.location.href = 'client-dashboard.html';
       } else {
-        // Unknown role or not authorized
-        if (!isLoginPage) {
-          redirectToLogin();
-        }
+        console.error('Unknown role:', role);
+        showLoginMessage('Invalid user role');
+        auth.signOut();
       }
     };
   
