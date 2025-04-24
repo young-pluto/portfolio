@@ -4,6 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coach Dashboard - FitCoach Portal</title>
+        <!-- EMERGENCY FIX - ADD THIS SCRIPT FIRST -->
+        <script>
+            // Complete emergency override
+            window.EMERGENCY_MODE = true;
+            
+            // Create storage persistence that survives reloads
+            if (!localStorage.getItem('reloadCounter')) {
+              localStorage.setItem('reloadCounter', '1');
+            } else {
+              let count = parseInt(localStorage.getItem('reloadCounter'));
+              localStorage.setItem('reloadCounter', (count + 1).toString());
+              
+              // If we've reloaded more than 3 times, go into emergency mode
+              if (count >= 3) {
+                // This creates empty dummy modules for all the potentially problematic modules
+                // We do this before any scripts load to ensure they can't cause reloads
+                window.ExercisesModule = {init: function() {console.log('Disabled');}};
+                window.WorkoutsModule = {
+                  init: function() {console.log('Disabled');},
+                  showCreateWorkoutPlanModal: function() {alert('Feature disabled due to technical issues');}
+                };
+                window.DietModule = {
+                  init: function() {console.log('Disabled');},
+                  showCreateDietPlanModal: function() {alert('Feature disabled due to technical issues');}
+                };
+                
+                // Override script loading completely
+                // This is extreme but necessary to break the loop
+                const originalAppendChild = Element.prototype.appendChild;
+                Element.prototype.appendChild = function(child) {
+                  if (child.nodeName === 'SCRIPT' && 
+                      child.src && 
+                      (child.src.includes('exercises.js') || 
+                       child.src.includes('workouts.js') || 
+                       child.src.includes('diet.js'))) {
+                    console.warn('Blocked loading of:', child.src);
+                    return document.createComment('Script loading blocked by emergency fix');
+                  }
+                  return originalAppendChild.apply(this, arguments);
+                };
+                
+                // Show message to user
+                window.addEventListener('DOMContentLoaded', function() {
+                  alert('Dashboard loaded in emergency mode with limited functionality due to technical issues.');
+                });
+              }
+            }
+          </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,21 +61,6 @@
     <link rel="stylesheet" href="css/coach.css">
 </head>
 <body>
-    <script>
-      // Prevent reload loops more aggressively
-      if (sessionStorage.getItem('reloadCount') === null) {
-        sessionStorage.setItem('reloadCount', '1');
-      } else {
-        const count = parseInt(sessionStorage.getItem('reloadCount'));
-        if (count > 2) {
-          // Too many reloads - disable problematic script loading
-          window.ExercisesModule = { init: function() { console.log('Exercise module disabled'); } };
-          sessionStorage.setItem('reloadStopped', 'true');
-        } else {
-          sessionStorage.setItem('reloadCount', (count + 1).toString());
-        }
-      }
-    </script>
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="loading-overlay">
         <div class="loader"></div>
@@ -772,7 +805,6 @@
     
     <!-- Chart.js for Progress Charts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
-    // Add this just before the app scripts are loaded in coach-dashboard.html
 <script>
   // Check if we've hit reload limit and need to disable problematic modules
   if (sessionStorage.getItem('reloadStopped') === 'true') {
