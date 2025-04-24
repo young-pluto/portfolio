@@ -1,3 +1,7 @@
+/**
+ * Authentication Module
+ * Handles user authentication and authorization
+ */
 const AuthModule = (() => {
     // DOM Elements
     const loginForm = document.getElementById('login-form');
@@ -19,6 +23,8 @@ const AuthModule = (() => {
       if (e) e.preventDefault();
       
       try {
+        console.log('Network status:', navigator.onLine);
+        
         const email = loginEmail.value.trim();
         const password = loginPassword.value;
         
@@ -35,6 +41,13 @@ const AuthModule = (() => {
         console.log('Login successful:', userCredential.user.uid);
         
       } catch (error) {
+        console.group('Login Error');
+        console.error('Full error object:', error);
+        console.log('Error code:', error.code);
+        console.log('Error message:', error.message);
+        console.groupEnd();
+        
+        // Detailed error messaging
         let userMessage = 'An unexpected error occurred';
         
         switch (error.code) {
@@ -62,6 +75,19 @@ const AuthModule = (() => {
     };
   
     /**
+     * Handles user logout
+     */
+    const handleLogout = async () => {
+      try {
+        await auth.signOut();
+        redirectToLogin();
+      } catch (error) {
+        console.error('Logout error:', error);
+        alert('Error logging out: ' + error.message);
+      }
+    };
+  
+    /**
      * Displays login error messages
      */
     const showLoginMessage = (message, isError = true) => {
@@ -69,16 +95,23 @@ const AuthModule = (() => {
         loginMessage.textContent = message;
         loginMessage.className = 'login-message';
         
+        // Remove any existing timeout
+        if (loginMessage.messageTimeout) {
+          clearTimeout(loginMessage.messageTimeout);
+        }
+        
         if (isError) {
           loginMessage.classList.add('error');
         }
         
         // Auto-clear message after 5 seconds
-        setTimeout(() => {
+        loginMessage.messageTimeout = setTimeout(() => {
           loginMessage.textContent = '';
           loginMessage.className = 'login-message';
         }, 5000);
       }
+      
+      console.log(isError ? 'Login Error:' : 'Login Message:', message);
     };
   
     /**
@@ -86,19 +119,19 @@ const AuthModule = (() => {
      */
     const loadUserData = async (userId) => {
       try {
-        // Check users node first
+        // Fetch user data from users node
         const userRef = database.ref(`users/${userId}`);
-        const userSnapshot = await userRef.once('value');
-        let userData = userSnapshot.val();
+        const snapshot = await userRef.once('value');
+        const userData = snapshot.val();
         
-        // If not found, check coaches node
+        console.log('Loaded user data:', userData);
+        
         if (!userData) {
-          const coachRef = database.ref(`coaches/${userId}`);
-          const coachSnapshot = await coachRef.once('value');
-          userData = coachSnapshot.val();
+          console.error('No user data found for UID:', userId);
+          return { role: 'unknown' };
         }
         
-        return userData || { role: 'unknown' };
+        return userData;
       } catch (error) {
         console.error('Error loading user data:', error);
         return { role: 'unknown' };
@@ -106,76 +139,131 @@ const AuthModule = (() => {
     };
   
     /**
+     * Redirects user based on role
+     */
+    const redirectBasedOnRole = (role) => {
+      // Get current page
+      const currentPath = window.location.pathname;
+      const isLoginPage = currentPath.endsWith('index.html') || currentPath.endsWith('/');
+      
+      console.log('Redirecting based on role:', role);
+      console.log('Current path:', currentPath);
+      
+      if (role === 'coach') {
+        if (!currentPath.includes('coach-dashboard.html')) {
+          window.location.href = 'coach-dashboard.html';
+        }
+      } else if (role === 'client') {
+        if (!currentPath.includes('client-dashboard.html')) {
+          window.location.href = 'client-dashboard.html';
+        }
+      } else {
+        // Unknown role or not authorized
+        if (!isLoginPage) {
+          redirectToLogin();
+        }
+      }
+    };
+  
+    /**
+     * Redirects to login page
+     */
+    const redirectToLogin = () => {
+      window.location.href = 'index.html';
+    };
+  
+    /**
      * Auth state change listener
      */
     const initAuthListener = () => {
-      auth.onAuthStateChanged(async (user) => {
-        const loadingOverlay = document.getElementById('loading-overlay');
-        
-        if (loadingOverlay) {
-          loadingOverlay.classList.remove('hidden');
-        }
-        
-        if (user) {
-          try {
-            // Load user data
-            userData = await loadUserData(user.uid);
-            currentUser = user;
-            userRole = userData.role;
-            
-            // Redirect based on role
-            if (userRole === 'coach') {
-              window.location.href = 'coach-dashboard.html';
-            } else if (userRole === 'client') {
-              window.location.href = 'client-dashboard.html';
-            } else {
-              showLoginMessage('Invalid user role');
-              await auth.signOut();
-            }
-          } catch (error) {
-            console.error('Authentication error:', error);
-            showLoginMessage('Authentication failed');
-            await auth.signOut();
-          } finally {
-            if (loadingOverlay) {
-              loadingOverlay.classList.add('hidden');
-            }
-          }
-        } else {
-          // User is signed out
-          currentUser = null;
-          userData = null;
-          userRole = null;
+        auth.onAuthStateChanged(async (user) => {
+          // Show loading overlay
+          const loadingOverlay = document.getElementById('loading-overlay');
+          if (loadingOverlay) loadingOverlay.classList.remove('hidden');
           
-          if (loadingOverlay) {
-            loadingOverlay.classList.add('hidden');
+          console.group('Auth State Change');
+          console.log('User object:', user);
+          
+          if (user) {
+            try {
+              // Load user data
+              userData = await loadUserData(user.uid);
+              currentUser = user;
+              userRole = userData.role;
+              
+              console.log('Loaded User Data:', userData);
+              console.log('User Role:', userRole);
+              
+              // Validate role
+              if (!userRole) {
+                console.error('No role found for user');
+                showLoginMessage('User role not configured. Please contact support.');
+                await auth.signOut();
+                return;
+              }
+              
+              // Hide loading overlay
+              if (loadingOverlay) loadingOverlay.classList.add('hidden');
+              
+              // Redirect based on role
+              redirectBasedOnRole(userRole);
+              
+            } catch (error) {
+              console.error('Error in auth state change:', error);
+              
+              // Ensure loading overlay is hidden
+              if (loadingOverlay) loadingOverlay.classList.add('hidden');
+              
+              // Show error message
+              showLoginMessage('Authentication failed. Please try again.');
+              
+              // Sign out if there's an error
+              await auth.signOut();
+              redirectToLogin();
+            } finally {
+              console.groupEnd();
+            }
+          } else {
+            // User is signed out
+            currentUser = null;
+            userData = null;
+            userRole = null;
+            
+            // Hide loading overlay
+            if (loadingOverlay) loadingOverlay.classList.add('hidden');
+            
+            console.groupEnd();
+            
+            // Redirect to login if not on login page
+            const currentPath = window.location.pathname;
+            if (!currentPath.endsWith('index.html') && !currentPath.endsWith('/')) {
+              redirectToLogin();
+            }
           }
-        }
-      });
-    };
+        });
+      };
   
     /**
      * Initialize Auth Module
      */
     const init = () => {
-      // Prevent default form submission and attach login handler
-      if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-          handleLogin();
-        });
-      }
-      
-      if (loginBtn) {
-        loginBtn.addEventListener('click', handleLogin);
-      }
+      // Add event listeners
+      if (loginForm) loginForm.addEventListener('submit', handleLogin);
+      if (loginBtn) loginBtn.addEventListener('click', handleLogin);
+      if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
       
       // Initialize auth state listener
       initAuthListener();
     };
   
+    /**
+     * Public methods and properties
+     */
     return {
-      init
+      init,
+      getCurrentUser: () => currentUser,
+      getUserData: () => userData,
+      getUserRole: () => userRole
     };
   })();
   
