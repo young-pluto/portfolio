@@ -1529,6 +1529,15 @@ const CoachModule = (() => {
     
     // Initialize client management
     initClientManagement();
+
+      // Conditionally initialize ExercisesModule
+  if (typeof ExercisesModule !== 'undefined') {
+    try {
+      ExercisesModule.init();
+    } catch (error) {
+      console.error('Error initializing ExercisesModule:', error);
+    }
+  }
     
     // Handle workspace building buttons
     if (createWorkoutPlanBtn) {

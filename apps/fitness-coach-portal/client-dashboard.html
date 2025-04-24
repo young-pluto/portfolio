@@ -479,5 +479,18 @@
     <script src="js/diet.js"></script>
     <script src="js/progress.js"></script>
     <script src="js/mood.js"></script>
+    <script>// Add this at the beginning of your coach.js or in a script tag in coach-dashboard.html
+        (function preventReloadLoop() {
+          const lastLoadTime = localStorage.getItem('lastDashboardLoad');
+          const currentTime = Date.now();
+          
+          if (lastLoadTime && (currentTime - parseInt(lastLoadTime)) < 5000) {
+            // If page reloaded within 5 seconds, stop further module initialization
+            console.warn('Detected reload loop, halting initialization');
+            window.stopInitialization = true;
+          }
+          
+          localStorage.setItem('lastDashboardLoad', currentTime);
+        })();</script>
 </body>
 </html>
