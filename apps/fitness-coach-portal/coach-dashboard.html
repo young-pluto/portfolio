@@ -13,6 +13,21 @@
     <link rel="stylesheet" href="css/coach.css">
 </head>
 <body>
+    <script>
+        // Prevent reload loops more aggressively
+        if (sessionStorage.getItem('dashboardAttempts') === null) {
+          sessionStorage.setItem('dashboardAttempts', '1');
+        } else {
+          const attempts = parseInt(sessionStorage.getItem('dashboardAttempts'));
+          if (attempts > 3) {
+            // Too many reloads - disable problematic script loading
+            window.disableModuleInitialization = true;
+            console.warn('Multiple reloads detected - disabling module initialization');
+          } else {
+            sessionStorage.setItem('dashboardAttempts', (attempts + 1).toString());
+          }
+        }
+      </script>
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="loading-overlay">
         <div class="loader"></div>
