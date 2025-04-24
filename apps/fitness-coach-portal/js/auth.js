@@ -218,7 +218,7 @@ setTimeout(() => {
               // ✅ User is valid and role exists
               firebase.database().goOffline(); // optional safety
 setTimeout(() => {
-  redirectBasedOnRole(role); // or userRole
+  redirectBasedOnRole(userRole); // or userRole
 }, 150);
 
             } catch (error) {
