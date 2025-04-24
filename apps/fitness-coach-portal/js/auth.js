@@ -46,11 +46,8 @@ const AuthModule = (() => {
           const role = userData.role;
           
           if (role) {
-            firebase.database().goOffline(); // optional safety
-setTimeout(() => {
-  redirectBasedOnRole(role); // or userRole
-}, 150);
-
+            console.log('User role found:', role);
+            redirectBasedOnRole(role);
           } else {
             showLoginMessage('User role not set. Please contact support.');
           }
@@ -165,15 +162,16 @@ setTimeout(() => {
       console.log('Current path:', currentPath);
       
       if (role === 'coach') {
-        if (!currentPath.includes('coach-dashboard.html')) {
-          window.location.href = 'coach-dashboard.html';
-        }
+        console.log('Redirecting to coach dashboard...');
+        // Use absolute path for Vercel routing
+        window.location.href = '/coach-dashboard';
       } else if (role === 'client') {
-        if (!currentPath.includes('client-dashboard.html')) {
-          window.location.href = 'client-dashboard.html';
-        }
+        console.log('Redirecting to client dashboard...');
+        // Use absolute path for Vercel routing
+        window.location.href = '/client-dashboard';
       } else {
         // Unknown role or not authorized
+        console.log('Unknown role, redirecting to login...');
         if (!isLoginPage) {
           redirectToLogin();
         }
@@ -184,7 +182,7 @@ setTimeout(() => {
      * Redirects to login page
      */
     const redirectToLogin = () => {
-      window.location.href = 'index.html';
+      window.location.href = '/';
     };
   
     /**
@@ -215,11 +213,8 @@ setTimeout(() => {
                 return;
               }
       
-              // ✅ User is valid and role exists
-              firebase.database().goOffline(); // optional safety
-setTimeout(() => {
-  redirectBasedOnRole(userRole); // or userRole
-}, 150);
+              // Redirect based on role directly without timeout or database offline
+              redirectBasedOnRole(userRole);
 
             } catch (error) {
               console.error('Error during auth state handling:', error);
