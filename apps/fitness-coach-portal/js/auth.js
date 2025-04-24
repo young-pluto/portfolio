@@ -46,7 +46,11 @@ const AuthModule = (() => {
           const role = userData.role;
           
           if (role) {
-            redirectBasedOnRole(role);
+            firebase.database().goOffline(); // optional safety
+setTimeout(() => {
+  redirectBasedOnRole(role); // or userRole
+}, 150);
+
           } else {
             showLoginMessage('User role not set. Please contact support.');
           }
@@ -212,7 +216,11 @@ const AuthModule = (() => {
               }
       
               // ✅ User is valid and role exists
-              redirectBasedOnRole(userRole);
+              firebase.database().goOffline(); // optional safety
+setTimeout(() => {
+  redirectBasedOnRole(role); // or userRole
+}, 150);
+
             } catch (error) {
               console.error('Error during auth state handling:', error);
               showLoginMessage('Authentication failed. Please try again.');
