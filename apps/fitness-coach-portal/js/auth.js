@@ -176,55 +176,72 @@ const AuthModule = (() => {
      * Auth state change listener
      */
     const initAuthListener = () => {
-      auth.onAuthStateChanged(async (user) => {
-        // Show loading overlay
-        const loadingOverlay = document.getElementById('loading-overlay');
-        if (loadingOverlay) loadingOverlay.classList.remove('hidden');
-        
-        console.log('Auth state changed. User:', user);
-        
-        if (user) {
-          try {
-            // Load user data
-            userData = await loadUserData(user.uid);
-            currentUser = user;
-            userRole = userData.role;
-            
-            console.log('User role:', userRole);
+        auth.onAuthStateChanged(async (user) => {
+          // Show loading overlay
+          const loadingOverlay = document.getElementById('loading-overlay');
+          if (loadingOverlay) loadingOverlay.classList.remove('hidden');
+          
+          console.group('Auth State Change');
+          console.log('User object:', user);
+          
+          if (user) {
+            try {
+              // Load user data
+              userData = await loadUserData(user.uid);
+              currentUser = user;
+              userRole = userData.role;
+              
+              console.log('Loaded User Data:', userData);
+              console.log('User Role:', userRole);
+              
+              // Validate role
+              if (!userRole) {
+                console.error('No role found for user');
+                showLoginMessage('User role not configured. Please contact support.');
+                await auth.signOut();
+                return;
+              }
+              
+              // Hide loading overlay
+              if (loadingOverlay) loadingOverlay.classList.add('hidden');
+              
+              // Redirect based on role
+              redirectBasedOnRole(userRole);
+              
+            } catch (error) {
+              console.error('Error in auth state change:', error);
+              
+              // Ensure loading overlay is hidden
+              if (loadingOverlay) loadingOverlay.classList.add('hidden');
+              
+              // Show error message
+              showLoginMessage('Authentication failed. Please try again.');
+              
+              // Sign out if there's an error
+              await auth.signOut();
+              redirectToLogin();
+            } finally {
+              console.groupEnd();
+            }
+          } else {
+            // User is signed out
+            currentUser = null;
+            userData = null;
+            userRole = null;
             
             // Hide loading overlay
             if (loadingOverlay) loadingOverlay.classList.add('hidden');
             
-            // Redirect based on role
-            redirectBasedOnRole(userRole);
+            console.groupEnd();
             
-          } catch (error) {
-            console.error('Error in auth state change:', error);
-            
-            // Ensure loading overlay is hidden
-            if (loadingOverlay) loadingOverlay.classList.add('hidden');
-            
-            // Sign out if there's an error
-            await auth.signOut();
-            redirectToLogin();
+            // Redirect to login if not on login page
+            const currentPath = window.location.pathname;
+            if (!currentPath.endsWith('index.html') && !currentPath.endsWith('/')) {
+              redirectToLogin();
+            }
           }
-        } else {
-          // User is signed out
-          currentUser = null;
-          userData = null;
-          userRole = null;
-          
-          // Hide loading overlay
-          if (loadingOverlay) loadingOverlay.classList.add('hidden');
-          
-          // Redirect to login if not on login page
-          const currentPath = window.location.pathname;
-          if (!currentPath.endsWith('index.html') && !currentPath.endsWith('/')) {
-            redirectToLogin();
-          }
-        }
-      });
-    };
+        });
+      };
   
     /**
      * Initialize Auth Module
