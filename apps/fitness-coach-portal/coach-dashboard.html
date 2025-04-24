@@ -14,19 +14,22 @@
 </head>
 <body>
     <script>
-        // Prevent reload loops more aggressively
-        if (sessionStorage.getItem('dashboardAttempts') === null) {
-          sessionStorage.setItem('dashboardAttempts', '1');
-        } else {
-          const attempts = parseInt(sessionStorage.getItem('dashboardAttempts'));
-          if (attempts > 3) {
-            // Too many reloads - disable problematic script loading
-            window.disableModuleInitialization = true;
-            console.warn('Multiple reloads detected - disabling module initialization');
+        // One-time simple emergency fix to stop reload loops
+        window.addEventListener('load', function() {
+          // Only disable scripts if we detect a reload loop
+          if (sessionStorage.getItem('pageLoadCount')) {
+            const count = parseInt(sessionStorage.getItem('pageLoadCount'));
+            if (count > 2) {
+              console.warn('Reload loop detected - emergency fix activated');
+              // Create placeholder for ExercisesModule
+              window.ExercisesModule = { init: function() { console.log('Exercise module disabled'); } };
+            } else {
+              sessionStorage.setItem('pageLoadCount', count + 1);
+            }
           } else {
-            sessionStorage.setItem('dashboardAttempts', (attempts + 1).toString());
+            sessionStorage.setItem('pageLoadCount', 1);
           }
-        }
+        });
       </script>
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="loading-overlay">

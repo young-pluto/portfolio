@@ -154,35 +154,36 @@ const AuthModule = (() => {
      * Redirects user based on role
      */
     const redirectBasedOnRole = (role) => {
-        // Get current page
-        const currentPath = window.location.pathname;
-        const isLoginPage = currentPath.endsWith('index.html') || currentPath.endsWith('/');
-        
-        console.log('Redirecting based on role:', role);
-        console.log('Current path:', currentPath);
-        
-        if (role === 'coach') {
-          console.log('Redirecting to coach dashboard...');
-          // Use .html extension to match Vercel routing
-          window.location.href = 'coach-dashboard.html';
-        } else if (role === 'client') {
-          console.log('Redirecting to client dashboard...');
-          window.location.href = 'client-dashboard.html';
-        } else {
-          // Unknown role or not authorized
-          console.log('Unknown role, redirecting to login...');
-          if (!isLoginPage) {
-            redirectToLogin();
-          }
+      // Get current page
+      const currentPath = window.location.pathname;
+      const isLoginPage = currentPath.endsWith('index.html') || currentPath.endsWith('/');
+      
+      console.log('Redirecting based on role:', role);
+      console.log('Current path:', currentPath);
+      
+      if (role === 'coach') {
+        console.log('Redirecting to coach dashboard...');
+        // Use absolute path for Vercel routing
+        window.location.href = '/coach-dashboard';
+      } else if (role === 'client') {
+        console.log('Redirecting to client dashboard...');
+        // Use absolute path for Vercel routing
+        window.location.href = '/client-dashboard';
+      } else {
+        // Unknown role or not authorized
+        console.log('Unknown role, redirecting to login...');
+        if (!isLoginPage) {
+          redirectToLogin();
         }
-      };
+      }
+    };
   
     /**
      * Redirects to login page
      */
     const redirectToLogin = () => {
-        window.location.href = 'index.html';
-      };
+      window.location.href = '/';
+    };
   
     /**
      * Auth state change listener
