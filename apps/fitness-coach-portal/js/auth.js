@@ -41,16 +41,16 @@ const AuthModule = (() => {
           
           console.log('Login successful:', user.uid);
       
-          // 🚀 Fetch role and redirect
-          const userData = await loadUserData(user.uid);
-          const role = userData.role;
+        //   // 🚀 Fetch role and redirect
+        //   const userData = await loadUserData(user.uid);
+        //   const role = userData.role;
           
-          if (role) {
-            console.log('User role found:', role);
-            redirectBasedOnRole(role);
-          } else {
-            showLoginMessage('User role not set. Please contact support.');
-          }
+        //   if (role) {
+        //     console.log('User role found:', role);
+        //     redirectBasedOnRole(role);
+        //   } else {
+        //     showLoginMessage('User role not set. Please contact support.');
+        //   }
       
         } catch (error) {
           console.group('Login Error');
