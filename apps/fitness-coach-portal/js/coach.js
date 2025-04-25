@@ -1513,22 +1513,10 @@ const CoachModule = (() => {
   /**
    * Initialize Coach Module
    */
-  const init = (userProfileData) => {
-    // ABORT INITIALIZATION IF TOO MANY RELOADS
-    if (window.disableModuleInitialization) {
-      console.warn('Module initialization disabled due to reload loop detection');
-      // Show a message to the user that functionality is limited
-      const welcomeNameElement = document.getElementById('welcome-name');
-      if (welcomeNameElement) {
-        welcomeNameElement.textContent = "Coach (Limited Mode)";
-      }
-      
-      // Still initialize basic tab navigation for usability
-      initTabNavigation();
-      return;
-    }
-    
-    // Rest of your initialization code remains the same
+ // Modify the init function in coach.js to handle module initialization better:
+
+// At the end of the coach.js file, change the init function to this:
+const init = (userProfileData) => {
     // Store user data
     currentUser = AuthModule.getCurrentUser();
     userData = userProfileData;
@@ -1544,52 +1532,83 @@ const CoachModule = (() => {
     
     // Initialize client management
     initClientManagement();
-  
-    // Conditionally initialize ExercisesModule - WRAP IN TIMEOUT
-    if (typeof ExercisesModule !== 'undefined') {
-      try {
-        // Delay ExercisesModule initialization slightly to break potential cyclic dependencies
-        setTimeout(() => {
-          ExercisesModule.init();
-        }, 100);
-      } catch (error) {
-        console.error('Error initializing ExercisesModule:', error);
-        window.disableModuleInitialization = true; // Disable further initialization if this fails
-      }
+    
+    // Show "loading" content with a message to indicate initialization
+    if (recentClientActivity) {
+      recentClientActivity.innerHTML = '<p>Loading client activity data...</p>';
     }
-    // Handle workspace building buttons
+    
+    // Update dashboard stats with zeroes initially
+    updateDashboardStats(0, 0, 0);
+    
+    // Initialize modules with proper error handling and fallbacks
+    setTimeout(() => {
+      try {
+        // Initialize exercise library module
+        if (typeof ExercisesModule !== 'undefined') {
+          console.log('Initializing ExercisesModule');
+          ExercisesModule.init();
+        } else {
+          console.warn('ExercisesModule not found - some functionality will be limited');
+        }
+        
+        // Setup workout/diet plan creation buttons
+        setupPlanButtons();
+        
+        // After modules are initialized, try to load clients
+        loadClients().catch(err => {
+          console.error('Error loading clients:', err);
+          Utils.showNotification('Error loading client data. Some functions may be limited.', 'error');
+        });
+        
+      } catch (error) {
+        console.error('Error during module initialization:', error);
+        Utils.showNotification('Some features may not be available due to initialization errors.', 'warning');
+      }
+    }, 500);
+  };
+  
+  // Add this helper function to setup plan buttons
+  function setupPlanButtons() {
+    // Handle workout plan button
     if (createWorkoutPlanBtn) {
       createWorkoutPlanBtn.addEventListener('click', () => {
-        // This will be handled by the Workouts module
-        if (typeof WorkoutsModule !== 'undefined') {
+        if (typeof WorkoutsModule !== 'undefined' && WorkoutsModule.showCreateWorkoutPlanModal) {
           WorkoutsModule.showCreateWorkoutPlanModal();
+        } else {
+          Utils.showNotification('Workout plan creation is not available at this time.', 'warning');
         }
       });
     }
     
+    // Handle diet plan button
     if (createDietPlanBtn) {
       createDietPlanBtn.addEventListener('click', () => {
-        // This will be handled by the Diet module
-        if (typeof DietModule !== 'undefined') {
+        if (typeof DietModule !== 'undefined' && DietModule.showCreateDietPlanModal) {
           DietModule.showCreateDietPlanModal();
+        } else {
+          Utils.showNotification('Diet plan creation is not available at this time.', 'warning');
         }
       });
     }
     
     // Quick action buttons
     document.getElementById('create-plan-quick')?.addEventListener('click', () => {
-      if (typeof WorkoutsModule !== 'undefined') {
+      if (typeof WorkoutsModule !== 'undefined' && WorkoutsModule.showCreateWorkoutPlanModal) {
         WorkoutsModule.showCreateWorkoutPlanModal();
+      } else {
+        Utils.showNotification('Workout plan creation is not available at this time.', 'warning');
       }
     });
     
     document.getElementById('create-diet-quick')?.addEventListener('click', () => {
-      if (typeof DietModule !== 'undefined') {
+      if (typeof DietModule !== 'undefined' && DietModule.showCreateDietPlanModal) {
         DietModule.showCreateDietPlanModal();
+      } else {
+        Utils.showNotification('Diet plan creation is not available at this time.', 'warning');
       }
     });
-  };
-
+  }
   /**
    * Public methods and properties
    */
