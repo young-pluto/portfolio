@@ -716,6 +716,11 @@ const showCreateWorkoutPlanModal = () => {
       if (modal) modal.classList.remove('active');
       
       Utils.showNotification('Workout plan created successfully!', 'success');
+
+      // Add this line to reload plans list
+if (typeof loadWorkoutPlans === 'function') {
+    loadWorkoutPlans();
+  }
       
     } catch (error) {
       console.error('Error saving workout plan:', error);

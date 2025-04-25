@@ -389,6 +389,11 @@ const showCreateDietPlanModal = () => {
       if (modal) modal.classList.remove('active');
       
       Utils.showNotification('Diet plan created successfully!', 'success');
+
+      // Add this line to reload plans list
+if (typeof loadDietPlans === 'function') {
+    loadDietPlans();
+  }
       
     } catch (error) {
       console.error('Error saving diet plan:', error);

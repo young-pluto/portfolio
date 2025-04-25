@@ -53,17 +53,23 @@ const CoachModule = (() => {
     const initTabNavigation = () => {
       tabButtons.forEach(button => {
         button.addEventListener('click', () => {
-          const tabId = button.id;
-          const sectionId = tabId.replace('-tab', '-section');
-          
-          // Remove active class from all tabs and sections
-          tabButtons.forEach(tab => tab.classList.remove('active'));
-          sections.forEach(section => section.classList.remove('active'));
-          
-          // Add active class to clicked tab and corresponding section
-          button.classList.add('active');
-          document.getElementById(sectionId)?.classList.add('active');
-        });
+            const tabId = button.id;
+            const sectionId = tabId.replace('-tab', '-section');
+            
+            // Remove active class from all tabs and sections
+            tabButtons.forEach(tab => tab.classList.remove('active'));
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Add active class to clicked tab and corresponding section
+            button.classList.add('active');
+            document.getElementById(sectionId)?.classList.add('active');
+            
+            // Load specific section data if needed
+            if (tabId === 'plans-tab') {
+              loadWorkoutPlans();
+              loadDietPlans();
+            }
+          });
       });
     };
   
@@ -110,6 +116,29 @@ const CoachModule = (() => {
           });
         });
       });
+      // Add plan tab event listeners
+document.querySelectorAll('.plan-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      const tabId = this.dataset.tab;
+      
+      // Set active tab
+      document.querySelectorAll('.plan-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Show active content
+      document.querySelectorAll('.plan-tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(tabId)?.classList.add('active');
+      
+      // Load plans if needed
+      if (tabId === 'workout-plans') {
+        loadWorkoutPlans();
+      } else if (tabId === 'diet-plans') {
+        loadDietPlans();
+      }
+    });
+  });
     };
   
     /**
@@ -1179,15 +1208,23 @@ const CoachModule = (() => {
   /**
    * Shows the assign plan modal
    */
-  const showAssignPlanModal = async (clientId, planType) => {
+  /**
+ * Shows the assign plan modal
+ */
+const showAssignPlanModal = async (clientId, planType) => {
     try {
+      console.log(`Showing assign ${planType} plan modal for client ${clientId}`);
+      
       // Get modal and elements
       const modal = document.getElementById('assign-plan-modal');
       const planSelect = document.getElementById('plan-select');
       const confirmBtn = document.getElementById('confirm-assign-btn');
       const cancelBtn = document.getElementById('cancel-assign-btn');
       
-      if (!modal || !planSelect || !confirmBtn || !cancelBtn) return;
+      if (!modal || !planSelect || !confirmBtn || !cancelBtn) {
+        console.error('Modal elements not found:', { modal, planSelect, confirmBtn, cancelBtn });
+        return;
+      }
       
       // Set modal title
       const modalTitle = document.getElementById('assign-plan-title');
@@ -1199,9 +1236,14 @@ const CoachModule = (() => {
       planSelect.innerHTML = '<option value="">Select a plan</option>';
       
       // Fetch plans from database
-      const plansRef = database.ref(`coaches/${AuthModule.getCurrentUser().uid}/${planType}Plans`);
+      const coachId = AuthModule.getCurrentUser().uid;
+      console.log(`Fetching ${planType} plans for coach ${coachId}`);
+      
+      const plansRef = database.ref(`coaches/${coachId}/${planType}Plans`);
       const snapshot = await plansRef.once('value');
       const plans = snapshot.val();
+      
+      console.log(`Fetched plans:`, plans);
       
       if (!plans) {
         planSelect.innerHTML += `<option value="" disabled>No ${planType} plans available</option>`;
@@ -1215,8 +1257,15 @@ const CoachModule = (() => {
         });
       }
       
+      // Remove any existing event listeners
+      const newConfirmBtn = confirmBtn.cloneNode(true);
+      confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+      
+      const newCancelBtn = cancelBtn.cloneNode(true);
+      cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+      
       // Set up confirm button
-      confirmBtn.onclick = async () => {
+      newConfirmBtn.addEventListener('click', async () => {
         const selectedPlanId = planSelect.value;
         
         if (!selectedPlanId) {
@@ -1225,8 +1274,10 @@ const CoachModule = (() => {
         }
         
         try {
+          console.log(`Assigning ${planType} plan ${selectedPlanId} to client ${clientId}`);
+          
           // Get plan data
-          const planRef = database.ref(`coaches/${AuthModule.getCurrentUser().uid}/${planType}Plans/${selectedPlanId}`);
+          const planRef = database.ref(`coaches/${coachId}/${planType}Plans/${selectedPlanId}`);
           const planSnapshot = await planRef.once('value');
           const planData = planSnapshot.val();
           
@@ -1254,12 +1305,12 @@ const CoachModule = (() => {
           console.error('Error assigning plan:', error);
           Utils.showNotification('Error assigning plan.', 'error');
         }
-      };
+      });
       
       // Set up cancel button
-      cancelBtn.onclick = () => {
+      newCancelBtn.addEventListener('click', () => {
         modal.classList.remove('active');
-      };
+      });
       
       // Show modal
       modal.classList.add('active');
@@ -1509,7 +1560,168 @@ const CoachModule = (() => {
       recentClientActivity.innerHTML = '<div class="error-message">Error loading recent activity.</div>';
     }
   };
-
+/**
+ * Loads the workout plans list
+ */
+const loadWorkoutPlans = async () => {
+    try {
+      const workoutPlansList = document.getElementById('workout-plans-list');
+      if (!workoutPlansList) return;
+      
+      workoutPlansList.innerHTML = '<div class="loading">Loading workout plans...</div>';
+      
+      const coachId = AuthModule.getCurrentUser().uid;
+      const plansRef = database.ref(`coaches/${coachId}/workoutPlans`);
+      const snapshot = await plansRef.once('value');
+      const plans = snapshot.val();
+      
+      if (!plans) {
+        workoutPlansList.innerHTML = '<div class="empty-message">No workout plans yet. Create your first plan to get started.</div>';
+        return;
+      }
+      
+      // Clear existing content
+      workoutPlansList.innerHTML = '';
+      
+      // Create plan cards
+      Object.entries(plans).forEach(([planId, plan]) => {
+        // Get template
+        const template = document.getElementById('plan-card-template');
+        if (!template) return;
+        
+        const planCard = document.importNode(template.content, true).querySelector('.plan-card');
+        
+        // Set plan data
+        planCard.dataset.id = planId;
+        planCard.querySelector('.plan-name').textContent = plan.name || 'Unnamed Plan';
+        planCard.querySelector('.plan-description').textContent = plan.description || '';
+        
+        // Add event listeners
+        planCard.querySelector('.view-plan-btn')?.addEventListener('click', () => {
+          viewPlan('workout', planId, plan);
+        });
+        
+        planCard.querySelector('.edit-plan-btn')?.addEventListener('click', () => {
+          editPlan('workout', planId, plan);
+        });
+        
+        planCard.querySelector('.delete-plan-btn')?.addEventListener('click', () => {
+          deletePlan('workout', planId);
+        });
+        
+        // Append to list
+        workoutPlansList.appendChild(planCard);
+      });
+      
+    } catch (error) {
+      console.error('Error loading workout plans:', error);
+      const workoutPlansList = document.getElementById('workout-plans-list');
+      if (workoutPlansList) {
+        workoutPlansList.innerHTML = '<div class="error-message">Error loading workout plans.</div>';
+      }
+    }
+  };
+  
+  /**
+   * Loads the diet plans list
+   */
+  const loadDietPlans = async () => {
+    try {
+      const dietPlansList = document.getElementById('diet-plans-list');
+      if (!dietPlansList) return;
+      
+      dietPlansList.innerHTML = '<div class="loading">Loading diet plans...</div>';
+      
+      const coachId = AuthModule.getCurrentUser().uid;
+      const plansRef = database.ref(`coaches/${coachId}/dietPlans`);
+      const snapshot = await plansRef.once('value');
+      const plans = snapshot.val();
+      
+      if (!plans) {
+        dietPlansList.innerHTML = '<div class="empty-message">No diet plans yet. Create your first plan to get started.</div>';
+        return;
+      }
+      
+      // Clear existing content
+      dietPlansList.innerHTML = '';
+      
+      // Create plan cards
+      Object.entries(plans).forEach(([planId, plan]) => {
+        // Get template
+        const template = document.getElementById('plan-card-template');
+        if (!template) return;
+        
+        const planCard = document.importNode(template.content, true).querySelector('.plan-card');
+        
+        // Set plan data
+        planCard.dataset.id = planId;
+        planCard.querySelector('.plan-name').textContent = plan.name || 'Unnamed Plan';
+        planCard.querySelector('.plan-description').textContent = plan.description || '';
+        
+        // Add event listeners
+        planCard.querySelector('.view-plan-btn')?.addEventListener('click', () => {
+          viewPlan('diet', planId, plan);
+        });
+        
+        planCard.querySelector('.edit-plan-btn')?.addEventListener('click', () => {
+          editPlan('diet', planId, plan);
+        });
+        
+        planCard.querySelector('.delete-plan-btn')?.addEventListener('click', () => {
+          deletePlan('diet', planId);
+        });
+        
+        // Append to list
+        dietPlansList.appendChild(planCard);
+      });
+      
+    } catch (error) {
+      console.error('Error loading diet plans:', error);
+      const dietPlansList = document.getElementById('diet-plans-list');
+      if (dietPlansList) {
+        dietPlansList.innerHTML = '<div class="error-message">Error loading diet plans.</div>';
+      }
+    }
+  };
+  
+  /**
+   * Views a plan's details
+   */
+  const viewPlan = (planType, planId, planData) => {
+    // For now, just show a notification
+    Utils.showNotification(`Viewing ${planType} plan: ${planData.name}`, 'info');
+  };
+  
+  /**
+   * Edits a plan
+   */
+  const editPlan = (planType, planId, planData) => {
+    // For now, just show a notification
+    Utils.showNotification(`Editing ${planType} plan functionality coming soon`, 'info');
+  };
+  
+  /**
+   * Deletes a plan
+   */
+  const deletePlan = (planType, planId) => {
+    if (confirm(`Are you sure you want to delete this ${planType} plan?`)) {
+      const coachId = AuthModule.getCurrentUser().uid;
+      
+      database.ref(`coaches/${coachId}/${planType}Plans/${planId}`).remove()
+        .then(() => {
+          Utils.showNotification(`${planType.charAt(0).toUpperCase() + planType.slice(1)} plan deleted successfully!`, 'success');
+          if (planType === 'workout') {
+            loadWorkoutPlans();
+          } else {
+            loadDietPlans();
+          }
+        })
+        .catch(error => {
+          console.error(`Error deleting ${planType} plan:`, error);
+          Utils.showNotification(`Error deleting ${planType} plan. Please try again.`, 'error');
+        });
+    }
+  };
   /**
    * Initialize Coach Module
    */
