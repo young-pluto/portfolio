@@ -436,12 +436,308 @@ const WorkoutsModule = (() => {
       // Initialize workout logging
       initWorkoutLogging();
     };
+
+    /**
+ * Add these functions to the WorkoutsModule in workouts.js
+ * Place them before the return statement at the end of the module
+ */
+
+/**
+ * Shows the create workout plan modal
+ */
+const showCreateWorkoutPlanModal = () => {
+    const modal = document.getElementById('workout-plan-modal');
+    if (!modal) {
+      console.error('Workout plan modal not found in DOM');
+      Utils.showNotification('Unable to create workout plan. Please try again later.', 'error');
+      return;
+    }
+    
+    // Reset form
+    const form = document.getElementById('workout-plan-form');
+    if (form) form.reset();
+    
+    // Set title
+    const titleElement = document.getElementById('workout-plan-form-title');
+    if (titleElement) titleElement.textContent = 'Create Workout Plan';
+    
+    // Setup day tabs
+    setupWorkoutDayTabs();
+    
+    // Show modal
+    modal.classList.add('active');
+    
+    // Add event listeners
+    setupWorkoutPlanEventListeners();
+  };
+  
+  /**
+   * Sets up the workout day tabs
+   */
+  const setupWorkoutDayTabs = () => {
+    const dayTabs = document.querySelectorAll('.day-tab');
+    const dayForms = document.querySelectorAll('.day-form');
+    
+    // Create day forms if they don't exist yet
+    const workoutDayContent = document.getElementById('workout-day-content');
+    
+    // Make sure day 1 exists already (it should according to HTML)
+    const day1Form = document.querySelector('.day-form[data-day="day1"]');
+    
+    if (!day1Form) {
+      console.error('Day 1 form template not found');
+      return;
+    }
+    
+    // Create forms for days 2-7 if they don't exist
+    for (let i = 2; i <= 7; i++) {
+      const dayKey = `day${i}`;
+      const existingForm = document.querySelector(`.day-form[data-day="${dayKey}"]`);
+      
+      if (!existingForm && workoutDayContent) {
+        // Clone day 1 form
+        const newDayForm = day1Form.cloneNode(true);
+        newDayForm.classList.remove('active');
+        newDayForm.dataset.day = dayKey;
+        
+        // Update IDs and values
+        const dayNameInput = newDayForm.querySelector('input[id="day1-name"]');
+        if (dayNameInput) {
+          dayNameInput.id = `${dayKey}-name`;
+          dayNameInput.value = `Day ${i}`;
+        }
+        
+        // Update exercise list container
+        const exercisesList = newDayForm.querySelector('#day1-exercises');
+        if (exercisesList) {
+          exercisesList.id = `${dayKey}-exercises`;
+          exercisesList.innerHTML = ''; // Clear exercises
+        }
+        
+        // Update add exercise button
+        const addExerciseBtn = newDayForm.querySelector('.add-day-exercise');
+        if (addExerciseBtn) {
+          addExerciseBtn.dataset.day = dayKey;
+        }
+        
+        workoutDayContent.appendChild(newDayForm);
+      }
+    }
+    
+    // Add tab click handlers
+    dayTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const day = tab.dataset.day;
+        
+        // Set active tab
+        dayTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        // Show active form
+        dayForms.forEach(form => {
+          form.classList.remove('active');
+          if (form.dataset.day === day) {
+            form.classList.add('active');
+          }
+        });
+      });
+    });
+    
+    // Add "Add Exercise" button handlers for each day
+    document.querySelectorAll('.add-day-exercise').forEach(button => {
+      button.addEventListener('click', () => {
+        const day = button.dataset.day;
+        addExerciseToDay(day);
+      });
+    });
+  };
+  
+  /**
+   * Sets up event listeners for the workout plan form
+   */
+  const setupWorkoutPlanEventListeners = () => {
+    // Cancel button
+    const cancelBtn = document.getElementById('cancel-workout-plan-btn');
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', () => {
+        const modal = document.getElementById('workout-plan-modal');
+        if (modal) modal.classList.remove('active');
+      });
+    }
+    
+    // Save button / form submission
+    const form = document.getElementById('workout-plan-form');
+    if (form) {
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        saveWorkoutPlan();
+      };
+    }
+  };
+  
+  /**
+   * Adds an exercise to a day
+   */
+  const addExerciseToDay = async (day) => {
+    const exercisesContainer = document.getElementById(`${day}-exercises`);
+    if (!exercisesContainer) return;
+    
+    // Get exercise template
+    const template = document.getElementById('day-exercise-template');
+    if (!template) {
+      console.error('Exercise template not found');
+      return;
+    }
+    
+    // Clone template
+    const exerciseElement = document.importNode(template.content, true).querySelector('.day-exercise');
+    
+    // Populate exercise select
+    const exerciseSelect = exerciseElement.querySelector('.exercise-select');
+    
+    // Load exercises if needed
+    if (!exerciseLibrary || exerciseLibrary.length === 0) {
+      try {
+        await loadExerciseLibrary();
+      } catch (error) {
+        console.error('Error loading exercise library:', error);
+      }
+    }
+    
+    // Add options to select
+    exerciseSelect.innerHTML = '<option value="">Select an exercise</option>';
+    
+    exerciseLibrary.forEach(exercise => {
+      const option = document.createElement('option');
+      option.value = exercise.id;
+      option.textContent = exercise.name;
+      exerciseSelect.appendChild(option);
+    });
+    
+    // Add event handlers
+    exerciseElement.querySelector('.remove-exercise-btn').addEventListener('click', () => {
+      exerciseElement.remove();
+    });
+    
+    // Add to container
+    exercisesContainer.appendChild(exerciseElement);
+  };
+  
+  /**
+   * Saves the workout plan
+   */
+  const saveWorkoutPlan = async () => {
+    try {
+      const coachId = AuthModule.getCurrentUser().uid;
+      
+      // Get plan name and description
+      const planName = document.getElementById('workout-plan-name').value.trim();
+      const planDescription = document.getElementById('workout-plan-description').value.trim();
+      
+      if (!planName) {
+        Utils.showNotification('Please enter a plan name.', 'error');
+        return;
+      }
+      
+      // Build plan data
+      const planData = {
+        name: planName,
+        description: planDescription,
+        createdAt: firebase.database.ServerValue.TIMESTAMP,
+        updatedAt: firebase.database.ServerValue.TIMESTAMP
+      };
+      
+      // Add days
+      for (let i = 1; i <= 7; i++) {
+        const dayKey = `day${i}`;
+        const dayNameInput = document.getElementById(`${dayKey}-name`);
+        
+        if (!dayNameInput) continue;
+        
+        const dayName = dayNameInput.value.trim();
+        const dayExercisesContainer = document.getElementById(`${dayKey}-exercises`);
+        
+        if (!dayExercisesContainer) continue;
+        
+        const exerciseElements = dayExercisesContainer.querySelectorAll('.day-exercise');
+        const exercises = [];
+        
+        exerciseElements.forEach(element => {
+          const exerciseSelect = element.querySelector('.exercise-select');
+          const setsInput = element.querySelector('.sets-input');
+          const repsInput = element.querySelector('.reps-input');
+          const notesInput = element.querySelector('.notes-input');
+          
+          if (exerciseSelect && exerciseSelect.value) {
+            // Find exercise data
+            const selectedExercise = exerciseLibrary.find(ex => ex.id === exerciseSelect.value);
+            
+            if (selectedExercise) {
+              exercises.push({
+                id: selectedExercise.id,
+                name: selectedExercise.name,
+                sets: setsInput ? parseInt(setsInput.value) || 3 : 3,
+                reps: repsInput ? repsInput.value || '8-12' : '8-12',
+                notes: notesInput ? notesInput.value.trim() : ''
+              });
+            }
+          }
+        });
+        
+        // Only add day if it has exercises
+        if (exercises.length > 0) {
+          planData[dayKey] = {
+            name: dayName || `Day ${i}`,
+            exercises
+          };
+        }
+      }
+      
+      // Check if plan has at least one day with exercises
+      let hasDays = false;
+      for (let i = 1; i <= 7; i++) {
+        if (planData[`day${i}`]) {
+          hasDays = true;
+          break;
+        }
+      }
+      
+      if (!hasDays) {
+        Utils.showNotification('Please add at least one exercise to your plan.', 'error');
+        return;
+      }
+      
+      // Save to Firebase
+      const newPlanRef = database.ref(`coaches/${coachId}/workoutPlans`).push();
+      await newPlanRef.set(planData);
+      
+      // Close modal
+      const modal = document.getElementById('workout-plan-modal');
+      if (modal) modal.classList.remove('active');
+      
+      Utils.showNotification('Workout plan created successfully!', 'success');
+      
+    } catch (error) {
+      console.error('Error saving workout plan:', error);
+      Utils.showNotification('Error saving workout plan. Please try again.', 'error');
+    }
+  };
+  
+  /**
+   * Add these to the return statement to make them publicly available
+   */
+  // Update your return statement to include:
+  // showCreateWorkoutPlanModal,
+  // saveWorkoutPlan
   
     /**
      * Public methods and properties
      */
     return {
       init,
-      loadWorkoutPlan
+      loadWorkoutPlan,
+      showCreateWorkoutPlanModal,
+      saveWorkoutPlan,
+      saveWorkoutLog
     };
   })();

@@ -381,23 +381,94 @@ const ClientModule = (() => {
     /**
      * Initialize Client Module
      */
-    const init = (userProfileData) => {
-      // Store user data
-      currentUser = AuthModule.getCurrentUser();
-      userData = userProfileData;
-      
-      // Initialize tab navigation
-      initTabNavigation();
-      
-      // Load profile data
-      loadProfile();
-      
+   /**
+ * Update the init function in client.js
+ */
+const init = (userProfileData) => {
+    // Store user data
+    currentUser = AuthModule.getCurrentUser();
+    userData = userProfileData;
+    
+    console.log("ClientModule initializing with user data:", userData);
+    
+    // Set client name in header and welcome message
+    const userNameElement = document.getElementById('user-name');
+    const welcomeNameElement = document.getElementById('welcome-name');
+    
+    if (userNameElement && userData) {
+      userNameElement.textContent = userData.name || 'Client';
+    }
+    
+    if (welcomeNameElement && userData) {
+      welcomeNameElement.textContent = userData.name || 'Client';
+    }
+    
+    // Initialize tab navigation
+    initTabNavigation();
+    
+    // Initialize current date display
+    const currentDateElement = document.getElementById('current-date');
+    if (currentDateElement) {
+      const now = new Date();
+      currentDateElement.textContent = now.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+    
+    // Load profile data
+    loadProfile();
+    
+    // Initialize other modules with proper error handling
+    try {
       // Set up dashboard components
-      loadTodayWorkoutPreview();
-      loadNutritionPreview();
+      loadTodayWorkoutPreview().catch(err => console.error("Error loading workout preview:", err));
+      loadNutritionPreview().catch(err => console.error("Error loading nutrition preview:", err));
       setupQuickMoodInput();
-      loadRecentActivity();
-    };
+      loadRecentActivity().catch(err => console.error("Error loading recent activity:", err));
+      
+      // Initialize workouts module
+      if (typeof WorkoutsModule !== 'undefined') {
+        WorkoutsModule.init();
+      } else {
+        console.warn("WorkoutsModule not available - some functionality will be limited");
+      }
+      
+      // Initialize diet module
+      if (typeof DietModule !== 'undefined') {
+        DietModule.init();
+      } else {
+        console.warn("DietModule not available - some functionality will be limited");
+      }
+      
+      // Initialize progress module
+      if (typeof ProgressModule !== 'undefined') {
+        ProgressModule.init();
+      } else {
+        console.warn("ProgressModule not available - some functionality will be limited");
+      }
+      
+      // Initialize mood module
+      if (typeof MoodModule !== 'undefined') {
+        MoodModule.init();
+      } else {
+        console.warn("MoodModule not available - some functionality will be limited");
+      }
+      
+      // Initialize logs module
+      if (typeof LogsModule !== 'undefined') {
+        LogsModule.init();
+      } else {
+        console.warn("LogsModule not available - some functionality will be limited");
+      }
+      
+    } catch (error) {
+      console.error("Error initializing client modules:", error);
+      Utils.showNotification("There was an error loading some features. Please try refreshing the page.", "error");
+    }
+  };
   
     /**
      * Public methods and properties
