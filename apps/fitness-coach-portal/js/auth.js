@@ -41,7 +41,7 @@ const AuthModule = (() => {
           
           console.log('Login successful:', user.uid);
       
-        //   // 🚀 Fetch role and redirect
+          // 🚀 Fetch role and redirect
         //   const userData = await loadUserData(user.uid);
         //   const role = userData.role;
           
@@ -154,28 +154,20 @@ const AuthModule = (() => {
      * Redirects user based on role
      */
     const redirectBasedOnRole = (role) => {
-      // Get current page
-      const currentPath = window.location.pathname;
-      const isLoginPage = currentPath.endsWith('index.html') || currentPath.endsWith('/');
-      
-      console.log('Redirecting based on role:', role);
-      console.log('Current path:', currentPath);
-      
-      if (role === 'coach') {
-        console.log('Redirecting to coach dashboard...');
-        // Use absolute path for Vercel routing
-        window.location.href = '/coach-dashboard';
-      } else if (role === 'client') {
-        console.log('Redirecting to client dashboard...');
-        // Use absolute path for Vercel routing
-        window.location.href = '/client-dashboard';
-      } else {
-        // Unknown role or not authorized
-        console.log('Unknown role, redirecting to login...');
-        if (!isLoginPage) {
-          redirectToLogin();
+        const currentPath = window.location.pathname;
+        if ((role === 'coach' && currentPath === '/coach-dashboard') || 
+            (role === 'client' && currentPath === '/client-dashboard')) {
+            console.log('User is already on the correct dashboard. No redirection needed.');
+            return;
         }
-      }
+    
+        if (role === 'coach') {
+            window.location.href = '/coach-dashboard';
+        } else if (role === 'client') {
+            window.location.href = '/client-dashboard';
+        } else {
+            redirectToLogin();
+        }
     };
   
     /**
@@ -188,64 +180,37 @@ const AuthModule = (() => {
     /**
      * Auth state change listener
      */
+    let initialized = false;
+
     const initAuthListener = () => {
         auth.onAuthStateChanged(async (user) => {
-          const loadingOverlay = document.getElementById('loading-overlay');
-          if (loadingOverlay) loadingOverlay.classList.remove('hidden');
-      
-          console.group('Auth State Change');
-          console.log('User object:', user);
-      
-          if (user) {
+            if (initialized) return;
+            initialized = true;
+    
             try {
-              currentUser = user;
-              userData = await loadUserData(user.uid);
-              userRole = userData.role;
-      
-              console.log('Loaded User Data:', userData);
-              console.log('User Role:', userRole);
-      
-              if (!userRole) {
-                console.error('No role found for user');
-                showLoginMessage('User role not configured. Please contact support.');
-                await auth.signOut();
-                redirectToLogin();
-                return;
-              }
-      
-              // Redirect based on role directly without timeout or database offline
-              redirectBasedOnRole(userRole);
-
+                if (user) {
+                    currentUser = user;
+                    userData = await loadUserData(user.uid);
+                    userRole = userData.role;
+    
+                    if (userRole) {
+                        redirectBasedOnRole(userRole);
+                    } else {
+                        showLoginMessage('User role not configured. Redirecting to login.');
+                        await auth.signOut();
+                        redirectToLogin();
+                    }
+                } else {
+                    redirectToLogin();
+                }
             } catch (error) {
-              console.error('Error during auth state handling:', error);
-              showLoginMessage('Authentication failed. Please try again.');
-              await auth.signOut();
-              redirectToLogin();
+                console.error('Error in auth state listener:', error);
+                showLoginMessage('Authentication error. Please try again.');
             } finally {
-              if (loadingOverlay) loadingOverlay.classList.add('hidden');
-              console.groupEnd();
+                initialized = false; // Reset for future calls if needed
             }
-          } 
-          
-          else if (user === null) {
-            // No user is signed in
-            currentUser = null;
-            userData = null;
-            userRole = null;
-      
-            if (loadingOverlay) loadingOverlay.classList.add('hidden');
-            console.warn('No authenticated user found');
-      
-            const currentPath = window.location.pathname;
-            const isLoginPage = currentPath.endsWith('index.html') || currentPath.endsWith('/');
-            if (!isLoginPage) {
-              redirectToLogin();
-            }
-      
-            console.groupEnd();
-          }
         });
-      };
+    };
       
   
     /**
