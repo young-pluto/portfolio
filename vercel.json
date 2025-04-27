@@ -28,6 +28,10 @@
 {
   "src": "apps/fitness-coach-portal/**/*",
   "use": "@vercel/static"
+},
+{
+  "src": "apps/training/**/*",
+  "use": "@vercel/static"
 }
   ],
   "routes": [
@@ -190,6 +194,16 @@
         }
       ],
       "dest": "/apps/practice/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "training.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/training/index.html"
     },
     {
       "src": "/css/(.*)",
