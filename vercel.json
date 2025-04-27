@@ -196,6 +196,16 @@
       "dest": "/apps/practice/index.html"
     },
     {
+      "src": "/styles.css",
+      "has": [
+        {
+          "type": "host",
+          "value": "training.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/Training/styles.css"
+    },
+    {
       "src": "/(.*)",
       "has": [
         {
