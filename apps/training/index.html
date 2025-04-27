@@ -2,9 +2,450 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Personal Training Program</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Base styles */
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2c3e50;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --gray: #95a5a6;
+            --text: #333;
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--text);
+            line-height: 1.6;
+            padding-bottom: 50px;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 15px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background-color: var(--secondary);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            font-size: 1rem;
+        }
+
+        .tab.active {
+            background-color: var(--primary);
+        }
+
+        /* Content sections */
+        .content-section {
+            display: none;
+            background-color: white;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Day Tabs - Fixed Solution */
+        .days-nav {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0px -5px 15px;
+            padding-top: 10px;
+            clear: both;
+        }
+
+        .day-tab {
+            flex: 0 0 33.33%;
+            padding: 0 5px;
+            margin-bottom: 10px;
+        }
+
+        .day-btn {
+            width: 100%;
+            padding: 10px 5px;
+            background-color: var(--light);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--dark);
+            transition: all 0.2s ease;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .day-btn:hover {
+            background-color: #d6e4f0;
+        }
+
+        .day-btn.active {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Day Content */
+        .day-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .day-content.active {
+            display: block;
+        }
+
+        .day-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+            letter-spacing: 0.3px;
+        }
+
+        /* Exercise cards */
+        .exercise-card {
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            margin-bottom: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--primary);
+        }
+
+        .exercise-header {
+            padding: 12px 10px;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .exercise-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: block;
+            color: var(--dark);
+        }
+
+        .exercise-sets {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 3px;
+            display: block;
+        }
+
+        .exercise-details {
+            margin-left: 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    background-color: #fff;
+}
+
+.exercise-details.open {
+    max-height: 2000px; /* Much larger value to accommodate any length */
+    overflow: visible;
+}
+
+        .exercise-description {
+            padding: 12px;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .toggle-btn.open {
+            transform: rotate(180deg);
+        }
+
+        /* Nutrition section */
+        .macro-info {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .macro-info h3 {
+            margin-bottom: 10px;
+            color: var(--secondary);
+            font-size: 1.1rem;
+            letter-spacing: 0.3px;
+        }
+
+        .macro-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .macro-item {
+            background-color: #f8f9fa;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .macro-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 4px;
+        }
+
+        .macro-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .meal-plan {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .meal-plan h3 {
+            margin-bottom: 12px;
+            color: var(--secondary);
+            font-size: 1.1rem;
+            letter-spacing: 0.3px;
+        }
+
+        .meal {
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .meal:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .meal-title {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .meal-items {
+            padding-left: 5px;
+        }
+
+        .meal-item {
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+
+        .meal-item-name {
+            flex: 1;
+        }
+
+        .meal-item-quantity {
+            color: var(--gray);
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                font-size: 15px;
+            }
+            
+            .container {
+                padding: 0 10px;
+            }
+            
+            .tab {
+                padding: 10px 5px;
+                font-size: 0.95rem;
+            }
+            
+            .day-title {
+                font-size: 1.1rem;
+                margin-bottom: 12px;
+            }
+            
+            .exercise-header {
+                padding: 10px 8px;
+            }
+            
+            .exercise-description {
+                padding: 10px;
+            }
+            
+            /* Adjust header for mobile */
+            .header-content {
+                padding: 0 5px;
+            }
+            
+            .logo h1 {
+                font-size: 1.2rem;
+            }
+            
+            .day-btn {
+                font-size: 0.85rem;
+                padding: 8px 5px;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 360px) {
+            .day-tab {
+                flex: 0 0 50%;
+            }
+            
+            .day-btn {
+                font-size: 0.8rem;
+                padding: 8px 4px;
+            }
+            
+            .day-title {
+                font-size: 1rem;
+            }
+            
+            .exercise-name {
+                font-size: 0.9rem;
+            }
+            
+            .exercise-sets {
+                font-size: 0.75rem;
+            }
+            
+            .toggle-btn {
+                width: 25px;
+                height: 25px;
+            }
+            
+            .tab {
+                padding: 10px 5px;
+                font-size: 0.9rem;
+            }
+            
+            .header-content {
+                padding: 0;
+            }
+            
+            .logo h1 {
+                font-size: 1.1rem;
+            }
+            
+            .macro-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Active state enhancements */
+        .tab.active, .day-btn.active {
+            background-color: var(--primary);
+            background-image: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+        }
+
+        /* Improved scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Ensure proper margins and spacing */
+        .content-section {
+            padding-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -17,609 +458,909 @@
         </div>
     </header>
 
-    <main class="container">
-        <div class="tab-container">
-            <div class="tabs">
-                <div class="tab active" data-tab="training">Training</div>
-                <div class="tab" data-tab="nutrition">Nutrition</div>
-            </div>
-            
-            <!-- Training Content -->
-            <div class="tab-content active" id="training-content">
-                <div class="day-selector">
+    <main class="container main-content">
+        <!-- Main Tab Navigation -->
+        <div class="tabs">
+            <div class="tab active" data-tab="training">Training</div>
+            <div class="tab" data-tab="nutrition">Nutrition</div>
+        </div>
+        
+        <!-- Training Section -->
+        <div class="content-section active" id="training">
+            <!-- Day Navigation -->
+            <div class="days-nav">
+                <div class="day-tab">
                     <button class="day-btn active" data-day="day1">Day 1</button>
+                </div>
+                <div class="day-tab">
                     <button class="day-btn" data-day="day2">Day 2</button>
+                </div>
+                <div class="day-tab">
                     <button class="day-btn" data-day="day3">Day 3</button>
+                </div>
+                <div class="day-tab">
                     <button class="day-btn" data-day="day4">Day 4</button>
+                </div>
+                <div class="day-tab">
                     <button class="day-btn" data-day="day5">Day 5</button>
+                </div>
+                <div class="day-tab">
                     <button class="day-btn" data-day="day6">Day 6</button>
                 </div>
+            </div>
+            
+            <!-- Day 1 Workout -->
+            <div class="day-content active" id="day1">
+                <h2 class="day-title">Day 1: Chest, Shoulders (Side), Triceps, Abs</h2>
                 
-                <!-- Day 1 Workout -->
-                <div class="day-content active" id="day1">
-                    <h2 class="day-title">Day 1: Chest, Shoulders (Side), Triceps, Abs</h2>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Flat Smith Machine Bench Press</span>
-                                <span class="exercise-sets">4 sets × 8-12 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Flat Smith Machine Bench Press</span>
+                            <span class="exercise-sets">4 sets × 8-12 reps</span>
                         </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
+                        <button class="toggle-btn">▼</button>
                     </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Incline Dumbbell Flyes</span>
-                                <span class="exercise-sets">4 sets × 10-12 reps (superset last 2 sets with Push-Ups)</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Single-Arm Overhead Dumbbell Triceps Extension</span>
-                                <span class="exercise-sets">4 sets × 10-12 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Single-Arm Cable Lateral Raises</span>
-                                <span class="exercise-sets">3 sets × 12-15 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Seated Ab Crunch Machine</span>
-                                <span class="exercise-sets">3 sets × 15-20 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                            <h2>Execution Cues</h2>
+  
+                            <ol>
+                              <li>
+                                <strong>Setup:</strong>
+                                <ul>
+                                  <li>Adjust a flat bench under the machine so that, when lying down, the handles/bar align with your mid to lower chest.</li>
+                                  <li>Ensure your feet are planted firmly and your back maintains a slight natural arch (not excessive).</li>
+                                  <li>Retract and depress your scapulae (shoulder blades down and back) to stabilize the upper body.</li>
+                                </ul>
+                              </li>
+                              
+                              <li>
+                                <strong>Unrack &amp; Starting Position:</strong>
+                                <ul>
+                                  <li>Grip the handles firmly, with the bar directly above your mid to lower chest.</li>
+                                  <li>Elbows should be slightly tucked (~45 degrees from the torso).</li>
+                                </ul>
+                              </li>
+                              
+                              <li>
+                                <strong>Eccentric (Lowering):</strong>
+                                <ul>
+                                  <li>Lower the weight under control—slower than your push—to emphasize eccentric loading.</li>
+                                  <li>Descend until the handles are just above or lightly touch your lower chest.</li>
+                                  <li>You should feel a deep stretch in the chest at the bottom.</li>
+                                  <li>Pause for a split second at the bottom—do not bounce.</li>
+                                </ul>
+                              </li>
+                              
+                              <li>
+                                <strong>Concentric (Pushing):</strong>
+                                <ul>
+                                  <li>Push the weight explosively from the bottom position, focusing on driving through the palms.</li>
+                                  <li>Intentionally engage the chest—minimize shoulder and tricep dominance by maintaining scapular retraction and internal focus on pec contraction.</li>
+                                  <li>Do not lock out fully; stop just short to keep constant tension.</li>
+                                </ul>
+                              </li>
+                              
+                              <li>
+                                <strong>Breathing:</strong>
+                                <ul>
+                                  <li>Inhale on the way down, exhale forcefully as you push.</li>
+                                </ul>
+                              </li>
+                            </ol>
+            
+
                         </div>
                     </div>
                 </div>
                 
-                <!-- Day 2 Workout -->
-                <div class="day-content" id="day2">
-                    <h2 class="day-title">Day 2: Back, Biceps, Rear Delts</h2>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Neutral-Grip Lat Pulldown</span>
-                                <span class="exercise-sets">4 sets × 10-12 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Incline Dumbbell Flyes</span>
+                            <span class="exercise-sets">4 sets × 10-12 reps (superset last 2 sets with Push-Ups)</span>
                         </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
+                        <button class="toggle-btn">▼</button>
                     </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Straight-Arm Cable Lat Pushdown</span>
-                                <span class="exercise-sets">3 sets × 15 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Incline Dumbbell Bicep Curls</span>
-                                <span class="exercise-sets">4 sets × 10-12 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Bent-Over Cable Rear Delt Flyes</span>
-                                <span class="exercise-sets">3 sets × 10-15 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                            <h2>Execution Cues:</h2>
+<ul>
+  <li>Set the bench between 15–30 degrees (no higher).</li>
+  <li>Lower the dumbbells slowly and under control — feel a deep stretch across your chest.</li>
+  <li>Keep the movement strict; do not turn the fly into a press.</li>
+  <li>Keep triceps relaxed; chest should do all the work.</li>
+  <li>Focus on bringing your elbows together at the top to maximize chest contraction.</li>
+</ul>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Day 3 Workout -->
-                <div class="day-content" id="day3">
-                    <h2 class="day-title">Day 3: Legs (Quads, Hamstrings, Calves), Shoulders (Side)</h2>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Smith Machine Squat</span>
-                                <span class="exercise-sets">4 sets × 6-8 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Single-Arm Overhead Cable Triceps Extension</span>
+                            <span class="exercise-sets">4 sets × 10-12 reps</span>
                         </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
+                        <button class="toggle-btn">▼</button>
                     </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Walking Lunges</span>
-                                <span class="exercise-sets">3 sets × 10 steps each leg</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Standing Calf Raises</span>
-                                <span class="exercise-sets">3 sets × 15-20 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Seated Leg Curl Machine</span>
-                                <span class="exercise-sets">3 sets × 15-20 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Dumbbell Lateral Raises</span>
-                                <span class="exercise-sets">3 sets × 15-17 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                            <h2>Execution Cues:</h2>
+<ul>
+ <li>Grab the round handle firmly and position your arm overhead.</li>
+ <li>Fully extend the elbow at the top, locking out under control.</li>
+ <li>Lower the handle slowly until your forearm nearly touches your bicep.</li>
+ <li>Keep the upper arm stable and pointed vertically throughout the movement.</li>
+ <li>Stretch deeply at the bottom, then drive the handle back up by isolating the triceps.</li>
+</ul>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Day 4 Workout -->
-                <div class="day-content" id="day4">
-                    <h2 class="day-title">Day 4: Chest, Triceps, Abs</h2>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Incline Dumbbell Bench Press</span>
-                                <span class="exercise-sets">4 sets × 8-10 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Single-Arm Cable Lateral Raises</span>
+                            <span class="exercise-sets">3 sets × 12-15 reps</span>
                         </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
+                        <button class="toggle-btn">▼</button>
                     </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">High-to-Low Cable Chest Flyes</span>
-                                <span class="exercise-sets">3 sets × 15-20 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Bodyweight Dips</span>
-                                <span class="exercise-sets">3 sets × AMRAP</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Cable Triceps Pushdowns</span>
-                                <span class="exercise-sets">3-4 sets</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Ab Wheel Rollouts</span>
-                                <span class="exercise-sets">2-3 sets</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                            <h2>Execution Cues:</h2>
+<ul>
+ <li>Grab the upright support pole with your non-working hand for balance.</li>
+ <li>Lean slightly <strong>toward</strong> the cable stack to increase the range of motion.</li>
+ <li>Start with your working hand positioned near your hip/pocket.</li>
+ <li>Raise the arm out and slightly above parallel, leading with the elbow.</li>
+ <li>Focus on lifting through the lateral delt; forearm remains passive (just a lever).</li>
+ <li>Lower the weight slowly and under control; lift explosively on the concentric phase.</li>
+ <li>Keep the torso stable throughout — avoid swinging or using momentum.</li>
+</ul>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Day 5 Workout -->
-                <div class="day-content" id="day5">
-                    <h2 class="day-title">Day 5: Back, Biceps, Rear Delts</h2>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Seated Cable Row</span>
-                                <span class="exercise-sets">On Hold</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Seated Ab Crunch Machine</span>
+                            <span class="exercise-sets">3 sets × 15-20 reps</span>
                         </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
+                        <button class="toggle-btn">▼</button>
                     </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Preacher Curl (EZ-Bar or Machine)</span>
-                                <span class="exercise-sets">2 sets</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Rope Cable Hammer Curls</span>
-                                <span class="exercise-sets">2 sets</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Standing Cable Rear Delt Flyes</span>
-                                <span class="exercise-sets">3 sets</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Bodyweight Pull-Ups</span>
-                                <span class="exercise-sets">3 sets × AMRAP</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Assisted Pull-Ups (Machine or Bands)</span>
-                                <span class="exercise-sets">3 sets × 10-15 reps</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Day 6 Workout -->
-                <div class="day-content" id="day6">
-                    <h2 class="day-title">Day 6: Legs (Glutes, Hamstrings, Quads), Shoulders (Side), Abs</h2>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Dumbbell Romanian Deadlifts</span>
-                                <span class="exercise-sets">3-4 sets</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Leg Press Machine</span>
-                                <span class="exercise-sets">3-4 sets</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Bulgarian Split Squats</span>
-                                <span class="exercise-sets">3 sets per leg</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Leg Extensions</span>
-                                <span class="exercise-sets">3 sets</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Seated Dumbbell Lateral Raises</span>
-                                <span class="exercise-sets">3 sets</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="exercise-card">
-                        <div class="exercise-header">
-                            <div>
-                                <span class="exercise-name">Core/Abs</span>
-                                <span class="exercise-sets">2 sets (your choice: planks, cable crunches, etc.)</span>
-                            </div>
-                            <button class="toggle-btn">▼</button>
-                        </div>
-                        <div class="exercise-details">
-                            <div class="exercise-description">
-                                <!-- Placeholder for cues -->
-                            </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                            <h2> Execution Cues:</h2>
+<ul>
+ <li>Grip the handles above your head lightly, using only your fingers — avoid pulling with your arms.</li>
+ <li>Slightly lift your glutes off the seat to adjust your position, then firmly press your back against the seat.</li>
+ <li>Engage your legs to lock them in place — this ensures stability throughout the movement.</li>
+ <li>Begin the crunch by <strong>contracting your abs</strong>, keeping the movement focused solely on your core.</li>
+ <li>Avoid using your arms, forearms, or biceps — only your abs should be working.</li>
+ <li>Control the movement to <strong>maintain constant tension</strong> on your abs.</li>
+ <li>Do not fully extend or release — stop before the weight touches the stack to keep tension on the muscles.</li>
+ <li>Focus on a strong contraction at the top, then slowly lower to stretch the abs fully before initiating the next rep.</li>
+ <li>Keep your mind-muscle connection <strong>exclusively on the abs</strong> throughout the set.</li>
+</ul>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Nutrition Content -->
-            <div class="tab-content" id="nutrition-content">
-                <div class="day-selector">
+            <!-- Day 2 Workout -->
+            <div class="day-content" id="day2">
+                <h2 class="day-title">Day 2: Back, Biceps, Rear Delts</h2>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Neutral-Grip Lat Pulldown</span>
+                            <span class="exercise-sets">4 sets × 10-12 reps</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                            <h2>Execution Cues:</h2>
+<ul>
+ <li>Take a shoulder-width or slightly wider grip — not too close, not excessively wide.</li>
+ <li>Use a <strong>false grip</strong> (wrap fingers only, no thumb) to better connect to the lats.</li>
+ <li>Focus entirely on driving your <strong>elbows</strong> down toward your ribs and pockets.</li>
+ <li>Keep biceps, shoulders, and forearms relaxed; the lats should do all the work.</li>
+ <li>Pull down powerfully and contract your lats hard at the bottom.</li>
+ <li>Control the eccentric — <strong>release slowly</strong> to a full stretch without losing tension.</li>
+ <li>Maintain a mostly upright torso; a slight lean back is fine, but avoid turning it into a row.</li>
+ <li>Breathe properly (exhale on pull, inhale on release) and train with controlled aggression.</li>
+</ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Straight-Arm Cable Lat Pushdown</span>
+                            <span class="exercise-sets">3 sets × 15 reps</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                            <h2>Execution Cues:</h2>
+                            <ul>
+                             <li>Position the bar across the middle of your palms for a firm grip.</li>
+                             <li>Maintain a slight bend in your elbows throughout the movement.</li>
+                             <li>Lean slightly forward to stabilize your torso and stay balanced under the cable tension.</li>
+                             <li>Initiate the movement by <strong>driving your elbows down and back</strong> toward your lats.</li>
+                             <li>Squeeze and contract your lats hard at the bottom of each rep.</li>
+                             <li>Control the bar on the way up; don't let the weight pull you out of position.</li>
+                             <li>It's normal to feel slight tricep activation, but the primary focus must remain on the lats.</li>
+                             <li>Perform with high focus and controlled tempo, targeting 15–17 reps per set. YOUR LATS SHOULD BE ON FIRE. IF NOT YOU ARE DOING IT WRONG.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Incline Dumbbell Bicep Curls</span>
+                            <span class="exercise-sets">4 sets × 10-12 reps</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                            <h2>Execution Cues:</h2>
+<ul>
+ <li>Set the bench at a 15–30 degree incline and lie back fully supported.</li>
+ <li>Use lighter weights (7.5–10 kg) to maintain strict form and tension.</li>
+ <li>Start with arms fully extended; let the biceps stretch completely at the bottom.</li>
+ <li>Keep shoulders pinned back and stable — <strong>no swinging or shoulder involvement.</strong></li>
+ <li>Curl the dumbbells up by contracting the biceps only; elbows stay locked in place.</li>
+ <li>As you curl up, <strong>slightly supinate (rotate) your pinky upward</strong> to maximize bicep peak contraction.</li>
+ <li>Squeeze hard at the top, then lower slowly and under control to achieve a full stretch.</li>
+ <li>In the final few reps (only when close to failure), slight momentum from shoulders is acceptable — but keep it controlled.</li>
+</ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Bent-Over Cable Rear Delt Flyes</span>
+                            <span class="exercise-sets">3 sets × 10-15 reps</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                            <h2>Execution Cues:</h2>
+<ul>
+ <li>Set the cable handle at the lowest position on the pulley stack.</li>
+ <li>Stand a few steps <strong>away</strong> from the cable machine to increase range of motion.</li>
+ <li>Bend at the hips about <strong>45–60 degrees</strong>, keeping your back flat and core braced.</li>
+ <li>Slightly rotate your torso <strong>toward the opposite side</strong> (away from the working arm) to better target the rear delts.</li>
+ <li>Grab the handle with a neutral grip (palm facing in).</li>
+ <li>Initiate the movement by pulling the handle out and back, leading with your elbow.</li>
+ <li>Focus purely on moving through the <strong>rear delts</strong> — avoid using your arms, forearms, or jerking the weight.</li>
+ <li>Stretch fully at the bottom and contract hard at the top.</li>
+ <li>Use very light weight — <strong>1–2 plates</strong> for a standard pulley, or more if using a multiple-pulley system (like in Anytime Fitness setups).</li>
+ <li>Maintain strict form: slow eccentric, controlled concentric, no momentum.</li>
+</ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Day 3 Workout -->
+            <div class="day-content" id="day3">
+                <h2 class="day-title">Day 3: Legs (Quads, Hamstrings, Calves), Shoulders (Side)</h2>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Smith Machine Squat</span>
+                            <span class="exercise-sets">4 sets × 6-8 reps</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Walking Lunges</span>
+                            <span class="exercise-sets">3 sets × 10 steps each leg</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Standing Calf Raises</span>
+                            <span class="exercise-sets">3 sets × 15-20 reps</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Seated Leg Curl Machine</span>
+                            <span class="exercise-sets">3 sets × 15-20 reps</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Dumbbell Lateral Raises</span>
+                            <span class="exercise-sets">3 sets × 15-17 reps</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Day 4 Workout -->
+            <div class="day-content" id="day4">
+                <h2 class="day-title">Day 4: Chest, Triceps, Abs</h2>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Incline Dumbbell Bench Press</span>
+                            <span class="exercise-sets">4 sets × 8-10 reps</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">High-to-Low Cable Chest Flyes</span>
+                            <span class="exercise-sets">3 sets × 15-20 reps</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Bodyweight Dips</span>
+                            <span class="exercise-sets">3 sets × AMRAP</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Cable Triceps Pushdowns</span>
+                            <span class="exercise-sets">3-4 sets</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Ab Wheel Rollouts</span>
+                            <span class="exercise-sets">2-3 sets</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Day 5 Workout -->
+            <div class="day-content" id="day5">
+                <h2 class="day-title">Day 5: Back, Biceps, Rear Delts</h2>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Seated Cable Row</span>
+                            <span class="exercise-sets">On Hold</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Preacher Curl (EZ-Bar or Machine)</span>
+                            <span class="exercise-sets">2 sets</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Rope Cable Hammer Curls</span>
+                            <span class="exercise-sets">2 sets</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Standing Cable Rear Delt Flyes</span>
+                            <span class="exercise-sets">3 sets</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Bodyweight Pull-Ups</span>
+                            <span class="exercise-sets">3 sets × AMRAP</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Assisted Pull-Ups (Machine or Bands)</span>
+                            <span class="exercise-sets">3 sets × 10-15 reps</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Day 6 Workout -->
+            <div class="day-content" id="day6">
+                <h2 class="day-title">Day 6: Legs (Glutes, Hamstrings, Quads), Shoulders (Side), Abs</h2>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Dumbbell Romanian Deadlifts</span>
+                            <span class="exercise-sets">3-4 sets</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Leg Press Machine</span>
+                            <span class="exercise-sets">3-4 sets</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Bulgarian Split Squats</span>
+                            <span class="exercise-sets">3 sets per leg</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Leg Extensions</span>
+                            <span class="exercise-sets">3 sets</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Seated Dumbbell Lateral Raises</span>
+                            <span class="exercise-sets">3 sets</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div>
+                            <span class="exercise-name">Core/Abs</span>
+                            <span class="exercise-sets">2 sets (your choice: planks, cable crunches, etc.)</span>
+                        </div>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-description">
+                            <!-- Placeholder for cues -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Nutrition Section -->
+        <div class="content-section" id="nutrition">
+            <!-- Day Navigation for Nutrition -->
+            <div class="days-nav">
+                <div class="day-tab">
                     <button class="day-btn active" data-day="nutrition-day1">Day 1</button>
+                </div>
+                <div class="day-tab">
                     <button class="day-btn" data-day="nutrition-day2">Day 2</button>
+                </div>
+                <div class="day-tab">
                     <button class="day-btn" data-day="nutrition-day3">Day 3</button>
+                </div>
+                <div class="day-tab">
                     <button class="day-btn" data-day="nutrition-day4">Day 4</button>
+                </div>
+                <div class="day-tab">
                     <button class="day-btn" data-day="nutrition-day5">Day 5</button>
+                </div>
+                <div class="day-tab">
                     <button class="day-btn" data-day="nutrition-day6">Day 6</button>
                 </div>
-                
-                <!-- Day 1 Nutrition -->
-                <div class="day-content active" id="nutrition-day1">
-                    <h2 class="day-title">Day 1: Nutrition Plan</h2>
-                    
-                    <div class="macro-info">
-                        <h3>Daily Macros</h3>
-                        <div class="macro-grid">
-                            <div class="macro-item">
-                                <div class="macro-label">Calories</div>
-                                <div class="macro-value">2400</div>
-                            </div>
-                            <div class="macro-item">
-                                <div class="macro-label">Protein</div>
-                                <div class="macro-value">180g</div>
-                            </div>
-                            <div class="macro-item">
-                                <div class="macro-label">Carbs</div>
-                                <div class="macro-value">260g</div>
-                            </div>
-                            <div class="macro-item">
-                                <div class="macro-label">Fat</div>
-                                <div class="macro-value">65g</div>
-                            </div>
-                        </div>
+            </div>
+            
+        <!-- Day 1 Nutrition -->
+        <div class="day-content active" id="nutrition-day1">
+            <h2 class="day-title">Day 1: Nutrition Plan</h2>
+            
+            <div class="macro-info">
+                <h3>Daily Macros</h3>
+                <div class="macro-grid">
+                    <div class="macro-item">
+                        <div class="macro-label">Calories</div>
+                        <div class="macro-value">2030</div>
                     </div>
-                    
-                    <div class="meal-plan">
-                        <h3>Meal Plan</h3>
-                        
-                        <!-- Placeholder for meal plan content -->
-                        <div class="meal">
-                            <h4 class="meal-title">Meal 1: Breakfast</h4>
-                            <div class="meal-items">
-                                <p>Meal plan details to be added</p>
-                            </div>
-                        </div>
-                        
-                        <div class="meal">
-                            <h4 class="meal-title">Meal 2: Lunch</h4>
-                            <div class="meal-items">
-                                <p>Meal plan details to be added</p>
-                            </div>
-                        </div>
-                        
-                        <div class="meal">
-                            <h4 class="meal-title">Meal 3: Dinner</h4>
-                            <div class="meal-items">
-                                <p>Meal plan details to be added</p>
-                            </div>
-                        </div>
+                    <div class="macro-item">
+                        <div class="macro-label">Protein</div>
+                        <div class="macro-value">151g</div>
+                    </div>
+                    <div class="macro-item">
+                        <div class="macro-label">Carbs</div>
+                        <div class="macro-value">159g</div>
+                    </div>
+                    <div class="macro-item">
+                        <div class="macro-label">Fat</div>
+                        <div class="macro-value">82g</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="meal-plan">
+                <h3>Meal Plan</h3>
+                
+                <div class="meal">
+                    <h4 class="meal-title">Meal 1: Breakfast</h4>
+                    <div class="meal-items">
+                        <ul>
+                            <li>1 scoop whey isolate</li>
+                            <li>4 egg whites + 1 whole egg with spinach & onion, cooked in 1 tsp oil</li>
+                            <li>2 slices whole-grain bread</li>
+                            <li>50 g mixed berries</li>
+                        </ul>
+                        <p><strong>Macros:</strong> 526 kcal | P 57 g | C 39 g | F 12 g</p>
                     </div>
                 </div>
                 
-                <!-- Other nutrition days - just placeholders for now -->
-                <div class="day-content" id="nutrition-day2">
-                    <h2 class="day-title">Day 2: Nutrition Plan</h2>
-                    <p>Nutrition content for Day 2 will be added here.</p>
+                <div class="meal">
+                    <h4 class="meal-title">Meal 2: Lunch</h4>
+                    <div class="meal-items">
+                        <ul>
+                            <li>Paneer bhurji (100 g paneer + veggies & spices + 1 tsp oil)</li>
+                            <li>1 cup cooked brown rice</li>
+                            <li>1 scoop whey isolate</li>
+                            <li>1 medium apple</li>
+                        </ul>
+                        <p><strong>Macros:</strong> 810 kcal | P 50 g | C 85 g | F 27 g</p>
+                    </div>
                 </div>
                 
-                <div class="day-content" id="nutrition-day3">
-                    <h2 class="day-title">Day 3: Nutrition Plan</h2>
-                    <p>Nutrition content for Day 3 will be added here.</p>
+                <div class="meal">
+                    <h4 class="meal-title">Meal 3: Dinner</h4>
+                    <div class="meal-items">
+                        <ul>
+                            <li>Scrambled eggs (3 whole eggs + 1 tsp oil)</li>
+                            <li>Paneer & tofu stir-fry (75 g paneer + 50 g tofu + 1 tsp oil)</li>
+                            <li>2 slices whole-grain bread</li>
+                        </ul>
+                        <p><strong>Macros:</strong> 693 kcal | P 44 g | C 35 g | F 43 g</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Day 2 Nutrition -->
+        <div class="day-content" id="nutrition-day2">
+            <h2 class="day-title">Day 2: Nutrition Plan</h2>
+            
+            <div class="macro-info">
+                <h3>Daily Macros</h3>
+                <div class="macro-grid">
+                    <div class="macro-item">
+                        <div class="macro-label">Calories</div>
+                        <div class="macro-value">2007</div>
+                    </div>
+                    <div class="macro-item">
+                        <div class="macro-label">Protein</div>
+                        <div class="macro-value">153g</div>
+                    </div>
+                    <div class="macro-item">
+                        <div class="macro-label">Carbs</div>
+                        <div class="macro-value">163g</div>
+                    </div>
+                    <div class="macro-item">
+                        <div class="macro-label">Fat</div>
+                        <div class="macro-value">88g</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="meal-plan">
+                <h3>Meal Plan</h3>
+                
+                <div class="meal">
+                    <h4 class="meal-title">Meal 1: Breakfast</h4>
+                    <div class="meal-items">
+                        <ul>
+                            <li>60 g rolled oats</li>
+                            <li>1 scoop whey isolate</li>
+                            <li>2 egg whites</li>
+                            <li>10 almonds</li>
+                            <li>1 banana</li>
+                            <li>50 g mixed berries</li>
+                        </ul>
+                        <p><strong>Macros:</strong> 572 kcal | P 43 g | C 76 g | F 11 g</p>
+                    </div>
                 </div>
                 
-                <div class="day-content" id="nutrition-day4">
-                    <h2 class="day-title">Day 4: Nutrition Plan</h2>
-                    <p>Nutrition content for Day 4 will be added here.</p>
+                <div class="meal">
+                    <h4 class="meal-title">Meal 2: Lunch</h4>
+                    <div class="meal-items">
+                        <ul>
+                            <li>1 cup cooked brown rice</li>
+                            <li>Curry: 100 g tofu + 100 g paneer + veggies & spices + 1 Tbsp oil</li>
+                            <li>1 scoop whey isolate</li>
+                        </ul>
+                        <p><strong>Macros:</strong> 861 kcal | P 62 g | C 66 g | F 43 g</p>
+                    </div>
                 </div>
                 
-                <div class="day-content" id="nutrition-day5">
-                    <h2 class="day-title">Day 5: Nutrition Plan</h2>
-                    <p>Nutrition content for Day 5 will be added here.</p>
+                <div class="meal">
+                    <h4 class="meal-title">Meal 3: Dinner</h4>
+                    <div class="meal-items">
+                        <ul>
+                            <li>Egg mix: 2 whole eggs + 3 egg whites + 1 tsp oil</li>
+                            <li>Paneer (75 g) + tofu (50 g)</li>
+                            <li>1 chapati</li>
+                        </ul>
+                        <p><strong>Macros:</strong> 574 kcal | P 45 g | C 21 g | F 33 g</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Day 3 Nutrition -->
+        <div class="day-content" id="nutrition-day3">
+            <h2 class="day-title">Day 3: Nutrition Plan</h2>
+            
+            <div class="macro-info">
+                <h3>Daily Macros</h3>
+                <div class="macro-grid">
+                    <div class="macro-item">
+                        <div class="macro-label">Calories</div>
+                        <div class="macro-value">2029</div>
+                    </div>
+                    <div class="macro-item">
+                        <div class="macro-label">Protein</div>
+                        <div class="macro-value">150g</div>
+                    </div>
+                    <div class="macro-item">
+                        <div class="macro-label">Carbs</div>
+                        <div class="macro-value">178g</div>
+                    </div>
+                    <div class="macro-item">
+                        <div class="macro-label">Fat</div>
+                        <div class="macro-value">80g</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="meal-plan">
+                <h3>Meal Plan</h3>
+                
+                <div class="meal">
+                    <h4 class="meal-title">Meal 1: Breakfast</h4>
+                    <div class="meal-items">
+                        <ul>
+                            <li>Whey-oat smoothie (1 scoop whey + 40 g oats + 1 banana)</li>
+                            <li>3 boiled eggs</li>
+                        </ul>
+                        <p><strong>Macros:</strong> 626 kcal | P 49 g | C 63 g | F 19 g</p>
+                    </div>
                 </div>
                 
-                <div class="day-content" id="nutrition-day6">
-                    <h2 class="day-title">Day 6: Nutrition Plan</h2>
-                    <p>Nutrition content for Day 6 will be added here.</p>
+                <div class="meal">
+                    <h4 class="meal-title">Meal 2: Lunch</h4>
+                    <div class="meal-items">
+                        <ul>
+                            <li>2 chapatis</li>
+                            <li>Salad/curry: 100 g tofu + 100 g paneer + veggies & spices + 1 tsp oil</li>
+                            <li>1 scoop whey isolate</li>
+                            <li>1 medium apple</li>
+                        </ul>
+                        <p><strong>Macros:</strong> 861 kcal | P 63 g | C 82 g | F 33 g</p>
+                    </div>
                 </div>
+                
+                <div class="meal">
+                    <h4 class="meal-title">Meal 3: Dinner</h4>
+                    <div class="meal-items">
+                        <ul>
+                            <li>Paneer-egg plate: 80 g paneer + 2 whole eggs + 2 egg whites</li>
+                            <li>Vegetables</li>
+                            <li>1 slice whole-grain bread</li>
+                            <li>50 g mixed berries</li>
+                        </ul>
+                        <p><strong>Macros:</strong> 542 kcal | P 38 g | C 33 g | F 27 g</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+            <div class="day-content" id="nutrition-day4">
+                <h2 class="day-title">Day 4: Nutrition Plan</h2>
+                <p>Nutrition content for Day 4 will be added here.</p>
+            </div>
+            
+            <div class="day-content" id="nutrition-day5">
+                <h2 class="day-title">Day 5: Nutrition Plan</h2>
+                <p>Nutrition content for Day 5 will be added here.</p>
+            </div>
+            
+            <div class="day-content" id="nutrition-day6">
+                <h2 class="day-title">Day 6: Nutrition Plan</h2>
+                <p>Nutrition content for Day 6 will be added here.</p>
             </div>
         </div>
     </main>
@@ -635,30 +1376,44 @@
                 tab.classList.add('active');
                 
                 // Update active content
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                document.getElementById(`${tabName}-content`).classList.add('active');
+                document.querySelectorAll('.content-section').forEach(content => content.classList.remove('active'));
+                document.getElementById(tabName).classList.add('active');
                 
                 // Reset day selection when switching tabs
                 if (tabName === 'training') {
-                    resetDaySelection('day1');
+                    resetDaySelection('day1', 'training');
                 } else {
-                    resetDaySelection('nutrition-day1');
+                    resetDaySelection('nutrition-day1', 'nutrition');
                 }
             });
         });
         
-        // Day selection for Training
-        document.querySelectorAll('.day-btn').forEach(btn => {
+        // Day selection - Training
+        document.querySelectorAll('#training .day-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const dayId = btn.getAttribute('data-day');
-                const parent = btn.closest('.tab-content');
                 
                 // Update active button
-                parent.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('#training .day-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 
                 // Update active content
-                parent.querySelectorAll('.day-content').forEach(content => content.classList.remove('active'));
+                document.querySelectorAll('#training .day-content').forEach(content => content.classList.remove('active'));
+                document.getElementById(dayId).classList.add('active');
+            });
+        });
+        
+        // Day selection - Nutrition
+        document.querySelectorAll('#nutrition .day-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const dayId = btn.getAttribute('data-day');
+                
+                // Update active button
+                document.querySelectorAll('#nutrition .day-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update active content
+                document.querySelectorAll('#nutrition .day-content').forEach(content => content.classList.remove('active'));
                 document.getElementById(dayId).classList.add('active');
             });
         });
@@ -675,15 +1430,13 @@
         });
         
         // Helper function to reset day selection
-        function resetDaySelection(firstDayId) {
-            const tabContent = document.getElementById(firstDayId).closest('.tab-content');
-            
+        function resetDaySelection(firstDayId, sectionId) {
             // Set first day button as active
-            tabContent.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
-            tabContent.querySelector(`.day-btn[data-day="${firstDayId}"]`).classList.add('active');
+            document.querySelectorAll(`#${sectionId} .day-btn`).forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`#${sectionId} .day-btn[data-day="${firstDayId}"]`).classList.add('active');
             
             // Show first day content
-            tabContent.querySelectorAll('.day-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll(`#${sectionId} .day-content`).forEach(content => content.classList.remove('active'));
             document.getElementById(firstDayId).classList.add('active');
         }
     </script>
