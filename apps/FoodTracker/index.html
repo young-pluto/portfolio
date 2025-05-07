@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Food Tracker</title>
+    <link rel="stylesheet" href="/foodtracker/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABBBJREFUWEfFl2toXFUYhr+9z5lJJpNkJr2ltrQGW7QKpRQviCgiaNUHoRREEFHEFx98EXwVfPHJFwXxAir4IIgg4ouIYBWvRcFaRUvT1DTNJZlMMpnMZM5Z8p+cM3SSSS5Dc9KBYTJn9t5r/Wet/1/rCDMe+eW9y1fSzb1Igo8mULAK5RqUUyRnpskFtcGOUlhj2LGVK/xUYdrFyRJvXU48M4IEWbCXm9k3d4G5/Rn1wTWE/nZCPI1/4l+yfz1l4oIjxbsyffPd8XxRbfXLOCuJZJquwcshNuTWO/DcZpR/I8ZbT3FyFyvCDQy+VhGGVUz4VnpCGk0UZ7yKo9u14zSGXfO2vDiISe9Cc+dACQmKSHgS1h6iOPoXWvg2Xt/cj1YI3Siy8zEieQQljRIn6c7uRIsfEgmhMALhR9j8BYpSoNR9G/Kv4aUvxe3Z7DaHW22uDUYdoHu48fh/c9R2Qb5siBxcXdM9CU9hvSHc/PmYdBIn6KHvFdLp42jxCXCTaP55zJnPscIJiIw5J0iQGcYOvY+TGiDzwKrXqRXgJhwqCNuSAoGBYMIH4nJQKHt1n5e0EGY9MfQjHT1riNNXYQsv4LiXUQrfQPEfnOA4Ycp2Zm/e04KIgRAqTpD0wXVACCRCx+eYMIgTJOlW6OxI07PqUspH3yM7/jtanKCWDcMiU5HLcSffwOleJPP0mtdqBHj++oJmLSQdS5B0zORgBnrHJrDTETLt40lLwgJBFvXXkLnrbKJwbXW2NXqb2zVCJkHbI6GlgLAz4afGKDw6hsQTJJOLKY1foHDiKMHcHZh8DquXI8lwYvhP/K7VuL3nzXluFgKqAqo6QZ97I+KmyIxsJsz+RX7iGGHxS7ygj2h+W3YRMT57BLf3QtzeJgKaStCmwRFI2Ip4rihxOo+T6COZ7qNneCWZrbvIje2icOpvrJzcOCzjsZGT+Kk1pC9eQO/WFgrMAtx6MHQswpnMnN8LPZsuxl97MemL1lPIjJAbP9RYXWPITxzF9d/EXX5h8wGsBXCRvrhSXTc2RRgWKM8sMeAGBuYTVdbKbxfWKEK7HxiCyMTcF1nqxTqtBHCeAXdVH5VVzHCJtbO/Y+cuRMTU5V4jEJ+yVmItA9bFGMZWH8LtHqjTQgHSFRaEkKuYM2y/jR8fwJaPQ7kf8caxZcEqlcW3BtavDaJRguuP0F3IEB4+jrlmb726Fgb8r2zOxbAn5kZECdK9eDLBgu4Ep8eTRFGJiMqQXFXcx3jCkTSvfWX0i91+7uVWBvw6Q+rvdJRIRNGKxXNWU7LriI05aEzEGX2+e/xo4nSrzP8HzCLXFQHVF1YS5PLvfg11jLSyRbRSbpf6/AdJWug/16eTqwAAAABJRU5ErkJggg==">
+</head>
+<body>
+    <!-- Authentication Section -->
+    <div id="auth-container">
+        <div class="auth-card">
+            <h2>Food Tracker</h2>
+            <div id="login-form">
+                <h3>Login</h3>
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button id="login-btn">Login</button>
+                <p>Don't have an account? <span id="show-signup">Sign up</span></p>
+            </div>
+            <div id="signup-form" class="hidden">
+                <h3>Sign Up</h3>
+                <input type="text" id="signup-name" placeholder="Your Name" required>
+                <input type="email" id="signup-email" placeholder="Email" required>
+                <input type="password" id="signup-password" placeholder="Password" required>
+                <button id="signup-btn">Sign Up</button>
+                <p>Already have an account? <span id="show-login">Login</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Section (Initially Hidden) -->
+    <div id="app-container" class="hidden">
+        <div id="welcome-message" class="welcome-message"></div>
+        
+        <header>
+            <h1>Food Tracker</h1>
+            <button id="logout-btn">Logout</button>
+        </header>
+
+        <nav>
+            <button id="new-entry-btn" class="nav-btn active">New Entry</button>
+            <button id="recent-btn" class="nav-btn">Recent Entries</button>
+            <button id="history-btn" class="nav-btn">History</button>
+        </nav>
+
+        <!-- New Food Entry Section -->
+        <section id="new-entry-section">
+            <div class="section-header">
+                <h2>New Food Entry</h2>
+                <button id="save-entry-btn" class="action-btn">
+                    <i class="fas fa-save"></i> Save Entry
+                </button>
+            </div>
+
+            <div id="entry-date-container">
+                <label for="entry-date">Date:</label>
+                <input type="date" id="entry-date">
+            </div>
+
+            <div id="meals-container" class="list-container">
+                <!-- Meals will be added here -->
+            </div>
+
+            <button id="add-meal-btn" class="action-btn">
+                <i class="fas fa-plus"></i> Add Meal
+            </button>
+        </section>
+
+        <!-- Recent Entries Section -->
+        <section id="recent-entries-section" class="hidden">
+            <div class="section-header">
+                <h2>Recent Entries</h2>
+            </div>
+            <div id="recent-entries-list" class="list-container">
+                <!-- Recent entries will be displayed here -->
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section id="history-section" class="hidden">
+            <h2 id="history-title">Food History</h2>
+            <div id="history-list" class="list-container">
+                <!-- History entries will be displayed here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Templates -->
+    <template id="meal-template">
+        <div class="meal-item">
+            <div class="meal-header">
+                <input type="text" class="meal-name-input" placeholder="Meal Name (e.g., Breakfast, Lunch, Snack)">
+                <div class="meal-actions">
+                    <button class="delete-meal-btn icon-btn"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="food-items-container">
+                <!-- Food items will be added here -->
+            </div>
+            <button class="add-food-btn">
+                <i class="fas fa-plus"></i> Add Food Item
+            </button>
+        </div>
+    </template>
+
+    <template id="food-item-template">
+        <div class="food-item">
+            <input type="text" class="food-name-input" placeholder="Food name">
+            <div class="food-details">
+                <div class="input-group">
+                    <label>Weight (g)</label>
+                    <input type="number" class="weight-input" min="0" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>Protein (g)</label>
+                    <input type="number" class="protein-input" min="0" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>Carbs (g)</label>
+                    <input type="number" class="carbs-input" min="0" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>Fat (g)</label>
+                    <input type="number" class="fat-input" min="0" step="0.1">
+                </div>
+            </div>
+            <button class="delete-food-btn icon-btn"><i class="fas fa-trash"></i></button>
+        </div>
+    </template>
+
+    <template id="entry-item-template">
+        <div class="entry-item">
+            <div class="entry-header">
+                <h3 class="entry-date"></h3>
+                <div class="entry-actions">
+                    <button class="edit-entry-btn icon-btn"><i class="fas fa-edit"></i></button>
+                    <button class="delete-entry-btn icon-btn"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="entry-summary">
+                <!-- Summary information will be filled here -->
+            </div>
+            <div class="meal-summary-container">
+                <!-- Meal summaries will be added here -->
+            </div>
+        </div>
+    </template>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <!-- Inline Firebase Init -->
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyB-F0C8l_fOhJPpkYsL6Eb6P7GUFcaC9MQ",
+        authDomain: "portfolio-415e1.firebaseapp.com",
+        databaseURL: "https://portfolio-415e1-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "portfolio-415e1",
+        storageBucket: "portfolio-415e1.firebasestorage.app",
+        messagingSenderId: "959081513500",
+        appId: "1:959081513500:web:e1889367df9e24f25355d9"
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      // Get references to Firebase services
+      const auth = firebase.auth();
+      const database = firebase.database();
+      
+      console.log("Firebase initialized inline");
+    </script>
+
+    <!-- App Scripts -->
+    <script src="/foodtracker/auth.js"></script>
+    <script src="/foodtracker/app.js"></script>
+    <script src="/foodtracker/foodentry.js"></script>
+</body>
+</html>
