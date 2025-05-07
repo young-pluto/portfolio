@@ -1,7 +1,8 @@
-// Food Entry Module
+// Food Entry Module with Body Weight Support
 const FoodEntryModule = (() => {
     // DOM Elements
     const entryDate = document.getElementById('entry-date');
+    const bodyWeight = document.getElementById('body-weight');
     const mealsContainer = document.getElementById('meals-container');
     const addMealBtn = document.getElementById('add-meal-btn');
     const saveEntryBtn = document.getElementById('save-entry-btn');
@@ -117,6 +118,7 @@ const FoodEntryModule = (() => {
         const entryData = {
             date: entryDate.value,
             timestamp: firebase.database.ServerValue.TIMESTAMP,
+            bodyWeight: bodyWeight.value ? parseFloat(bodyWeight.value) : null,
             meals: {}
         };
         
@@ -195,6 +197,9 @@ const FoodEntryModule = (() => {
         
         // Reset editing state
         editingEntryId = null;
+        
+        // Reset weight
+        bodyWeight.value = '';
         
         // Reset date to today
         initEntryDate();
@@ -289,6 +294,14 @@ const FoodEntryModule = (() => {
         
         entryElement.querySelector('.entry-date').textContent = formattedDate;
         
+        // Add body weight if available
+        const weightDisplay = entryElement.querySelector('.weight-display');
+        if (entry.bodyWeight) {
+            weightDisplay.innerHTML = `<i class="fas fa-weight"></i> Body Weight: <strong>${entry.bodyWeight} kg</strong>`;
+        } else {
+            weightDisplay.classList.add('hidden');
+        }
+        
         // Calculate totals
         let totalProtein = 0;
         let totalCarbs = 0;
@@ -372,6 +385,9 @@ const FoodEntryModule = (() => {
         // Set date
         entryDate.value = entry.date;
         
+        // Set body weight if available
+        bodyWeight.value = entry.bodyWeight || '';
+        
         // Recreate meals
         if (entry.meals) {
             Object.values(entry.meals).forEach(meal => {
@@ -419,6 +435,11 @@ const FoodEntryModule = (() => {
             });
     };
 
+    // Get all entries
+    const getAllEntries = () => {
+        return [...entries];
+    };
+
     // Initialize
     const init = () => {
         // Set default date
@@ -439,6 +460,7 @@ const FoodEntryModule = (() => {
     return {
         init,
         loadRecentEntries,
-        loadHistoryEntries
+        loadHistoryEntries,
+        getAllEntries
     };
 })();

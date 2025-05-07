@@ -10,6 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABBBJREFUWEfFl2toXFUYhr+9z5lJJpNkJr2ltrQGW7QKpRQviCgiaNUHoRREEFHEFx98EXwVfPHJFwXxAir4IIgg4ouIYBWvRcFaRUvT1DTNJZlMMpnMZM5Z8p+cM3SSSS5Dc9KBYTJn9t5r/Wet/1/rCDMe+eW9y1fSzb1Igo8mULAK5RqUUyRnpskFtcGOUlhj2LGVK/xUYdrFyRJvXU48M4IEWbCXm9k3d4G5/Rn1wTWE/nZCPI1/4l+yfz1l4oIjxbsyffPd8XxRbfXLOCuJZJquwcshNuTWO/DcZpR/I8ZbT3FyFyvCDQy+VhGGVUz4VnpCGk0UZ7yKo9u14zSGXfO2vDiISe9Cc+dACQmKSHgS1h6iOPoXWvg2Xt/cj1YI3Siy8zEieQQljRIn6c7uRIsfEgmhMALhR9j8BYpSoNR9G/Kv4aUvxe3Z7DaHW22uDUYdoHu48fh/c9R2Qb5siBxcXdM9CU9hvSHc/PmYdBIn6KHvFdLp42jxCXCTaP55zJnPscIJiIw5J0iQGcYOvY+TGiDzwKrXqRXgJhwqCNuSAoGBYMIH4nJQKHt1n5e0EGY9MfQjHT1riNNXYQsv4LiXUQrfQPEfnOA4Ycp2Zm/e04KIgRAqTpD0wXVACCRCx+eYMIgTJOlW6OxI07PqUspH3yM7/jtanKCWDcMiU5HLcSffwOleJPP0mtdqBHj++oJmLSQdS5B0zORgBnrHJrDTETLt40lLwgJBFvXXkLnrbKJwbXW2NXqb2zVCJkHbI6GlgLAz4afGKDw6hsQTJJOLKY1foHDiKMHcHZh8DquXI8lwYvhP/K7VuL3nzXluFgKqAqo6QZ97I+KmyIxsJsz+RX7iGGHxS7ygj2h+W3YRMT57BLf3QtzeJgKaStCmwRFI2Ip4rihxOo+T6COZ7qNneCWZrbvIje2icOpvrJzcOCzjsZGT+Kk1pC9eQO/WFgrMAtx6MHQswpnMnN8LPZsuxl97MemL1lPIjJAbP9RYXWPITxzF9d/EXX5h8wGsBXCRvrhSXTc2RRgWKM8sMeAGBuYTVdbKbxfWKEK7HxiCyMTcF1nqxTqtBHCeAXdVH5VVzHCJtbO/Y+cuRMTU5V4jEJ+yVmItA9bFGMZWH8LtHqjTQgHSFRaEkKuYM2y/jR8fwJaPQ7kf8caxZcEqlcW3BtavDaJRguuP0F3IEB4+jrlmb726Fgb8r2zOxbAn5kZECdK9eDLBgu4Ep8eTRFGJiMqQXFXcx3jCkTSvfWX0i91+7uVWBvw6Q+rvdJRIRNGKxXNWU7LriI05aEzEGX2+e/xo4nSrzP8HzCLXFQHVF1YS5PLvfg11jLSyRbRSbpf6/AdJWug/16eTqwAAAABJRU5ErkJggg==">
+    <!-- Add Chart.js library for data visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
     <!-- Authentication Section -->
@@ -47,6 +49,7 @@
             <button id="new-entry-btn" class="nav-btn active">New Entry</button>
             <button id="recent-btn" class="nav-btn">Recent Entries</button>
             <button id="history-btn" class="nav-btn">History</button>
+            <button id="trends-btn" class="nav-btn">Trends</button>
         </nav>
 
         <!-- New Food Entry Section -->
@@ -61,6 +64,11 @@
             <div id="entry-date-container">
                 <label for="entry-date">Date:</label>
                 <input type="date" id="entry-date">
+            </div>
+
+            <div id="body-weight-container">
+                <label for="body-weight">Body Weight (kg):</label>
+                <input type="number" step="0.1" min="0" id="body-weight" placeholder="Enter your weight">
             </div>
 
             <div id="meals-container" class="list-container">
@@ -84,9 +92,55 @@
 
         <!-- History Section -->
         <section id="history-section" class="hidden">
-            <h2 id="history-title">Food History</h2>
+            <div class="section-header">
+                <h2 id="history-title">Food History</h2>
+            </div>
             <div id="history-list" class="list-container">
                 <!-- History entries will be displayed here -->
+            </div>
+        </section>
+
+        <!-- Trends Section -->
+        <section id="trends-section" class="hidden">
+            <div class="section-header">
+                <h2>Nutrition and Weight Trends</h2>
+            </div>
+            <div class="graph-container">
+                <h3>Body Weight Trend</h3>
+                <canvas id="weight-chart"></canvas>
+            </div>
+            <div class="graph-container">
+                <h3>Daily Calorie Intake</h3>
+                <canvas id="calories-chart"></canvas>
+            </div>
+            <div class="macros-container">
+                <h3>Macronutrient Breakdown</h3>
+                <canvas id="macros-chart"></canvas>
+            </div>
+            <div class="table-container">
+                <h3>Detailed Data</h3>
+                <div class="data-controls">
+                    <button id="export-data-btn" class="action-btn">
+                        <i class="fas fa-file-export"></i> Export Data
+                    </button>
+                </div>
+                <div class="data-table-wrapper">
+                    <table id="nutrition-data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Weight (kg)</th>
+                                <th>Calories</th>
+                                <th>Protein (g)</th>
+                                <th>Carbs (g)</th>
+                                <th>Fat (g)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nutrition-data-body">
+                            <!-- Table data will be added here -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </div>
@@ -146,6 +200,9 @@
             <div class="entry-summary">
                 <!-- Summary information will be filled here -->
             </div>
+            <div class="weight-display">
+                <!-- Weight display will be added here -->
+            </div>
             <div class="meal-summary-container">
                 <!-- Meal summaries will be added here -->
             </div>
@@ -184,5 +241,6 @@
     <script src="/foodtracker/auth.js"></script>
     <script src="/foodtracker/app.js"></script>
     <script src="/foodtracker/foodentry.js"></script>
+    <script src="/foodtracker/trends.js"></script>
 </body>
 </html>
