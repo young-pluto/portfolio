@@ -210,6 +210,16 @@
       "dest": "/apps/FoodTracker/foodentry.js"
     },
     {
+      "src": "/foodtracker/trends.js",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/FoodTracker/trends.js"
+    },
+    {
       "src": "/foodtracker/styles.css",
       "has": [
         {
