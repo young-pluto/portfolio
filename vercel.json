@@ -22,17 +22,21 @@
       "use": "@vercel/static"
     },
     { 
-  "src": "apps/practice/**/*",
-  "use": "@vercel/static"
-},
-{
-  "src": "apps/fitness-coach-portal/**/*",
-  "use": "@vercel/static"
-},
-{
-  "src": "apps/training/**/*",
-  "use": "@vercel/static"
-}
+      "src": "apps/practice/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "apps/fitness-coach-portal/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "apps/training/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "apps/FoodTracker/**/*",
+      "use": "@vercel/static"
+    }
   ],
   "routes": [
     {
@@ -174,6 +178,56 @@
         }
       ],
       "dest": "/apps/WorkoutTracker/styles.css"
+    },
+    {
+      "src": "/foodtracker/auth.js",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/FoodTracker/auth.js"
+    },
+    {
+      "src": "/foodtracker/app.js",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/FoodTracker/app.js"
+    },
+    {
+      "src": "/foodtracker/foodentry.js",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/FoodTracker/foodentry.js"
+    },
+    {
+      "src": "/foodtracker/styles.css",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/FoodTracker/styles.css"
+    },
+    {
+      "src": "/foodtracker",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/FoodTracker/index.html"
     },
     {
       "src": "/(.*)",
