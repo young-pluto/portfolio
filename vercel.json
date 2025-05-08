@@ -160,6 +160,16 @@
       "dest": "/apps/WorkoutTracker/workouts.js"
     },
     {
+      "src": "/progress.js",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/WorkoutTracker/progress.js"
+    },
+    {
       "src": "/app.js",
       "has": [
         {
