@@ -7,12 +7,14 @@ const AppModule = (() => {
     const exercisesSection = document.getElementById('exercises-section');
     const newWorkoutSection = document.getElementById('new-workout-section');
     const workoutHistorySection = document.getElementById('workout-history-section');
+    const exerciseProgressSection = document.getElementById('exercise-progress-section');
 
     // Show exercises section
     const showExercisesSection = () => {
         exercisesSection.classList.remove('hidden');
         newWorkoutSection.classList.add('hidden');
         workoutHistorySection.classList.add('hidden');
+        exerciseProgressSection.classList.add('hidden');
         
         // Update active nav button
         updateActiveNavButton(viewExercisesBtn);
@@ -23,6 +25,7 @@ const AppModule = (() => {
         exercisesSection.classList.add('hidden');
         newWorkoutSection.classList.remove('hidden');
         workoutHistorySection.classList.add('hidden');
+        exerciseProgressSection.classList.add('hidden');
         
         // Update active nav button
         updateActiveNavButton(newWorkoutBtn);
@@ -36,6 +39,7 @@ const AppModule = (() => {
         exercisesSection.classList.add('hidden');
         newWorkoutSection.classList.add('hidden');
         workoutHistorySection.classList.remove('hidden');
+        exerciseProgressSection.classList.add('hidden');
         
         // Update active nav button
         updateActiveNavButton(workoutHistoryBtn);
@@ -70,6 +74,8 @@ const AppModule = (() => {
         initAfterAuth: () => {
             ExercisesModule.init();
             WorkoutsModule.init();
+            TimerModule.init();
+            ProgressModule.init();
             init();
         }
     };

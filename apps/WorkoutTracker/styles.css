@@ -12,6 +12,10 @@
     --success: #10b981;
     --warning: #f59e0b;
     --error: #e53e3e;
+    --chart-blue: #3b82f6;
+    --chart-red: #ef4444;
+    --chart-green: #10b981;
+    --chart-purple: #8b5cf6;
     
     /* UI Elements */
     --card-bg: rgba(255, 255, 255, 0.85);
@@ -440,6 +444,7 @@ section {
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
     position: relative;
     overflow: hidden;
+    margin: 0 5px;
 }
 
 .action-btn::before {
@@ -456,6 +461,16 @@ section {
 .action-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* Special Save Entry Button */
+#save-entry-btn {
+    background: linear-gradient(45deg, var(--success), #0d9488);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+#save-entry-btn:hover {
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
 }
 
 .icon-btn {
@@ -611,6 +626,45 @@ section {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
+}
+
+/* Form Layout Helpers */
+#workout-date-container,
+#workout-name-container,
+#body-weight-container {
+    margin-bottom: 20px;
+}
+
+#workout-date-container label,
+#workout-name-container label,
+#body-weight-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+#workout-date,
+#workout-name,
+#body-weight {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+}
+
+#workout-date:focus,
+#workout-name:focus,
+#body-weight:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    background-color: white;
 }
 
 /* Exercise Items */
@@ -851,6 +905,20 @@ section {
     font-size: 0.85rem;
 }
 
+.workout-body-weight {
+    background-color: rgba(139, 92, 246, 0.1);
+    border-left: 3px solid var(--chart-purple);
+    padding: 10px 15px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.workout-body-weight i {
+    color: var(--chart-purple);
+    margin-right: 6px;
+}
+
 .workout-summary {
     margin-top: 10px;
     color: var(--text-secondary);
@@ -922,41 +990,6 @@ section {
     font-size: 0.95rem;
     padding: 2px 0;
     color: var(--text-primary);
-}
-
-/* Form Layout Helpers */
-#workout-date-container,
-#workout-name-container {
-    margin-bottom: 20px;
-}
-
-#workout-date-container label,
-#workout-name-container label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-}
-
-#workout-date,
-#workout-name {
-    width: 100%;
-    padding: 14px;
-    border: 2px solid var(--border);
-    border-radius: var(--radius-md);
-    font-size: 1rem;
-    background-color: rgba(255, 255, 255, 0.8);
-    color: var(--text-primary);
-    transition: all var(--transition-fast);
-}
-
-#workout-date:focus,
-#workout-name:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-    background-color: white;
 }
 
 /* Exercise Search */
@@ -1139,6 +1172,185 @@ section {
     font-size: 1.4em;
 }
 
+/* Progress Section Styles */
+.info-container {
+    background: white;
+    border-radius: var(--radius-md);
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    position: relative;
+    border: 1px solid var(--border);
+}
+
+.info-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(to right, var(--chart-blue), var(--chart-purple));
+    border-radius: 6px 6px 0 0;
+}
+
+.info-container h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}
+
+.graph-container {
+    background: white;
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.graph-container h3, .table-container h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+    position: relative;
+    padding-left: 12px;
+}
+
+.graph-container h3::before, .table-container h3::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--chart-blue), var(--chart-green));
+    border-radius: 4px;
+}
+
+canvas {
+    width: 100% !important;
+    height: 300px !important;
+    max-height: 300px;
+}
+
+/* Table Styles */
+.table-container {
+    background: white;
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    position: relative;
+    border: 1px solid var(--border);
+}
+
+.data-table-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--primary-light);
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 10;
+}
+
+td {
+    padding: 12px 15px;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border);
+}
+
+tbody tr:hover {
+    background-color: rgba(99, 102, 241, 0.05);
+}
+
+/* Saved Workouts Dialog Styles */
+.wider-dialog {
+    max-width: 500px;
+}
+
+.saved-workouts-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 15px 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    /* Custom Scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) #f1f5f9;
+}
+
+.saved-workouts-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.saved-workouts-list::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+.saved-workouts-list::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 10px;
+    border: 2px solid #f1f5f9;
+}
+
+.saved-workout-item {
+    padding: 15px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.saved-workout-item:hover {
+    background-color: rgba(99, 102, 241, 0.1);
+}
+
+.saved-workout-item:last-child {
+    border-bottom: none;
+}
+
+.saved-workout-item h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.saved-workout-item .workout-date {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.saved-workout-item .exercise-count {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 5px;
+}
+
 /* Custom Dialog */
 .custom-dialog {
     position: fixed;
@@ -1176,6 +1388,12 @@ section {
     width: 100%;
     height: 6px;
     background: linear-gradient(to right, var(--primary), var(--accent));
+}
+
+.dialog-content h3 {
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+    font-weight: 600;
 }
   
 .dialog-content p {
