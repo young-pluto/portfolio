@@ -1,4 +1,4 @@
-// Workouts Module with improved exercise selection and save entry feature
+// Workouts Module with improved exercise selection, save entry feature, and error handling
 const WorkoutsModule = (() => {
     // DOM Elements
     const newWorkoutSection = document.getElementById('new-workout-section');
@@ -49,7 +49,10 @@ const WorkoutsModule = (() => {
         
         workoutsRef.on('value', (snapshot) => {
             workoutHistory = [];
-            workoutHistoryList.innerHTML = '';
+            
+            if (workoutHistoryList) {
+                workoutHistoryList.innerHTML = '';
+            }
             
             const data = snapshot.val();
             if (data) {
@@ -65,14 +68,14 @@ const WorkoutsModule = (() => {
                 workoutHistory.sort((a, b) => b.timestamp - a.timestamp);
                 
                 renderWorkoutHistory();
-            } else {
+            } else if (workoutHistoryList) {
                 workoutHistoryList.innerHTML = '<p>No workout history yet. Start a new workout to see your history here.</p>';
             }
         });
         
         // Update history title with user's name
         const userData = AuthModule.getUserData();
-        if (userData && userData.name) {
+        if (userData && userData.name && workoutHistoryTitle) {
             workoutHistoryTitle.textContent = `${userData.name}'s Workout History`;
         }
     };
@@ -99,6 +102,7 @@ const WorkoutsModule = (() => {
                     savedWorkouts.sort((a, b) => b.timestamp - a.timestamp);
                 }
                 
+                console.log(`Loaded ${savedWorkouts.length} saved entries`);
                 resolve(savedWorkouts);
             }, (error) => {
                 console.error("Error loading saved entries:", error);
@@ -109,6 +113,8 @@ const WorkoutsModule = (() => {
 
     // Render workout history
     const renderWorkoutHistory = () => {
+        if (!workoutHistoryList) return;
+        
         workoutHistoryList.innerHTML = '';
         
         if (workoutHistory.length === 0) {
@@ -125,6 +131,8 @@ const WorkoutsModule = (() => {
     // Create workout history element from template
     const createWorkoutHistoryElement = (workout) => {
         const template = document.getElementById('workout-history-item-template');
+        if (!template) return document.createElement('div');
+        
         const workoutItem = document.importNode(template.content, true).querySelector('.workout-history-item');
         
         workoutItem.dataset.id = workout.id;
@@ -202,14 +210,20 @@ const WorkoutsModule = (() => {
         }
         
         // Add event listeners
-        workoutItem.querySelector('.view-workout-btn').addEventListener('click', () => {
-            detailsContainer.classList.toggle('hidden');
-        });
+        const viewWorkoutBtn = workoutItem.querySelector('.view-workout-btn');
+        if (viewWorkoutBtn) {
+            viewWorkoutBtn.addEventListener('click', () => {
+                detailsContainer.classList.toggle('hidden');
+            });
+        }
         
         // Add edit button event listener
-        workoutItem.querySelector('.edit-workout-btn').addEventListener('click', () => {
-            editWorkout(workout.id);
-        });
+        const editWorkoutBtn = workoutItem.querySelector('.edit-workout-btn');
+        if (editWorkoutBtn) {
+            editWorkoutBtn.addEventListener('click', () => {
+                editWorkout(workout.id);
+            });
+        }
         
         return workoutItem;
     };
@@ -225,6 +239,10 @@ const WorkoutsModule = (() => {
                 // No saved entries, create a new workout
                 createNewWorkout();
             }
+        }).catch(error => {
+            console.error("Error loading saved entries:", error);
+            // Default to creating a new workout if there's an error
+            createNewWorkout();
         });
     };
 
@@ -235,18 +253,30 @@ const WorkoutsModule = (() => {
         const yyyy = today.getFullYear();
         const mm = String(today.getMonth() + 1).padStart(2, '0');
         const dd = String(today.getDate()).padStart(2, '0');
-        workoutDate.value = `${yyyy}-${mm}-${dd}`;
+        
+        if (workoutDate) {
+            workoutDate.value = `${yyyy}-${mm}-${dd}`;
+        }
         
         // Clear name and body weight fields
-        workoutName.value = '';
-        bodyWeight.value = '';
+        if (workoutName) {
+            workoutName.value = '';
+        }
+        
+        if (bodyWeight) {
+            bodyWeight.value = '';
+        }
         
         // Clear current workout exercises
         currentWorkoutExercises = [];
-        currentWorkout.innerHTML = '';
+        if (currentWorkout) {
+            currentWorkout.innerHTML = '';
+        }
         
         // Hide start workout button
-        startWorkoutBtn.classList.add('hidden');
+        if (startWorkoutBtn) {
+            startWorkoutBtn.classList.add('hidden');
+        }
         
         // Reset workout active state
         isWorkoutActive = false;
@@ -256,46 +286,65 @@ const WorkoutsModule = (() => {
         editingSavedEntryId = null;
         
         // Hide timer
-        TimerModule.hideTimer();
+        if (typeof TimerModule !== 'undefined') {
+            TimerModule.hideTimer();
+        }
     };
 
     // Show saved entries dialog
     const showSavedEntriesDialog = () => {
+        // First, make sure the element exists
+        const savedWorkoutsList = document.getElementById('saved-workouts-list');
+        const savedWorkoutsDialog = document.getElementById('saved-workouts-dialog');
+        
+        if (!savedWorkoutsList || !savedWorkoutsDialog) {
+            console.error("Required DOM elements for saved entries dialog not found");
+            // Create a backup approach - just create a new workout
+            createNewWorkout();
+            return;
+        }
+        
         // Clear previous list
         savedWorkoutsList.innerHTML = '';
         
         // Create a list item for each saved entry
-        savedWorkouts.forEach(workout => {
-            const workoutItem = document.createElement('div');
-            workoutItem.className = 'saved-workout-item';
-            workoutItem.dataset.id = workout.id;
-            
-            const workoutDate = new Date(workout.date);
-            const formattedDate = workoutDate.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
+        if (savedWorkouts && savedWorkouts.length > 0) {
+            savedWorkouts.forEach(workout => {
+                const workoutItem = document.createElement('div');
+                workoutItem.className = 'saved-workout-item';
+                workoutItem.dataset.id = workout.id;
+                
+                const workoutDate = new Date(workout.date);
+                const formattedDate = workoutDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                
+                const exerciseCount = workout.exercises ? Object.keys(workout.exercises).length : 0;
+                
+                workoutItem.innerHTML = `
+                    <h4>${workout.name || 'Unnamed Workout'}</h4>
+                    <div class="workout-date">${formattedDate}</div>
+                    <div class="exercise-count">${exerciseCount} exercise${exerciseCount === 1 ? '' : 's'}</div>
+                `;
+                
+                // Add click event to load the saved entry
+                workoutItem.addEventListener('click', () => {
+                    loadSavedEntry(workout.id);
+                    savedWorkoutsDialog.classList.add('hidden');
+                });
+                
+                savedWorkoutsList.appendChild(workoutItem);
             });
             
-            const exerciseCount = workout.exercises ? Object.keys(workout.exercises).length : 0;
-            
-            workoutItem.innerHTML = `
-                <h4>${workout.name || 'Unnamed Workout'}</h4>
-                <div class="workout-date">${formattedDate}</div>
-                <div class="exercise-count">${exerciseCount} exercise${exerciseCount === 1 ? '' : 's'}</div>
-            `;
-            
-            // Add click event to load the saved entry
-            workoutItem.addEventListener('click', () => {
-                loadSavedEntry(workout.id);
-                savedWorkoutsDialog.classList.add('hidden');
-            });
-            
-            savedWorkoutsList.appendChild(workoutItem);
-        });
-        
-        // Show dialog
-        savedWorkoutsDialog.classList.remove('hidden');
+            // Show dialog
+            savedWorkoutsDialog.classList.remove('hidden');
+        } else {
+            // No saved entries, just create a new workout
+            console.log("No saved workouts found, creating a new workout");
+            createNewWorkout();
+        }
     };
 
     // Load saved entry
@@ -304,13 +353,23 @@ const WorkoutsModule = (() => {
         if (!savedEntry) return;
         
         // Set form fields
-        workoutDate.value = savedEntry.date;
-        workoutName.value = savedEntry.name || '';
-        bodyWeight.value = savedEntry.bodyWeight || '';
+        if (workoutDate) {
+            workoutDate.value = savedEntry.date;
+        }
+        
+        if (workoutName) {
+            workoutName.value = savedEntry.name || '';
+        }
+        
+        if (bodyWeight) {
+            bodyWeight.value = savedEntry.bodyWeight || '';
+        }
         
         // Clear current workout exercises
         currentWorkoutExercises = [];
-        currentWorkout.innerHTML = '';
+        if (currentWorkout) {
+            currentWorkout.innerHTML = '';
+        }
         
         // Set editing state
         editingSavedEntryId = entryId;
@@ -325,30 +384,40 @@ const WorkoutsModule = (() => {
                     
                     // Create exercise element
                     const exerciseElement = createWorkoutExerciseElement(exercise);
-                    currentWorkout.appendChild(exerciseElement);
+                    if (currentWorkout && exerciseElement) {
+                        currentWorkout.appendChild(exerciseElement);
+                    }
                     
                     // Load sets
                     const savedExercise = savedEntry.exercises[exerciseId];
-                    if (savedExercise.sets) {
+                    if (savedExercise.sets && exerciseElement) {
                         const setsContainer = exerciseElement.querySelector('.sets-container');
-                        setsContainer.innerHTML = ''; // Clear any default sets
-                        
-                        Object.keys(savedExercise.sets).forEach((setKey, index) => {
-                            const set = savedExercise.sets[setKey];
-                            const setElement = addSetToExercise(exerciseElement);
+                        if (setsContainer) {
+                            setsContainer.innerHTML = ''; // Clear any default sets
                             
-                            // Set values
-                            setElement.querySelector('.weight-input').value = set.weight || '';
-                            setElement.querySelector('.reps-input').value = set.reps || '';
-                            setElement.querySelector('.remarks-input').value = set.remarks || '';
-                        });
+                            Object.keys(savedExercise.sets).forEach((setKey, index) => {
+                                const set = savedExercise.sets[setKey];
+                                const setElement = addSetToExercise(exerciseElement);
+                                
+                                if (setElement) {
+                                    // Set values
+                                    const weightInput = setElement.querySelector('.weight-input');
+                                    const repsInput = setElement.querySelector('.reps-input');
+                                    const remarksInput = setElement.querySelector('.remarks-input');
+                                    
+                                    if (weightInput) weightInput.value = set.weight || '';
+                                    if (repsInput) repsInput.value = set.reps || '';
+                                    if (remarksInput) remarksInput.value = set.remarks || '';
+                                }
+                            });
+                        }
                     }
                 }
             });
         }
         
         // Show start workout button if exercises are added
-        if (currentWorkoutExercises.length > 0) {
+        if (currentWorkoutExercises.length > 0 && startWorkoutBtn) {
             startWorkoutBtn.classList.remove('hidden');
         }
     };
@@ -360,12 +429,22 @@ const WorkoutsModule = (() => {
         
         // Clear current workout
         currentWorkoutExercises = [];
-        currentWorkout.innerHTML = '';
+        if (currentWorkout) {
+            currentWorkout.innerHTML = '';
+        }
         
         // Set form fields
-        workoutDate.value = workout.date;
-        workoutName.value = workout.name || '';
-        bodyWeight.value = workout.bodyWeight || '';
+        if (workoutDate) {
+            workoutDate.value = workout.date;
+        }
+        
+        if (workoutName) {
+            workoutName.value = workout.name || '';
+        }
+        
+        if (bodyWeight) {
+            bodyWeight.value = workout.bodyWeight || '';
+        }
         
         // Set editing state
         editingWorkoutId = workoutId;
@@ -380,39 +459,57 @@ const WorkoutsModule = (() => {
                     
                     // Create exercise element
                     const exerciseElement = createWorkoutExerciseElement(exercise);
-                    currentWorkout.appendChild(exerciseElement);
+                    if (currentWorkout && exerciseElement) {
+                        currentWorkout.appendChild(exerciseElement);
+                    }
                     
                     // Load sets
                     const savedExercise = workout.exercises[exerciseId];
-                    if (savedExercise.sets) {
+                    if (savedExercise.sets && exerciseElement) {
                         const setsContainer = exerciseElement.querySelector('.sets-container');
-                        setsContainer.innerHTML = ''; // Clear any default sets
-                        
-                        Object.keys(savedExercise.sets).forEach((setKey, index) => {
-                            const set = savedExercise.sets[setKey];
-                            const setElement = addSetToExercise(exerciseElement);
+                        if (setsContainer) {
+                            setsContainer.innerHTML = ''; // Clear any default sets
                             
-                            // Set values
-                            setElement.querySelector('.weight-input').value = set.weight || '';
-                            setElement.querySelector('.reps-input').value = set.reps || '';
-                            setElement.querySelector('.remarks-input').value = set.remarks || '';
-                        });
+                            Object.keys(savedExercise.sets).forEach((setKey, index) => {
+                                const set = savedExercise.sets[setKey];
+                                const setElement = addSetToExercise(exerciseElement);
+                                
+                                if (setElement) {
+                                    // Set values
+                                    const weightInput = setElement.querySelector('.weight-input');
+                                    const repsInput = setElement.querySelector('.reps-input');
+                                    const remarksInput = setElement.querySelector('.remarks-input');
+                                    
+                                    if (weightInput) weightInput.value = set.weight || '';
+                                    if (repsInput) repsInput.value = set.reps || '';
+                                    if (remarksInput) remarksInput.value = set.remarks || '';
+                                }
+                            });
+                        }
                     }
                 }
             });
         }
         
         // Show start workout button if exercises are added
-        if (currentWorkoutExercises.length > 0) {
+        if (currentWorkoutExercises.length > 0 && startWorkoutBtn) {
             startWorkoutBtn.classList.remove('hidden');
         }
         
         // Switch to new workout section
-        document.getElementById('new-workout-btn').click();
+        const newWorkoutBtn = document.getElementById('new-workout-btn');
+        if (newWorkoutBtn) {
+            newWorkoutBtn.click();
+        }
     };
 
     // Open exercise selection dialog
     const openExerciseSelection = () => {
+        if (!exerciseSelection || !exerciseSelectionList) {
+            console.error("Exercise selection elements not found");
+            return;
+        }
+        
         // Get all exercises from the Exercises Module
         const allExercises = ExercisesModule.getAllExercises();
         
@@ -422,7 +519,9 @@ const WorkoutsModule = (() => {
         
         if (allExercises.length === 0) {
             exerciseSelectionList.innerHTML = '<p>No exercises available. Please add exercises first.</p>';
-            confirmExercisesBtn.disabled = true;
+            if (confirmExercisesBtn) {
+                confirmExercisesBtn.disabled = true;
+            }
         } else {
             // Create checklist items for each exercise
             allExercises.forEach(exercise => {
@@ -458,18 +557,24 @@ const WorkoutsModule = (() => {
                 exerciseSelectionList.appendChild(item);
             });
             
-            confirmExercisesBtn.disabled = false;
+            if (confirmExercisesBtn) {
+                confirmExercisesBtn.disabled = false;
+            }
         }
         
         exerciseSelection.classList.remove('hidden');
         
         // Reset search input
-        exerciseSearchInput.value = '';
-        filterExercises('');
+        if (exerciseSearchInput) {
+            exerciseSearchInput.value = '';
+            filterExercises('');
+        }
     };
 
     // Filter exercises in selection list
     const filterExercises = (searchTerm) => {
+        if (!exerciseSelectionList) return;
+        
         const items = exerciseSelectionList.querySelectorAll('.checklist-item');
         searchTerm = searchTerm.toLowerCase();
         
@@ -485,12 +590,16 @@ const WorkoutsModule = (() => {
 
     // Close exercise selection dialog
     const closeExerciseSelection = () => {
-        exerciseSelection.classList.add('hidden');
+        if (exerciseSelection) {
+            exerciseSelection.classList.add('hidden');
+        }
         selectedExercises = [];
     };
 
     // Handle exercise selection confirmation
     const confirmExerciseSelection = () => {
+        if (!exerciseSelectionList) return;
+        
         // Get all checked checkboxes
         const checkboxes = exerciseSelectionList.querySelectorAll('input[type="checkbox"]:checked:not(:disabled)');
         
@@ -506,7 +615,7 @@ const WorkoutsModule = (() => {
         closeExerciseSelection();
         
         // Show start workout button if exercises are selected
-        if (currentWorkoutExercises.length > 0) {
+        if (currentWorkoutExercises.length > 0 && startWorkoutBtn) {
             startWorkoutBtn.classList.remove('hidden');
         }
     };
@@ -516,40 +625,73 @@ const WorkoutsModule = (() => {
         if (!isWorkoutActive) {
             // Starting the workout
             isWorkoutActive = true;
-            TimerModule.startTimer();
-            startWorkoutBtn.classList.add('active');
-            startWorkoutBtn.innerHTML = '<i class="fas fa-stop-circle"></i> End Workout';
+            if (typeof TimerModule !== 'undefined') {
+                TimerModule.startTimer();
+            }
+            if (startWorkoutBtn) {
+                startWorkoutBtn.classList.add('active');
+                startWorkoutBtn.innerHTML = '<i class="fas fa-stop-circle"></i> End Workout';
+            }
         } else {
             // Ending the workout - ask if user wants to save
             if (currentWorkoutExercises.length > 0) {
                 // Show custom confirm dialog
                 const customDialog = document.getElementById('custom-confirm-dialog');
+                const dialogMessage = document.getElementById('dialog-message');
                 const yesBtn = document.getElementById('dialog-yes-btn');
                 const noBtn = document.getElementById('dialog-no-btn');
                 
-                customDialog.classList.remove('hidden');
-                
-                // Handle Yes button
-                yesBtn.onclick = () => {
-                    customDialog.classList.add('hidden');
-                    saveWorkout();
-                };
-                
-                // Handle No button
-                noBtn.onclick = () => {
-                    customDialog.classList.add('hidden');
-                    // Just end workout without saving
-                    isWorkoutActive = false;
-                    TimerModule.hideTimer();
-                    startWorkoutBtn.classList.remove('active');
-                    startWorkoutBtn.innerHTML = '<i class="fas fa-play-circle"></i> Start Workout';
-                };
+                if (customDialog && yesBtn && noBtn) {
+                    if (dialogMessage) {
+                        dialogMessage.textContent = 'Would you like to save this workout?';
+                    }
+                    
+                    customDialog.classList.remove('hidden');
+                    
+                    // Handle Yes button
+                    yesBtn.onclick = () => {
+                        customDialog.classList.add('hidden');
+                        saveWorkout();
+                    };
+                    
+                    // Handle No button
+                    noBtn.onclick = () => {
+                        customDialog.classList.add('hidden');
+                        // Just end workout without saving
+                        isWorkoutActive = false;
+                        if (typeof TimerModule !== 'undefined') {
+                            TimerModule.hideTimer();
+                        }
+                        if (startWorkoutBtn) {
+                            startWorkoutBtn.classList.remove('active');
+                            startWorkoutBtn.innerHTML = '<i class="fas fa-play-circle"></i> Start Workout';
+                        }
+                    };
+                } else {
+                    // Fallback if dialog elements don't exist
+                    if (confirm('Would you like to save this workout?')) {
+                        saveWorkout();
+                    } else {
+                        isWorkoutActive = false;
+                        if (typeof TimerModule !== 'undefined') {
+                            TimerModule.hideTimer();
+                        }
+                        if (startWorkoutBtn) {
+                            startWorkoutBtn.classList.remove('active');
+                            startWorkoutBtn.innerHTML = '<i class="fas fa-play-circle"></i> Start Workout';
+                        }
+                    }
+                }
             } else {
                 // No exercises to save, just end workout
                 isWorkoutActive = false;
-                TimerModule.hideTimer();
-                startWorkoutBtn.classList.remove('active');
-                startWorkoutBtn.innerHTML = '<i class="fas fa-play-circle"></i> Start Workout';
+                if (typeof TimerModule !== 'undefined') {
+                    TimerModule.hideTimer();
+                }
+                if (startWorkoutBtn) {
+                    startWorkoutBtn.classList.remove('active');
+                    startWorkoutBtn.innerHTML = '<i class="fas fa-play-circle"></i> Start Workout';
+                }
             }
         }
     };
@@ -566,15 +708,21 @@ const WorkoutsModule = (() => {
         
         // Create exercise element
         const exerciseElement = createWorkoutExerciseElement(exercise);
-        currentWorkout.appendChild(exerciseElement);
+        if (currentWorkout && exerciseElement) {
+            currentWorkout.appendChild(exerciseElement);
+        }
         
         // Show start workout button if not already shown
-        startWorkoutBtn.classList.remove('hidden');
+        if (startWorkoutBtn) {
+            startWorkoutBtn.classList.remove('hidden');
+        }
     };
 
     // Create workout exercise element from template
     const createWorkoutExerciseElement = (exercise) => {
         const template = document.getElementById('workout-exercise-template');
+        if (!template) return null;
+        
         const exerciseElement = document.importNode(template.content, true).querySelector('.workout-exercise');
         
         exerciseElement.dataset.id = exercise.id;
@@ -583,23 +731,35 @@ const WorkoutsModule = (() => {
         exerciseElement.querySelector('.exercise-name').textContent = exercise.name;
         
         // Add event listeners
-        exerciseElement.querySelector('.history-btn').addEventListener('click', () => {
-            toggleExerciseHistory(exerciseElement, exercise.id);
-        });
+        const historyBtn = exerciseElement.querySelector('.history-btn');
+        if (historyBtn) {
+            historyBtn.addEventListener('click', () => {
+                toggleExerciseHistory(exerciseElement, exercise.id);
+            });
+        }
         
-        exerciseElement.querySelector('.view-progress-btn').addEventListener('click', () => {
-            if (ProgressModule) {
-                ProgressModule.showExerciseProgress(exercise.id);
-            }
-        });
+        const progressBtn = exerciseElement.querySelector('.view-progress-btn');
+        if (progressBtn) {
+            progressBtn.addEventListener('click', () => {
+                if (typeof ProgressModule !== 'undefined') {
+                    ProgressModule.showExerciseProgress(exercise.id);
+                }
+            });
+        }
         
-        exerciseElement.querySelector('.add-set-btn').addEventListener('click', () => {
-            addSetToExercise(exerciseElement);
-        });
+        const addSetBtn = exerciseElement.querySelector('.add-set-btn');
+        if (addSetBtn) {
+            addSetBtn.addEventListener('click', () => {
+                addSetToExercise(exerciseElement);
+            });
+        }
         
-        exerciseElement.querySelector('.remove-exercise-btn').addEventListener('click', () => {
-            removeExerciseFromWorkout(exerciseElement, exercise.id);
-        });
+        const removeBtn = exerciseElement.querySelector('.remove-exercise-btn');
+        if (removeBtn) {
+            removeBtn.addEventListener('click', () => {
+                removeExerciseFromWorkout(exerciseElement, exercise.id);
+            });
+        }
         
         // Add initial set
         addSetToExercise(exerciseElement);
@@ -610,27 +770,40 @@ const WorkoutsModule = (() => {
     // Add set to exercise
     const addSetToExercise = (exerciseElement) => {
         const setsContainer = exerciseElement.querySelector('.sets-container');
+        if (!setsContainer) return null;
+        
         const setCount = setsContainer.children.length + 1;
         
         const template = document.getElementById('set-template');
+        if (!template) return null;
+        
         const setElement = document.importNode(template.content, true).querySelector('.set-item');
         
         // Set the set number
-        setElement.querySelector('.set-label').textContent = `Set ${setCount}`;
+        const setLabel = setElement.querySelector('.set-label');
+        if (setLabel) {
+            setLabel.textContent = `Set ${setCount}`;
+        }
         
         // Add event listener for delete button
-        setElement.querySelector('.delete-set-btn').addEventListener('click', () => {
-            if (setsContainer.children.length > 1) {
-                setElement.remove();
-                
-                // Update set numbers
-                Array.from(setsContainer.children).forEach((set, index) => {
-                    set.querySelector('.set-label').textContent = `Set ${index + 1}`;
-                });
-            } else {
-                alert('You need at least one set. Remove the exercise instead if not needed.');
-            }
-        });
+        const deleteBtn = setElement.querySelector('.delete-set-btn');
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', () => {
+                if (setsContainer.children.length > 1) {
+                    setElement.remove();
+                    
+                    // Update set numbers
+                    Array.from(setsContainer.children).forEach((set, index) => {
+                        const label = set.querySelector('.set-label');
+                        if (label) {
+                            label.textContent = `Set ${index + 1}`;
+                        }
+                    });
+                } else {
+                    alert('You need at least one set. Remove the exercise instead if not needed.');
+                }
+            });
+        }
         
         setsContainer.appendChild(setElement);
         return setElement;
@@ -639,7 +812,10 @@ const WorkoutsModule = (() => {
     // Toggle exercise history display
     const toggleExerciseHistory = (exerciseElement, exerciseId) => {
         const historySection = exerciseElement.querySelector('.exercise-history');
+        if (!historySection) return;
+        
         const historyData = historySection.querySelector('.history-data');
+        if (!historyData) return;
         
         if (historySection.classList.contains('hidden')) {
             // Load history data
@@ -673,331 +849,361 @@ const WorkoutsModule = (() => {
             // Sort by timestamp (newest first)
             workouts.sort((a, b) => b.timestamp - a.timestamp);
             
-            // Find the exercise in recent workouts
-            for (const workout of workouts) {
-                if (workout.exercises && workout.exercises[exerciseId]) {
-                    historyFound = true;
-                    const exerciseData = workout.exercises[exerciseId];
-                    
-                    const workoutDate = new Date(workout.date || workout.timestamp);
-                    const dateStr = workoutDate.toLocaleDateString();
-                    
-                    const historyItem = document.createElement('div');
-                    historyItem.className = 'history-item';
-                    
-                    const historyHeader = document.createElement('div');
-                    historyHeader.className = 'history-header';
-                    historyHeader.innerHTML = `<strong>${dateStr}</strong>`;
-                    
-                    if (workout.bodyWeight) {
-                        historyHeader.innerHTML += ` | Body Weight: <strong>${workout.bodyWeight} kg</strong>`;
-                    }
-                    
-                    historyItem.appendChild(historyHeader);
-                    
-                    if (exerciseData.sets) {
-                        const setsList = document.createElement('ul');
-                        setsList.className = 'history-sets';
-                        
-                        Object.values(exerciseData.sets).forEach(set => {
-                            const setItem = document.createElement('li');
-                            setItem.innerHTML = `<strong>${set.weight || 0}</strong> kg/lbs × <strong>${set.reps || 0}</strong> reps`;
-                            
-                            if (set.remarks) {
-                                setItem.innerHTML += ` <span class="history-remarks">(${set.remarks})</span>`;
-                            }
-                            
-                            setsList.appendChild(setItem);
-                        });
-                        
-                        historyItem.appendChild(setsList);
-                    }
-                    
-                    container.appendChild(historyItem);
-                }
-            }
+// Find the exercise in recent workouts
+for (const workout of workouts) {
+    if (workout.exercises && workout.exercises[exerciseId]) {
+        historyFound = true;
+        const exerciseData = workout.exercises[exerciseId];
+        
+        const workoutDate = new Date(workout.date || workout.timestamp);
+        const dateStr = workoutDate.toLocaleDateString();
+        
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        
+        const historyHeader = document.createElement('div');
+        historyHeader.className = 'history-header';
+        historyHeader.innerHTML = `<strong>${dateStr}</strong>`;
+        
+        if (workout.bodyWeight) {
+            historyHeader.innerHTML += ` | Body Weight: <strong>${workout.bodyWeight} kg</strong>`;
+        }
+        
+        historyItem.appendChild(historyHeader);
+        
+        if (exerciseData.sets) {
+            const setsList = document.createElement('ul');
+            setsList.className = 'history-sets';
             
-            if (!historyFound) {
-                container.innerHTML = '<p>No previous data for this exercise.</p>';
-            }
-        });
-    };
-
-    // Remove exercise from workout
-    const removeExerciseFromWorkout = (exerciseElement, exerciseId) => {
-        if (confirm('Are you sure you want to remove this exercise from the workout?')) {
-            // Remove from DOM
-            exerciseElement.remove();
-            
-            // Remove from array
-            currentWorkoutExercises = currentWorkoutExercises.filter(exercise => exercise.id !== exerciseId);
-            
-            // Hide start workout button if no exercises remain
-            if (currentWorkoutExercises.length === 0) {
-                startWorkoutBtn.classList.add('hidden');
+            Object.values(exerciseData.sets).forEach(set => {
+                const setItem = document.createElement('li');
+                setItem.innerHTML = `<strong>${set.weight || 0}</strong> kg/lbs × <strong>${set.reps || 0}</strong> reps`;
                 
-                // Also stop timer if active
-                if (isWorkoutActive) {
-                    isWorkoutActive = false;
-                    TimerModule.hideTimer();
+                if (set.remarks) {
+                    setItem.innerHTML += ` <span class="history-remarks">(${set.remarks})</span>`;
                 }
-            }
+                
+                setsList.appendChild(setItem);
+            });
+            
+            historyItem.appendChild(setsList);
         }
-    };
+        
+        container.appendChild(historyItem);
+    }
+}
 
-    // Save workout entry (without completing it)
-    const saveEntry = () => {
-        // Validate
-        if (currentWorkoutExercises.length === 0) {
-            alert('Please add at least one exercise to the workout.');
-            return;
+if (!historyFound) {
+    container.innerHTML = '<p>No previous data for this exercise.</p>';
+}
+});
+};
+
+// Remove exercise from workout
+const removeExerciseFromWorkout = (exerciseElement, exerciseId) => {
+if (confirm('Are you sure you want to remove this exercise from the workout?')) {
+// Remove from DOM
+exerciseElement.remove();
+
+// Remove from array
+currentWorkoutExercises = currentWorkoutExercises.filter(exercise => exercise.id !== exerciseId);
+
+// Hide start workout button if no exercises remain
+if (currentWorkoutExercises.length === 0 && startWorkoutBtn) {
+    startWorkoutBtn.classList.add('hidden');
+    
+    // Also stop timer if active
+    if (isWorkoutActive) {
+        isWorkoutActive = false;
+        if (typeof TimerModule !== 'undefined') {
+            TimerModule.hideTimer();
         }
+    }
+}
+}
+};
+
+// Save workout entry (without completing it)
+const saveEntry = () => {
+// Validate
+if (currentWorkoutExercises.length === 0) {
+alert('Please add at least one exercise to the workout.');
+return;
+}
+
+if (!workoutDate || !workoutDate.value) {
+alert('Please select a date for the workout.');
+return;
+}
+
+// Collect workout data
+const workoutData = {
+name: workoutName ? workoutName.value.trim() || 'Workout in Progress' : 'Workout in Progress',
+date: workoutDate.value,
+bodyWeight: bodyWeight && bodyWeight.value ? parseFloat(bodyWeight.value) : null,
+timestamp: firebase.database.ServerValue.TIMESTAMP,
+exercises: {}
+};
+
+// Process each exercise and its sets
+const exerciseElements = currentWorkout ? currentWorkout.querySelectorAll('.workout-exercise') : [];
+let hasValidData = false;
+
+exerciseElements.forEach(exerciseElement => {
+const exerciseId = exerciseElement.dataset.id;
+const exercise = ExercisesModule.getExerciseById(exerciseId);
+
+if (exercise) {
+    const sets = {};
+    const setElements = exerciseElement.querySelectorAll('.set-item');
+    
+    setElements.forEach((setElement, index) => {
+        const weightInput = setElement.querySelector('.weight-input');
+        const repsInput = setElement.querySelector('.reps-input');
+        const remarksInput = setElement.querySelector('.remarks-input');
         
-        if (!workoutDate.value) {
-            alert('Please select a date for the workout.');
-            return;
-        }
+        const weight = weightInput ? weightInput.value : '';
+        const reps = repsInput ? repsInput.value : '';
+        const remarks = remarksInput ? remarksInput.value : '';
         
-        // Collect workout data
-        const workoutData = {
-            name: workoutName.value.trim() || 'Workout in Progress',
-            date: workoutDate.value,
-            bodyWeight: bodyWeight.value ? parseFloat(bodyWeight.value) : null,
-            timestamp: firebase.database.ServerValue.TIMESTAMP,
-            exercises: {}
+        sets[`set${index + 1}`] = {
+            weight: weight || '',
+            reps: reps || '',
+            remarks: remarks || ''
         };
         
-        // Process each exercise and its sets
-        const exerciseElements = currentWorkout.querySelectorAll('.workout-exercise');
+        if (weight || reps) {
+            hasValidData = true;
+        }
+    });
+    
+    workoutData.exercises[exerciseId] = {
+        name: exercise.name,
+        category: exercise.category,
+        sets: sets
+    };
+}
+});
+
+// Save to Firebase
+const savedEntriesRef = getSavedEntriesRef();
+
+if (editingSavedEntryId) {
+// Update existing entry
+savedEntriesRef.child(editingSavedEntryId).update(workoutData)
+    .then(() => {
+        alert('Entry updated successfully!');
+        // Reload saved entries to keep local data in sync
+        loadSavedEntries();
+    })
+    .catch(error => {
+        alert(`Error updating entry: ${error.message}`);
+    });
+} else {
+// Add new entry
+savedEntriesRef.push(workoutData)
+    .then((reference) => {
+        alert('Entry saved successfully!');
+        // Set the editing ID to the new entry
+        editingSavedEntryId = reference.key;
+        // Reload saved entries to keep local data in sync
+        loadSavedEntries();
+    })
+    .catch(error => {
+        alert(`Error saving entry: ${error.message}`);
+    });
+}
+};
+
+// Save completed workout to Firebase
+const saveWorkout = () => {
+// Validate
+if (currentWorkoutExercises.length === 0) {
+alert('Please add at least one exercise to the workout.');
+return;
+}
+
+if (!workoutDate || !workoutDate.value) {
+alert('Please select a date for the workout.');
+return;
+}
+
+// Collect workout data
+const workoutData = {
+name: workoutName ? workoutName.value.trim() || 'Workout' : 'Workout',
+date: workoutDate.value,
+bodyWeight: bodyWeight && bodyWeight.value ? parseFloat(bodyWeight.value) : null,
+timestamp: firebase.database.ServerValue.TIMESTAMP,
+exercises: {}
+};
+
+// Process each exercise and its sets
+const exerciseElements = currentWorkout ? currentWorkout.querySelectorAll('.workout-exercise') : [];
+let hasValidSets = false;
+
+exerciseElements.forEach(exerciseElement => {
+const exerciseId = exerciseElement.dataset.id;
+const exercise = ExercisesModule.getExerciseById(exerciseId);
+
+if (exercise) {
+    const sets = {};
+    const setElements = exerciseElement.querySelectorAll('.set-item');
+    
+    setElements.forEach((setElement, index) => {
+        const weightInput = setElement.querySelector('.weight-input');
+        const repsInput = setElement.querySelector('.reps-input');
+        const remarksInput = setElement.querySelector('.remarks-input');
         
-        exerciseElements.forEach(exerciseElement => {
-            const exerciseId = exerciseElement.dataset.id;
-            const exercise = ExercisesModule.getExerciseById(exerciseId);
-            
-            if (exercise) {
-                const sets = {};
-                const setElements = exerciseElement.querySelectorAll('.set-item');
-                
-                setElements.forEach((setElement, index) => {
-                    const weight = setElement.querySelector('.weight-input').value;
-                    const reps = setElement.querySelector('.reps-input').value;
-                    const remarks = setElement.querySelector('.remarks-input').value;
-                    
-                    sets[`set${index + 1}`] = {
-                        weight: weight || '',
-                        reps: reps || '',
-                        remarks: remarks || ''
-                    };
-                });
-                
-                workoutData.exercises[exerciseId] = {
-                    name: exercise.name,
-                    category: exercise.category,
-                    sets: sets
-                };
-            }
-        });
+        const weight = weightInput ? weightInput.value : '';
+        const reps = repsInput ? repsInput.value : '';
+        const remarks = remarksInput ? remarksInput.value : '';
         
-        // Save to Firebase
-        const savedEntriesRef = getSavedEntriesRef();
+        // Only add sets with at least weight or reps
+        if (weight || reps) {
+            sets[`set${index + 1}`] = {
+                weight: weight || 0,
+                reps: reps || 0,
+                remarks: remarks || ''
+            };
+            hasValidSets = true;
+        }
+    });
+    
+    workoutData.exercises[exerciseId] = {
+        name: exercise.name,
+        category: exercise.category,
+        sets: sets
+    };
+    
+    // Update exercise usage count
+    ExercisesModule.updateExerciseUsageCount(exerciseId);
+}
+});
+
+if (!hasValidSets) {
+alert('Please enter at least weight or reps for one set.');
+return;
+}
+
+// Save to Firebase
+const workoutsRef = getWorkoutsRef();
+
+if (editingWorkoutId) {
+// Update existing workout
+workoutsRef.child(editingWorkoutId).update(workoutData)
+    .then(() => {
+        alert('Workout updated successfully!');
         
+        // If this was also a saved entry, remove it
         if (editingSavedEntryId) {
-            // Update existing entry
-            savedEntriesRef.child(editingSavedEntryId).update(workoutData)
+            getSavedEntriesRef().child(editingSavedEntryId).remove()
                 .then(() => {
-                    alert('Entry updated successfully!');
+                    console.log('Saved entry removed after completion');
                 })
                 .catch(error => {
-                    alert(`Error updating entry: ${error.message}`);
+                    console.error('Error removing saved entry:', error);
                 });
-        } else {
-            // Add new entry
-            savedEntriesRef.push(workoutData)
+        }
+        
+        createNewWorkout();
+    })
+    .catch(error => {
+        alert(`Error updating workout: ${error.message}`);
+    });
+} else {
+// Add new workout
+workoutsRef.push(workoutData)
+    .then(() => {
+        alert('Workout saved successfully!');
+        
+        // If this was also a saved entry, remove it
+        if (editingSavedEntryId) {
+            getSavedEntriesRef().child(editingSavedEntryId).remove()
                 .then(() => {
-                    alert('Entry saved successfully!');
-                    editingSavedEntryId = null; // Reset editing state but keep the workout open
+                    console.log('Saved entry removed after completion');
                 })
                 .catch(error => {
-                    alert(`Error saving entry: ${error.message}`);
+                    console.error('Error removing saved entry:', error);
                 });
         }
-    };
-
-    // Save completed workout to Firebase
-    const saveWorkout = () => {
-        // Validate
-        if (currentWorkoutExercises.length === 0) {
-            alert('Please add at least one exercise to the workout.');
-            return;
-        }
         
-        if (!workoutDate.value) {
-            alert('Please select a date for the workout.');
-            return;
-        }
-        
-        // Collect workout data
-        const workoutData = {
-            name: workoutName.value.trim() || 'Workout',
-            date: workoutDate.value,
-            bodyWeight: bodyWeight.value ? parseFloat(bodyWeight.value) : null,
-            timestamp: firebase.database.ServerValue.TIMESTAMP,
-            exercises: {}
-        };
-        
-        // Process each exercise and its sets
-        const exerciseElements = currentWorkout.querySelectorAll('.workout-exercise');
-        let hasValidSets = false;
-        
-        exerciseElements.forEach(exerciseElement => {
-            const exerciseId = exerciseElement.dataset.id;
-            const exercise = ExercisesModule.getExerciseById(exerciseId);
-            
-            if (exercise) {
-                const sets = {};
-                const setElements = exerciseElement.querySelectorAll('.set-item');
-                
-                setElements.forEach((setElement, index) => {
-                    const weight = setElement.querySelector('.weight-input').value;
-                    const reps = setElement.querySelector('.reps-input').value;
-                    const remarks = setElement.querySelector('.remarks-input').value;
-                    
-                    // Only add sets with at least weight or reps
-                    if (weight || reps) {
-                        sets[`set${index + 1}`] = {
-                            weight: weight || 0,
-                            reps: reps || 0,
-                            remarks: remarks || ''
-                        };
-                        hasValidSets = true;
-                    }
-                });
-                
-                workoutData.exercises[exerciseId] = {
-                    name: exercise.name,
-                    category: exercise.category,
-                    sets: sets
-                };
-                
-                // Update exercise usage count
-                ExercisesModule.updateExerciseUsageCount(exerciseId);
-            }
-        });
-        
-        if (!hasValidSets) {
-            alert('Please enter at least weight or reps for one set.');
-            return;
-        }
-        
-        // Save to Firebase
-        const workoutsRef = getWorkoutsRef();
-        
-        if (editingWorkoutId) {
-            // Update existing workout
-            workoutsRef.child(editingWorkoutId).update(workoutData)
-                .then(() => {
-                    alert('Workout updated successfully!');
-                    
-                    // If this was also a saved entry, remove it
-                    if (editingSavedEntryId) {
-                        getSavedEntriesRef().child(editingSavedEntryId).remove()
-                            .then(() => {
-                                console.log('Saved entry removed after completion');
-                            })
-                            .catch(error => {
-                                console.error('Error removing saved entry:', error);
-                            });
-                    }
-                    
-                    createNewWorkout();
-                })
-                .catch(error => {
-                    alert(`Error updating workout: ${error.message}`);
-                });
-        } else {
-            // Add new workout
-            workoutsRef.push(workoutData)
-                .then(() => {
-                    alert('Workout saved successfully!');
-                    
-                    // If this was also a saved entry, remove it
-                    if (editingSavedEntryId) {
-                        getSavedEntriesRef().child(editingSavedEntryId).remove()
-                            .then(() => {
-                                console.log('Saved entry removed after completion');
-                            })
-                            .catch(error => {
-                                console.error('Error removing saved entry:', error);
-                            });
-                    }
-                    
-                    createNewWorkout();
-                })
-                .catch(error => {
-                    alert(`Error saving workout: ${error.message}`);
-                });
-        }
-    };
-
-// In workouts.js, modify the init function to include null checks:
+        createNewWorkout();
+    })
+    .catch(error => {
+        alert(`Error saving workout: ${error.message}`);
+    });
+}
+};
 
 // Initialize
 const init = () => {
-    // Set default date
-    createNewWorkout();
-    
-    // Event listeners with null checks
-    if (selectExercisesBtn) {
-        selectExercisesBtn.addEventListener('click', openExerciseSelection);
-    }
-    if (confirmExercisesBtn) {
-        confirmExercisesBtn.addEventListener('click', confirmExerciseSelection);
-    }
-    if (cancelSelectionBtn) {
-        cancelSelectionBtn.addEventListener('click', closeExerciseSelection);
-    }
-    if (saveWorkoutBtn) {
-        saveWorkoutBtn.addEventListener('click', saveWorkout);
-    }
-    if (saveEntryBtn) {
-        saveEntryBtn.addEventListener('click', saveEntry);
-    }
-    if (startWorkoutBtn) {
-        startWorkoutBtn.addEventListener('click', startWorkout);
-    }
-    
-    // Exercise search functionality
-    if (exerciseSearchInput) {
-        exerciseSearchInput.addEventListener('input', (e) => {
-            filterExercises(e.target.value);
-        });
-    }
-    
-    // Saved entries dialog buttons
-    if (createNewWorkoutBtn) {
-        createNewWorkoutBtn.addEventListener('click', () => {
-            if (savedWorkoutsDialog) {
-                savedWorkoutsDialog.classList.add('hidden');
-            }
-            createNewWorkout();
-        });
-    }
-    
-    if (closeSavedWorkoutsBtn) {
-        closeSavedWorkoutsBtn.addEventListener('click', () => {
-            if (savedWorkoutsDialog) {
-                savedWorkoutsDialog.classList.add('hidden');
-            }
-        });
-    }
-    
-    // Load workout history
-    loadWorkoutHistory();
+try {
+// Set default date
+createNewWorkout();
+
+// Event listeners with null checks
+if (selectExercisesBtn) {
+    selectExercisesBtn.addEventListener('click', openExerciseSelection);
+}
+
+if (confirmExercisesBtn) {
+    confirmExercisesBtn.addEventListener('click', confirmExerciseSelection);
+}
+
+if (cancelSelectionBtn) {
+    cancelSelectionBtn.addEventListener('click', closeExerciseSelection);
+}
+
+if (saveWorkoutBtn) {
+    saveWorkoutBtn.addEventListener('click', saveWorkout);
+}
+
+if (saveEntryBtn) {
+    saveEntryBtn.addEventListener('click', saveEntry);
+}
+
+if (startWorkoutBtn) {
+    startWorkoutBtn.addEventListener('click', startWorkout);
+}
+
+// Exercise search functionality
+if (exerciseSearchInput) {
+    exerciseSearchInput.addEventListener('input', (e) => {
+        filterExercises(e.target.value);
+    });
+}
+
+// Saved entries dialog buttons
+if (createNewWorkoutBtn) {
+    createNewWorkoutBtn.addEventListener('click', () => {
+        if (savedWorkoutsDialog) {
+            savedWorkoutsDialog.classList.add('hidden');
+        }
+        createNewWorkout();
+    });
+}
+
+if (closeSavedWorkoutsBtn) {
+    closeSavedWorkoutsBtn.addEventListener('click', () => {
+        if (savedWorkoutsDialog) {
+            savedWorkoutsDialog.classList.add('hidden');
+        }
+    });
+}
+
+// Load workout history
+loadWorkoutHistory();
+
+} catch (error) {
+console.error("Error initializing WorkoutsModule:", error);
+}
 };
 
-    // Public methods and properties
-    return {
-        init,
-        initNewWorkout
-    };
+// Public methods and properties
+return {
+init,
+initNewWorkout,
+loadSavedEntries,
+createNewWorkout
+};
 })();
