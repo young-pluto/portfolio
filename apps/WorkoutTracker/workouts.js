@@ -939,37 +939,61 @@ const WorkoutsModule = (() => {
         }
     };
 
-    // Initialize
-    const init = () => {
-        // Set default date
-        createNewWorkout();
-        
-        // Event listeners
+// In workouts.js, modify the init function to include null checks:
+
+// Initialize
+const init = () => {
+    // Set default date
+    createNewWorkout();
+    
+    // Event listeners with null checks
+    if (selectExercisesBtn) {
         selectExercisesBtn.addEventListener('click', openExerciseSelection);
+    }
+    if (confirmExercisesBtn) {
         confirmExercisesBtn.addEventListener('click', confirmExerciseSelection);
+    }
+    if (cancelSelectionBtn) {
         cancelSelectionBtn.addEventListener('click', closeExerciseSelection);
+    }
+    if (saveWorkoutBtn) {
         saveWorkoutBtn.addEventListener('click', saveWorkout);
+    }
+    if (saveEntryBtn) {
         saveEntryBtn.addEventListener('click', saveEntry);
+    }
+    if (startWorkoutBtn) {
         startWorkoutBtn.addEventListener('click', startWorkout);
-        
-        // Exercise search functionality
+    }
+    
+    // Exercise search functionality
+    if (exerciseSearchInput) {
         exerciseSearchInput.addEventListener('input', (e) => {
             filterExercises(e.target.value);
         });
-        
-        // Saved entries dialog buttons
+    }
+    
+    // Saved entries dialog buttons
+    if (createNewWorkoutBtn) {
         createNewWorkoutBtn.addEventListener('click', () => {
-            savedWorkoutsDialog.classList.add('hidden');
+            if (savedWorkoutsDialog) {
+                savedWorkoutsDialog.classList.add('hidden');
+            }
             createNewWorkout();
         });
-        
+    }
+    
+    if (closeSavedWorkoutsBtn) {
         closeSavedWorkoutsBtn.addEventListener('click', () => {
-            savedWorkoutsDialog.classList.add('hidden');
+            if (savedWorkoutsDialog) {
+                savedWorkoutsDialog.classList.add('hidden');
+            }
         });
-        
-        // Load workout history
-        loadWorkoutHistory();
-    };
+    }
+    
+    // Load workout history
+    loadWorkoutHistory();
+};
 
     // Public methods and properties
     return {
