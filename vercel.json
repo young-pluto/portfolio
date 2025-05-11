@@ -180,6 +180,16 @@
       "dest": "/apps/WorkoutTracker/app.js"
     },
     {
+      "src": "/dialog-fix.js",
+      "has": [
+        {
+          "type": "host",
+          "value": "fitrack.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/WorkoutTracker/dialog-fix.js"
+    },
+    {
       "src": "/styles.css",
       "has": [
         {
