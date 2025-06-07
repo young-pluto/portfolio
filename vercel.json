@@ -36,6 +36,10 @@
     {
       "src": "apps/FoodTracker/**/*",
       "use": "@vercel/static"
+    },
+    {
+      "src": "apps/Upscale-Marketing/**/*",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -278,6 +282,16 @@
         }
       ],
       "dest": "/apps/practice/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "upscalemarketing.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/Upscale-Marketing/index.html"
     },
     {
       "src": "/styles.css",
