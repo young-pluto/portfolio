@@ -274,6 +274,16 @@
       "dest": "/apps/WorkoutTracker/index.html"
     },
     {
+      "src": "/js-roadmap-v9.html",
+      "has": [
+        {
+          "type": "host", 
+          "value": "practice.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/practice/js-roadmap-v9.html"
+    },
+    {
       "src": "/(.*)",
       "has": [
         {
