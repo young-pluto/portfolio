@@ -284,6 +284,16 @@
       "dest": "/apps/practice/js-roadmap-v9.html"
     },
     {
+      "src": "/project-roadmap.html",
+      "has": [
+        {
+          "type": "host", 
+          "value": "practice.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/practice/project-roadmap.html"
+    },
+    {
       "src": "/(.*)",
       "has": [
         {
