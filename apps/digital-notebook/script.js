@@ -697,48 +697,179 @@ class DigitalNotebook {
     }
 }
 
-// Header Auto-Hide on Scroll
+// Header Auto-Hide on Scroll + Mobile Navigation
 class HeaderScrollManager {
     constructor() {
         this.header = document.querySelector('.header');
         this.lastScrollTop = 0;
-        this.scrollThreshold = 10; // Minimum scroll distance to trigger hide/show
+        this.scrollThreshold = 10;
         this.isHeaderVisible = true;
         
         this.init();
+        this.initMobileNavigation();
     }
     
     init() {
-        // Add scroll listener to content area (since that's what scrolls)
         const contentArea = document.querySelector('.content-area');
         if (contentArea) {
             contentArea.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
         }
         
-        // Also listen to window scroll as backup
         window.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
     }
     
+    initMobileNavigation() {
+        // Create mobile menu toggle button
+        this.createMobileMenuToggle();
+        
+        // Handle sidebar interactions
+        this.setupMobileNavigation();
+        
+        // Handle window resize
+        window.addEventListener('resize', this.handleResize.bind(this));
+    }
+    
+    createMobileMenuToggle() {
+        const headerContent = document.querySelector('.header-content');
+        if (!headerContent) return;
+        
+        const toggleButton = document.createElement('button');
+        toggleButton.className = 'mobile-menu-toggle';
+        toggleButton.innerHTML = '<i class="fas fa-bars"></i>';
+        toggleButton.setAttribute('aria-label', 'Toggle navigation menu');
+        
+        headerContent.insertBefore(toggleButton, headerContent.firstChild);
+        
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'mobile-nav-overlay';
+        document.body.appendChild(overlay);
+        
+        this.toggleButton = toggleButton;
+        this.overlay = overlay;
+    }
+    
+    setupMobileNavigation() {
+        if (!this.toggleButton) return;
+        
+        const sidebar = document.querySelector('.sidebar');
+        
+        // Toggle button click
+        this.toggleButton.addEventListener('click', () => {
+            this.toggleMobileMenu();
+        });
+        
+        // Overlay click to close
+        this.overlay.addEventListener('click', () => {
+            this.closeMobileMenu();
+        });
+        
+        // Close menu when topic is selected on mobile
+        if (sidebar) {
+            sidebar.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768 && e.target.closest('.topic-item')) {
+                    setTimeout(() => this.closeMobileMenu(), 150);
+                }
+            });
+        }
+        
+        // Handle escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.isMobileMenuOpen()) {
+                this.closeMobileMenu();
+            }
+        });
+        
+        // Prevent body scroll when menu is open
+        this.handleBodyScroll();
+    }
+    
+    toggleMobileMenu() {
+        const sidebar = document.querySelector('.sidebar');
+        if (!sidebar) return;
+        
+        const isOpen = sidebar.classList.contains('mobile-open');
+        
+        if (isOpen) {
+            this.closeMobileMenu();
+        } else {
+            this.openMobileMenu();
+        }
+    }
+    
+    openMobileMenu() {
+        const sidebar = document.querySelector('.sidebar');
+        if (!sidebar) return;
+        
+        sidebar.classList.add('mobile-open');
+        this.overlay.classList.add('active');
+        this.toggleButton.innerHTML = '<i class="fas fa-times"></i>';
+        
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+        
+        // Focus management for accessibility
+        const firstFocusable = sidebar.querySelector('button, input, [tabindex="0"]');
+        if (firstFocusable) {
+            firstFocusable.focus();
+        }
+    }
+    
+    closeMobileMenu() {
+        const sidebar = document.querySelector('.sidebar');
+        if (!sidebar) return;
+        
+        sidebar.classList.remove('mobile-open');
+        this.overlay.classList.remove('active');
+        this.toggleButton.innerHTML = '<i class="fas fa-bars"></i>';
+        
+        // Restore body scroll
+        document.body.style.overflow = '';
+        
+        // Return focus to toggle button
+        this.toggleButton.focus();
+    }
+    
+    isMobileMenuOpen() {
+        const sidebar = document.querySelector('.sidebar');
+        return sidebar && sidebar.classList.contains('mobile-open');
+    }
+    
+    handleResize() {
+        // Close mobile menu if screen becomes large
+        if (window.innerWidth > 768 && this.isMobileMenuOpen()) {
+            this.closeMobileMenu();
+        }
+    }
+    
+    handleBodyScroll() {
+        // Prevent background scroll when mobile menu is open
+        this.overlay.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+    }
+    
     handleScroll() {
+        // Don't auto-hide header on mobile when menu is open
+        if (window.innerWidth <= 768 && this.isMobileMenuOpen()) {
+            return;
+        }
+        
         const scrollElement = document.querySelector('.content-area') || window;
         const currentScrollTop = scrollElement.scrollY || scrollElement.scrollTop || 0;
         
-        // Don't hide header at the very top
         if (currentScrollTop <= 50) {
             this.showHeader();
             this.lastScrollTop = currentScrollTop;
             return;
         }
         
-        // Check scroll direction
         const scrollDifference = Math.abs(currentScrollTop - this.lastScrollTop);
         
         if (scrollDifference > this.scrollThreshold) {
             if (currentScrollTop > this.lastScrollTop && this.isHeaderVisible) {
-                // Scrolling down - hide header
                 this.hideHeader();
             } else if (currentScrollTop < this.lastScrollTop && !this.isHeaderVisible) {
-                // Scrolling up - show header
                 this.showHeader();
             }
             
@@ -763,16 +894,130 @@ class HeaderScrollManager {
     }
 }
 
-// Initialize the application when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
+// Enhanced Touch and Mobile Interactions
+class MobileEnhancements {
+    constructor() {
+        this.init();
+    }
+    
+    init() {
+        this.addTouchSupport();
+        this.improveFormInputs();
+        this.addSwipeGestures();
+        this.optimizeModalsForMobile();
+    }
+    
+    addTouchSupport() {
+        // Add touch feedback for interactive elements
+        const touchElements = document.querySelectorAll('.btn, .topic-item, .subtopic-card');
+        
+        touchElements.forEach(element => {
+            element.addEventListener('touchstart', () => {
+                element.style.transform = 'scale(0.98)';
+            }, { passive: true });
+            
+            element.addEventListener('touchend', () => {
+                setTimeout(() => {
+                    element.style.transform = '';
+                }, 150);
+            }, { passive: true });
+        });
+    }
+    
+    improveFormInputs() {
+        // Better mobile input handling
+        const inputs = document.querySelectorAll('input, textarea');
+        
+        inputs.forEach(input => {
+            // Prevent zoom on focus for iOS
+            input.addEventListener('focus', () => {
+                if (window.innerWidth <= 768) {
+                    const viewport = document.querySelector('meta[name=viewport]');
+                    if (viewport) {
+                        viewport.setAttribute('content', 
+                            'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
+                        );
+                    }
+                }
+            });
+            
+            input.addEventListener('blur', () => {
+                if (window.innerWidth <= 768) {
+                    const viewport = document.querySelector('meta[name=viewport]');
+                    if (viewport) {
+                        viewport.setAttribute('content', 
+                            'width=device-width, initial-scale=1.0'
+                        );
+                    }
+                }
+            });
+        });
+    }
+    
+    addSwipeGestures() {
+        // Add swipe to close sidebar on mobile
+        let startX = 0;
+        let startY = 0;
+        
+        const sidebar = document.querySelector('.sidebar');
+        if (!sidebar) return;
+        
+        sidebar.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        }, { passive: true });
+        
+        sidebar.addEventListener('touchmove', (e) => {
+            if (!startX || !startY) return;
+            
+            const deltaX = e.touches[0].clientX - startX;
+            const deltaY = e.touches[0].clientY - startY;
+            
+            // Swipe left to close (only on mobile)
+            if (window.innerWidth <= 768 && Math.abs(deltaX) > Math.abs(deltaY) && deltaX < -50) {
+                const headerManager = window.headerScrollManager;
+                if (headerManager && headerManager.isMobileMenuOpen()) {
+                    headerManager.closeMobileMenu();
+                }
+            }
+        }, { passive: true });
+    }
+    
+    optimizeModalsForMobile() {
+        // Better modal handling on mobile
+        const modals = document.querySelectorAll('.modal');
+        
+        modals.forEach(modal => {
+            modal.addEventListener('touchmove', (e) => {
+                // Prevent background scroll
+                if (e.target === modal) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        });
+    }
+}
 
-     // Initialize header auto-hide functionality
-     const headerScrollManager = new HeaderScrollManager();
-    // Wait for Firebase to be initialized
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize header scroll manager and mobile navigation
+    window.headerScrollManager = new HeaderScrollManager();
+    
+    // Initialize mobile enhancements
+    const mobileEnhancements = new MobileEnhancements();
+    
+    // Add viewport meta tag if it doesn't exist
+    if (!document.querySelector('meta[name=viewport]')) {
+        const viewport = document.createElement('meta');
+        viewport.name = 'viewport';
+        viewport.content = 'width=device-width, initial-scale=1.0';
+        document.head.appendChild(viewport);
+    }
+    
+    // Initialize your existing DigitalNotebook
     if (typeof firebase !== 'undefined' && firebase.database) {
         window.notebook = new DigitalNotebook();
     } else {
-        // Wait a bit more for Firebase to load
         setTimeout(() => {
             if (typeof firebase !== 'undefined' && firebase.database) {
                 window.notebook = new DigitalNotebook();
