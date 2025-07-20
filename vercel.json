@@ -384,14 +384,6 @@
       "dest": "/apps/fitness-coach-portal/index.html"
     },
     {
-      "src": "/",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    },
-    {
       "src": "/(.*)",
       "has": [
         {
@@ -400,6 +392,14 @@
         }
       ],
       "dest": "/apps/digital-notebook/index.html"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
     }
   ]
 }
