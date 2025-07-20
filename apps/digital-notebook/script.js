@@ -14,6 +14,7 @@ class DigitalNotebook {
         
         this.initializeEventListeners();
         this.loadData();
+        this.addGlobalDeselectHandler();
     }
 
     // Initialize all event listeners
@@ -73,6 +74,13 @@ class DigitalNotebook {
                 if (e.target === modal) {
                     this.closeAllModals();
                 }
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            document.querySelectorAll('.modal-content').forEach(modal => {
+                modal.style.maxHeight = (window.innerHeight * 0.95) + 'px';
+                modal.style.overflowY = 'auto';
             });
         });
     }
@@ -279,13 +287,13 @@ class DigitalNotebook {
             content += `
                 <div class="content-section">
                     <h4><i class="fas fa-code"></i> Code Snippet</h4>
-                    <div class="code-block">
+                    <div class="code-block" style="overflow-x:auto;">
                         <div class="code-header">
                             <span>Code</span>
                             <span class="code-language">${subtopic.language || 'text'}</span>
                         </div>
-                        <div class="code-content">
-                            <pre><code class="language-${subtopic.language || 'text'}">${this.escapeHtml(subtopic.code)}</code></pre>
+                        <div class="code-content" style="overflow-x:auto;">
+                            <pre style="overflow-x:auto;"><code class="language-${subtopic.language || 'text'}">${this.escapeHtml(subtopic.code)}</code></pre>
                         </div>
                     </div>
                 </div>
@@ -550,18 +558,19 @@ class DigitalNotebook {
         const modal = document.getElementById('deleteModal');
         document.getElementById('deleteMessage').textContent = message;
         modal.style.display = 'block';
-        
-        // Store the confirmation callback
-        modal.dataset.confirmCallback = onConfirm;
+        // Store the confirmation callback as a property, not as a string
+        modal._confirmCallback = onConfirm;
     }
 
     // Confirm delete action
     confirmDelete() {
         const modal = document.getElementById('deleteModal');
-        const callback = modal.dataset.confirmCallback;
-        if (callback) {
+        const callback = modal._confirmCallback;
+        if (typeof callback === 'function') {
             callback();
         }
+        // Clean up after use
+        modal._confirmCallback = null;
     }
 
     // Show welcome screen
@@ -669,6 +678,22 @@ class DigitalNotebook {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    addGlobalDeselectHandler() {
+        document.addEventListener('click', (e) => {
+            const sidebar = document.querySelector('.sidebar');
+            const modals = document.querySelectorAll('.modal');
+            const contentArea = document.querySelector('.content-area');
+            if (
+                !sidebar.contains(e.target) &&
+                !contentArea.contains(e.target) &&
+                !Array.from(modals).some(m => m.contains(e.target))
+            ) {
+                this.currentTopicId = null;
+                this.showWelcomeScreen();
+            }
+        });
     }
 }
 
