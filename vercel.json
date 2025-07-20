@@ -388,16 +388,6 @@
       "dest": "/apps/fitness-coach-portal/index.html"
     },
     {
-      "src": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "digitalnotebook.builtbyapoorv.in"
-        }
-      ],
-      "dest": "/apps/digital-notebook/index.html"
-    },
-    {
       "src": "/styles.css",
       "has": [
         { "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }
@@ -410,6 +400,16 @@
         { "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }
       ],
       "dest": "/apps/digital-notebook/script.js"
+    },
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "digitalnotebook.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/digital-notebook/index.html"
     },
     {
       "src": "/",
