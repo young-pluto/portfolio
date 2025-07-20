@@ -697,8 +697,77 @@ class DigitalNotebook {
     }
 }
 
+// Header Auto-Hide on Scroll
+class HeaderScrollManager {
+    constructor() {
+        this.header = document.querySelector('.header');
+        this.lastScrollTop = 0;
+        this.scrollThreshold = 10; // Minimum scroll distance to trigger hide/show
+        this.isHeaderVisible = true;
+        
+        this.init();
+    }
+    
+    init() {
+        // Add scroll listener to content area (since that's what scrolls)
+        const contentArea = document.querySelector('.content-area');
+        if (contentArea) {
+            contentArea.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
+        }
+        
+        // Also listen to window scroll as backup
+        window.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
+    }
+    
+    handleScroll() {
+        const scrollElement = document.querySelector('.content-area') || window;
+        const currentScrollTop = scrollElement.scrollY || scrollElement.scrollTop || 0;
+        
+        // Don't hide header at the very top
+        if (currentScrollTop <= 50) {
+            this.showHeader();
+            this.lastScrollTop = currentScrollTop;
+            return;
+        }
+        
+        // Check scroll direction
+        const scrollDifference = Math.abs(currentScrollTop - this.lastScrollTop);
+        
+        if (scrollDifference > this.scrollThreshold) {
+            if (currentScrollTop > this.lastScrollTop && this.isHeaderVisible) {
+                // Scrolling down - hide header
+                this.hideHeader();
+            } else if (currentScrollTop < this.lastScrollTop && !this.isHeaderVisible) {
+                // Scrolling up - show header
+                this.showHeader();
+            }
+            
+            this.lastScrollTop = currentScrollTop;
+        }
+    }
+    
+    hideHeader() {
+        if (this.header && this.isHeaderVisible) {
+            this.header.classList.add('scrolling-down');
+            this.header.classList.remove('scrolling-up');
+            this.isHeaderVisible = false;
+        }
+    }
+    
+    showHeader() {
+        if (this.header && !this.isHeaderVisible) {
+            this.header.classList.add('scrolling-up');
+            this.header.classList.remove('scrolling-down');
+            this.isHeaderVisible = true;
+        }
+    }
+}
+
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+
+     // Initialize header auto-hide functionality
+     const headerScrollManager = new HeaderScrollManager();
     // Wait for Firebase to be initialized
     if (typeof firebase !== 'undefined' && firebase.database) {
         window.notebook = new DigitalNotebook();
