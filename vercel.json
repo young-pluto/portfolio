@@ -40,6 +40,10 @@
     {
       "src": "apps/Upscale-Marketing/**/*",
       "use": "@vercel/static"
+    },
+    {
+      "src": "apps/digital-notebook/**/*",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
