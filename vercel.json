@@ -398,6 +398,20 @@
       "dest": "/apps/digital-notebook/index.html"
     },
     {
+      "src": "/styles.css",
+      "has": [
+        { "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }
+      ],
+      "dest": "/apps/digital-notebook/styles.css"
+    },
+    {
+      "src": "/script.js",
+      "has": [
+        { "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }
+      ],
+      "dest": "/apps/digital-notebook/script.js"
+    },
+    {
       "src": "/",
       "dest": "/index.html"
     },
