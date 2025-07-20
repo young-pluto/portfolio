@@ -390,6 +390,16 @@
     {
       "src": "/(.*)",
       "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "digitalnotebook.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/digital-notebook/index.html"
     }
   ]
 }

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Notebook</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-book-open"></i> Digital Notebook</h1>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search topics and notes...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h3>Topics</h3>
+                    <button id="addTopicBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Topic
+                    </button>
+                </div>
+                <div id="topicsList" class="topics-list">
+                    <!-- Topics will be dynamically added here -->
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <section class="content-area">
+                <div id="welcomeScreen" class="welcome-screen">
+                    <div class="welcome-content">
+                        <i class="fas fa-edit welcome-icon"></i>
+                        <h2>Welcome to Your Digital Notebook</h2>
+                        <p>Start by adding a topic to organize your notes and code snippets.</p>
+                        <button id="getStartedBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Your First Topic
+                        </button>
+                    </div>
+                </div>
+
+                <div id="topicContent" class="topic-content" style="display: none;">
+                    <div class="topic-header">
+                        <h2 id="currentTopicTitle">Topic Title</h2>
+                        <div class="topic-actions">
+                            <button id="editTopicBtn" class="btn btn-secondary">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button id="deleteTopicBtn" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="subtopics-section">
+                        <div class="section-header">
+                            <h3>Subtopics</h3>
+                            <button id="addSubtopicBtn" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Subtopic
+                            </button>
+                        </div>
+                        <div id="subtopicsList" class="subtopics-list">
+                            <!-- Subtopics will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add/Edit Topic Modal -->
+    <div id="topicModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="topicModalTitle">Add New Topic</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="topicForm">
+                    <div class="form-group">
+                        <label for="topicTitle">Topic Title</label>
+                        <input type="text" id="topicTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="topicDescription">Description (optional)</label>
+                        <textarea id="topicDescription" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+                <button type="submit" form="topicForm" class="btn btn-primary">Save Topic</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Subtopic Modal -->
+    <div id="subtopicModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="subtopicModalTitle">Add New Subtopic</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="subtopicForm">
+                    <div class="form-group">
+                        <label for="subtopicTitle">Subtopic Title</label>
+                        <input type="text" id="subtopicTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subtopicDescription">Description</label>
+                        <textarea id="subtopicDescription" rows="3" placeholder="Enter description..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="subtopicNotes">Notes</label>
+                        <textarea id="subtopicNotes" rows="5" placeholder="Enter your notes..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="subtopicBulletPoints">Bullet Points (one per line)</label>
+                        <textarea id="subtopicBulletPoints" rows="4" placeholder="Enter bullet points, one per line..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="subtopicCode">Code Snippet</label>
+                        <textarea id="subtopicCode" rows="8" placeholder="Enter your code here..."></textarea>
+                        <div class="code-language-selector">
+                            <label for="codeLanguage">Language:</label>
+                            <select id="codeLanguage">
+                                <option value="javascript">JavaScript</option>
+                                <option value="html">HTML</option>
+                                <option value="css">CSS</option>
+                                <option value="python">Python</option>
+                                <option value="java">Java</option>
+                                <option value="cpp">C++</option>
+                                <option value="csharp">C#</option>
+                                <option value="php">PHP</option>
+                                <option value="sql">SQL</option>
+                                <option value="bash">Bash</option>
+                                <option value="json">JSON</option>
+                                <option value="xml">XML</option>
+                                <option value="markdown">Markdown</option>
+                                <option value="typescript">TypeScript</option>
+                                <option value="react">React JSX</option>
+                                <option value="vue">Vue</option>
+                                <option value="go">Go</option>
+                                <option value="rust">Rust</option>
+                                <option value="swift">Swift</option>
+                                <option value="kotlin">Kotlin</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+                <button type="submit" form="subtopicForm" class="btn btn-primary">Save Subtopic</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3>Confirm Delete</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="deleteMessage">Are you sure you want to delete this item?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+                <button id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Saving...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <!-- Inline Firebase Init (temporary fix) -->
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyB-F0C8l_fOhJPpkYsL6Eb6P7GUFcaC9MQ",
+        authDomain: "portfolio-415e1.firebaseapp.com",
+        databaseURL: "https://portfolio-415e1-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "portfolio-415e1",
+        storageBucket: "portfolio-415e1.firebasestorage.app",
+        messagingSenderId: "959081513500",
+        appId: "1:959081513500:web:e1889367df9e24f25355d9"
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      // Get references to Firebase services
+      const auth = firebase.auth();
+      const database = firebase.database();
+      
+      console.log("Firebase initialized inline");
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
