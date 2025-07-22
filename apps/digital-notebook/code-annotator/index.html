@@ -669,7 +669,7 @@
                 document.getElementById('folderModal').style.display = 'none';
             }
 
-            createNewFolder() {
+            async createNewFolder() {
                 const folderName = document.getElementById('folderNameInput').value.trim();
                 const folderDesc = document.getElementById('folderDescInput').value.trim();
                 if (!folderName) {
@@ -683,6 +683,12 @@
                 }
                 this.folders.set(folderId, { name: folderName, description: folderDesc, files: new Map() });
                 this.currentFolderId = folderId;
+                // Save folder to Firebase
+                await database.ref(`${this.dbRootNode}/folders/${folderId}`).set({
+                    name: folderName,
+                    description: folderDesc,
+                    files: []
+                });
                 this.updateFileList();
                 this.hideFolderModal();
                 this.showNotification('Folder created!', 'success');
@@ -727,6 +733,10 @@
                     
                     // Add to folder's files
                     this.folders.get(folderId).files.set(fileId, fileObj);
+                    // Save file data to Firebase immediately
+                    await database.ref(`${this.dbRootNode}/${this.filesNode}/${fileId}`).set(fileObj);
+                    // Update folder's file list in Firebase
+                    await this.saveFolderFilesToFirebase(folderId);
                     
                     // Load existing annotations from Firebase
                     await this.loadAnnotations(fileId);
@@ -882,7 +892,7 @@
                             </button>
                         </div>
                     `;
-                    noteDiv.classList.add('expanded');
+                    // Do NOT add 'expanded' class here; notes will be collapsed by default
                 }
                 
                 return noteDiv;
@@ -1084,16 +1094,57 @@
             }
 
             async loadSavedFolders() {
-                // Placeholder for future Firebase loading logic
-                // For now, just update UI
+                // Load folders from Firebase
+                const snapshot = await database.ref(`${this.dbRootNode}/folders`).once('value');
+                const foldersData = snapshot.val() || {};
+                this.folders = new Map();
+                for (const [folderId, folder] of Object.entries(foldersData)) {
+                    const filesMap = new Map();
+                    // Handle new format where files is an object: { fileId: { name: '...' } }
+                    if (folder.files && typeof folder.files === 'object' && !Array.isArray(folder.files)) {
+                        for (const [fileId, fileInfo] of Object.entries(folder.files)) {
+                            // Store name, but content will be loaded on demand
+                            filesMap.set(fileId, { id: fileId, name: fileInfo.name });
+                        }
+                    }
+                    this.folders.set(folderId, {
+                        name: folder.name,
+                        description: folder.description,
+                        files: filesMap
+                    });
+                }
                 this.updateFileList();
             }
 
-            selectFile(fileId, folderId) {
+            async selectFile(fileId, folderId) {
                 const folder = this.folders.get(folderId);
                 if (!folder) return;
-                const fileData = folder.files.get(fileId);
+                let fileData = folder.files.get(fileId);
                 if (!fileData) return;
+                
+                // If file data is not fully loaded (i.e., no content), fetch it from Firebase
+                if (!fileData.content) {
+                    this.showLoading(true);
+                    try {
+                        const fileSnapshot = await database.ref(`${this.dbRootNode}/${this.filesNode}/${fileId}`).once('value');
+                        const fullFileData = fileSnapshot.val();
+                        if (!fullFileData) {
+                            this.showNotification('Error: Could not load file data.', 'error');
+                            this.showLoading(false);
+                            return;
+                        }
+                        // Cache the full file data
+                        folder.files.set(fileId, fullFileData);
+                        fileData = fullFileData;
+                    } catch (error) {
+                        console.error("Error fetching file content:", error);
+                        this.showNotification('Failed to fetch file content.', 'error');
+                        this.showLoading(false);
+                        return;
+                    } finally {
+                        this.showLoading(false);
+                    }
+                }
                 
                 this.currentFile = fileData;
                 this.currentFileId = fileId;
@@ -1101,10 +1152,10 @@
                 this.fileContent = fileData.content;
                 this.annotations = {};
                 
-                this.loadAnnotations(fileId).then(() => {
-                    this.displayFile();
-                    this.updateUI();
-                });
+                await this.loadAnnotations(fileId);
+                this.displayFile();
+                this.updateFileList();
+                this.updateUI();
             }
 
             updateFileList() {
@@ -1260,6 +1311,8 @@
                     for (const fileId of folder.files.keys()) {
                         await this.deleteFileFromFirebase(fileId);
                     }
+                    // Remove folder from Firebase
+                    await database.ref(`${this.dbRootNode}/folders/${folderId}`).remove();
                 }
                 // Remove folder from UI
                 this.folders.delete(folderId);
@@ -1283,6 +1336,8 @@
                 const folder = this.folders.get(folderId);
                 if (folder) {
                     folder.files.delete(fileId);
+                    // Update folder's file list in Firebase
+                    await this.saveFolderFilesToFirebase(folderId);
                     if (this.currentFileId === fileId && this.currentFolderId === folderId) {
                         this.currentFile = null;
                         this.currentFileId = null;
@@ -1301,6 +1356,19 @@
                 await database.ref(`${this.dbRootNode}/${this.filesNode}/${fileId}`).remove();
                 // Remove annotations
                 await database.ref(`${this.dbRootNode}/${this.annotationsNode}/${fileId}`).remove();
+            }
+
+            async saveFolderFilesToFirebase(folderId) {
+                const folder = this.folders.get(folderId);
+                if (!folder) return;
+                const filesForFirebase = {};
+                for (const [fileId, fileData] of folder.files.entries()) {
+                    // Save file's name along with its ID
+                    if (fileData.name) {
+                        filesForFirebase[fileId] = { name: fileData.name };
+                    }
+                }
+                await database.ref(`${this.dbRootNode}/folders/${folderId}/files`).set(filesForFirebase);
             }
         }
 
