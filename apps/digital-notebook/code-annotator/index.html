@@ -294,6 +294,24 @@
             padding: 1rem;
             margin: 0.5rem 0.5rem 0.5rem 90px;
             max-height: 500px;
+            overflow-y: auto;
+        }
+        .line-note .note-content,
+        .line-note .note-input {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        /* Subtle comment icon by default, blue/white on hover/focus */
+        .note-toggle.has-note {
+            background: transparent;
+            color: #64b5f6;
+            transition: background 0.2s, color 0.2s;
+        }
+        .code-line-container:hover .note-toggle.has-note,
+        .note-toggle.has-note:focus {
+            background: linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%);
+            color: white;
         }
 
         .note-content {
