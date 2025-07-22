@@ -198,9 +198,24 @@
         .code-line-container {
             position: relative;
             display: flex;
-            align-items: flex-start;
+            flex-direction: column;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             transition: background 0.2s ease;
+        }
+        .code-row {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+        .line-note {
+            background: rgba(100, 181, 246, 0.05);
+            border: 1px solid rgba(100, 181, 246, 0.2);
+            border-radius: 8px;
+            margin: 0.5rem 0.5rem 0.5rem 90px;
+            /* margin-left matches line number + toggle width */
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease, padding 0.3s ease;
         }
 
         .code-line-container:hover {
@@ -825,6 +840,10 @@
                 container.className = 'code-line-container';
                 container.dataset.lineNumber = lineNumber;
                 
+                // Row for line number, note toggle, and code content
+                const codeRow = document.createElement('div');
+                codeRow.className = 'code-row';
+                
                 // Line number
                 const lineNumberEl = document.createElement('div');
                 lineNumberEl.className = 'line-number';
@@ -841,9 +860,10 @@
                 codeContent.className = 'code-content';
                 codeContent.innerHTML = `<code class="language-${this.currentFile.language}">${this.escapeHtml(line || ' ')}</code>`;
                 
-                container.appendChild(lineNumberEl);
-                container.appendChild(noteToggle);
-                container.appendChild(codeContent);
+                codeRow.appendChild(lineNumberEl);
+                codeRow.appendChild(noteToggle);
+                codeRow.appendChild(codeContent);
+                container.appendChild(codeRow);
                 
                 // Add note if exists
                 if (this.annotations[lineNumber]) {
