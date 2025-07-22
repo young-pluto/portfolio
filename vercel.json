@@ -406,6 +406,13 @@
       "dest": "/apps/digital-notebook/script.js"
     },
     {
+      "src": "/code-annotator/index.html",
+      "has": [
+        { "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }
+      ],
+      "dest": "/apps/digital-notebook/code-annotator/index.html"
+    },
+    {
       "src": "/code-annotator",
       "has": [
         { "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }
