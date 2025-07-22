@@ -406,6 +406,13 @@
       "dest": "/apps/digital-notebook/script.js"
     },
     {
+      "src": "/code-annotator",
+      "has": [
+        { "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }
+      ],
+      "dest": "/apps/digital-notebook/code-annotator/index.html"
+    },
+    {
       "src": "/(.*)",
       "has": [
         {
@@ -414,16 +421,6 @@
         }
       ],
       "dest": "/apps/digital-notebook/index.html"
-    },
-    {
-      "src": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "codeannotator.builtbyapoorv.in"
-        }
-      ],
-      "dest": "/apps/digital-notebook/code-annotator/index.html"
     },
     {
       "src": "/",
