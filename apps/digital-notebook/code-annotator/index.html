@@ -208,14 +208,12 @@
             align-items: flex-start;
         }
         .line-note {
-            background: rgba(100, 181, 246, 0.05);
-            border: 1px solid rgba(100, 181, 246, 0.2);
+            border: none;
+            background: none;
             border-radius: 8px;
-            margin: 0.5rem 0.5rem 0.5rem 90px;
-            /* margin-left matches line number + toggle width */
             overflow: hidden;
             max-height: 0;
-            transition: max-height 0.3s ease, padding 0.3s ease;
+            transition: max-height 0.3s ease, padding 0.3s ease, margin 0.3s;
         }
 
         .code-line-container:hover {
@@ -270,6 +268,10 @@
             opacity: 1;
             background: linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%);
             color: white;
+            /* Remove any border, underline, or box-shadow here if present */
+            box-shadow: none !important;
+            border-bottom: none !important;
+            text-decoration: none !important;
         }
 
         .note-toggle i {
@@ -278,18 +280,20 @@
 
         /* Expandable Notes */
         .line-note {
-            background: rgba(100, 181, 246, 0.05);
-            border: 1px solid rgba(100, 181, 246, 0.2);
+            border: none;
+            background: none;
             border-radius: 8px;
-            margin: 0.5rem 1rem 0.5rem 90px;
             overflow: hidden;
             max-height: 0;
-            transition: max-height 0.3s ease, padding 0.3s ease;
+            transition: max-height 0.3s ease, padding 0.3s ease, margin 0.3s;
         }
 
         .line-note.expanded {
-            max-height: 500px;
+            background: rgba(100, 181, 246, 0.05);
+            border: 1px solid rgba(100, 181, 246, 0.2);
             padding: 1rem;
+            margin: 0.5rem 0.5rem 0.5rem 90px;
+            max-height: 500px;
         }
 
         .note-content {
