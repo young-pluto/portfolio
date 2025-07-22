@@ -44,6 +44,10 @@
     {
       "src": "apps/digital-notebook/**/*",
       "use": "@vercel/static"
+    },
+    {
+      "src": "apps/code-annotator/**/*",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -410,6 +414,16 @@
         }
       ],
       "dest": "/apps/digital-notebook/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "codeannotator.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/code-annotator/index.html"
     },
     {
       "src": "/",
