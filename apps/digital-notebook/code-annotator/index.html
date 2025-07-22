@@ -538,11 +538,14 @@
             <!-- File Explorer -->
             <aside class="file-explorer" id="fileExplorer">
                 <div class="explorer-header">
-                    <h3><i class="fas fa-folder"></i> Opened Files</h3>
+                    <h3><i class="fas fa-folder"></i> Opened Folders</h3>
+                    <button id="newFolderBtn" class="btn btn-sm btn-primary" style="margin-top: 1rem; width: 100%;">
+                        <i class="fas fa-folder-plus"></i> New Folder
+                    </button>
                 </div>
                 <div class="file-list" id="fileList">
                     <p style="text-align: center; color: #888; padding: 2rem 1rem; font-style: italic;">
-                        No files opened yet
+                        No folders created yet
                     </p>
                 </div>
             </aside>
@@ -581,6 +584,25 @@
         </div>
     </div>
 
+    <!-- Folder Creation Modal -->
+    <div id="folderModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15,20,25,0.7); z-index:2000; align-items:center; justify-content:center;">
+        <div style="background:rgba(21,26,35,1); border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.4); padding:2rem; min-width:320px; max-width:90vw;">
+            <h2 style="color:#64b5f6; margin-bottom:1rem;">Create New Folder</h2>
+            <div style="margin-bottom:1rem;">
+                <label style="color:#e6e6e6; font-weight:500;">Folder Name</label>
+                <input id="folderNameInput" type="text" style="width:100%; padding:0.75rem; border-radius:8px; border:1px solid #222; background:#181c24; color:#e6e6e6; margin-top:0.5rem; font-size:1rem;" maxlength="50" placeholder="Enter folder name..." />
+            </div>
+            <div style="margin-bottom:1.5rem;">
+                <label style="color:#e6e6e6; font-weight:500;">Description (optional)</label>
+                <textarea id="folderDescInput" style="width:100%; padding:0.75rem; border-radius:8px; border:1px solid #222; background:#181c24; color:#e6e6e6; margin-top:0.5rem; font-size:1rem; min-height:60px;" maxlength="200" placeholder="Describe this folder..."></textarea>
+            </div>
+            <div style="display:flex; gap:1rem; justify-content:flex-end;">
+                <button id="createFolderBtn" class="btn btn-primary">Create</button>
+                <button id="cancelFolderBtn" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -610,6 +632,8 @@
                 this.fileContent = '';
                 this.annotations = {};
                 this.openFiles = new Map();
+                this.folders = new Map(); // folderId -> { name, description, files: Map<fileId, fileData> }
+                this.currentFolderId = null;
                 
                 // Unique database nodes to avoid conflicts
                 this.dbRootNode = 'code_annotator_2024_v1';
@@ -617,7 +641,7 @@
                 this.annotationsNode = 'file_annotations_2024_v1';
                 
                 this.initializeEventListeners();
-                this.loadSavedFiles();
+                this.loadSavedFolders();
             }
 
             initializeEventListeners() {
@@ -629,9 +653,58 @@
                 document.getElementById('saveBtn').addEventListener('click', () => this.saveToFirebase());
                 document.getElementById('clearNotesBtn').addEventListener('click', () => this.clearAllNotes());
                 document.getElementById('toggleExplorer').addEventListener('click', () => this.toggleFileExplorer());
+                document.getElementById('newFolderBtn').addEventListener('click', () => this.showFolderModal());
+                document.getElementById('createFolderBtn').addEventListener('click', () => this.createNewFolder());
+                document.getElementById('cancelFolderBtn').addEventListener('click', () => this.hideFolderModal());
+            }
+
+            showFolderModal() {
+                document.getElementById('folderModal').style.display = 'flex';
+                document.getElementById('folderNameInput').value = '';
+                document.getElementById('folderDescInput').value = '';
+                setTimeout(() => document.getElementById('folderNameInput').focus(), 100);
+            }
+
+            hideFolderModal() {
+                document.getElementById('folderModal').style.display = 'none';
+            }
+
+            createNewFolder() {
+                const folderName = document.getElementById('folderNameInput').value.trim();
+                const folderDesc = document.getElementById('folderDescInput').value.trim();
+                if (!folderName) {
+                    this.showNotification('Folder name is required', 'error');
+                    return;
+                }
+                const folderId = this.generateFolderId(folderName);
+                if (this.folders.has(folderId)) {
+                    this.showNotification('Folder already exists', 'error');
+                    return;
+                }
+                this.folders.set(folderId, { name: folderName, description: folderDesc, files: new Map() });
+                this.currentFolderId = folderId;
+                this.updateFileList();
+                this.hideFolderModal();
+                this.showNotification('Folder created!', 'success');
+            }
+
+            generateFolderId(folderName) {
+                return folderName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + Date.now();
             }
 
             async handleFileSelect(event) {
+                if (this.folders.size === 0) {
+                    this.showNotification('Create a folder first!', 'error');
+                    event.target.value = '';
+                    return;
+                }
+                if (!this.currentFolderId || !this.folders.has(this.currentFolderId)) {
+                    this.showNotification('Select a folder first!', 'error');
+                    event.target.value = '';
+                    return;
+                }
+                const folderId = this.currentFolderId;
+
                 const file = event.target.files[0];
                 if (!file) return;
 
@@ -639,7 +712,7 @@
                     const content = await this.readFile(file);
                     const fileId = this.generateFileId(file.name);
                     
-                    this.currentFile = {
+                    const fileObj = {
                         name: file.name,
                         content: content,
                         language: this.detectLanguage(file.name),
@@ -647,12 +720,13 @@
                         lastModified: file.lastModified
                     };
                     
+                    this.currentFile = fileObj;
                     this.currentFileId = fileId;
                     this.fileContent = content;
                     this.annotations = {};
                     
-                    // Add to opened files
-                    this.openFiles.set(fileId, this.currentFile);
+                    // Add to folder's files
+                    this.folders.get(folderId).files.set(fileId, fileObj);
                     
                     // Load existing annotations from Firebase
                     await this.loadAnnotations(fileId);
@@ -711,6 +785,12 @@
             }
 
             displayFile() {
+                if (!this.currentFile) {
+                    // Hide editor, show welcome screen
+                    document.getElementById('editorArea').style.display = 'none';
+                    document.getElementById('welcomeScreen').style.display = 'flex';
+                    return;
+                }
                 const codeDisplay = document.getElementById('codeDisplay');
                 const lines = this.fileContent.split('\n');
                 
@@ -1003,28 +1083,21 @@
                 }
             }
 
-            async loadSavedFiles() {
-                try {
-                    const snapshot = await database.ref(`${this.dbRootNode}/${this.filesNode}`).once('value');
-                    const files = snapshot.val();
-                    
-                    if (files) {
-                        Object.entries(files).forEach(([fileId, fileData]) => {
-                            this.openFiles.set(fileId, fileData);
-                        });
-                        this.updateFileList();
-                    }
-                } catch (error) {
-                    console.error('Error loading saved files:', error);
-                }
+            async loadSavedFolders() {
+                // Placeholder for future Firebase loading logic
+                // For now, just update UI
+                this.updateFileList();
             }
 
-            selectFile(fileId) {
-                const fileData = this.openFiles.get(fileId);
+            selectFile(fileId, folderId) {
+                const folder = this.folders.get(folderId);
+                if (!folder) return;
+                const fileData = folder.files.get(fileId);
                 if (!fileData) return;
                 
                 this.currentFile = fileData;
                 this.currentFileId = fileId;
+                this.currentFolderId = folderId;
                 this.fileContent = fileData.content;
                 this.annotations = {};
                 
@@ -1037,10 +1110,10 @@
             updateFileList() {
                 const fileList = document.getElementById('fileList');
                 
-                if (this.openFiles.size === 0) {
+                if (this.folders.size === 0) {
                     fileList.innerHTML = `
                         <p style="text-align: center; color: #888; padding: 2rem 1rem; font-style: italic;">
-                            No files opened yet
+                            No folders created yet
                         </p>
                     `;
                     return;
@@ -1048,20 +1121,62 @@
                 
                 fileList.innerHTML = '';
                 
-                this.openFiles.forEach((file, fileId) => {
-                    const fileItem = document.createElement('div');
-                    fileItem.className = 'file-item';
-                    if (fileId === this.currentFileId) {
-                        fileItem.classList.add('active');
-                    }
-                    
-                    fileItem.innerHTML = `
-                        <i class="fas fa-file-code file-icon"></i>
-                        <span class="file-name" title="${file.name}">${file.name}</span>
-                    `;
-                    
-                    fileItem.addEventListener('click', () => this.selectFile(fileId));
-                    fileList.appendChild(fileItem);
+                this.folders.forEach((folder, folderId) => {
+                    const folderItem = document.createElement('div');
+                    folderItem.className = 'file-item';
+                    folderItem.style.fontWeight = 'bold';
+                    folderItem.style.cursor = 'pointer';
+                    if (folderId === this.currentFolderId) folderItem.classList.add('selected-folder');
+                    folderItem.style.color = (folderId === this.currentFolderId) ? '#fff' : '';
+                    folderItem.innerHTML = `<i class=\"fas fa-folder file-icon\"></i> <span class=\"file-name\" style='${folderId === this.currentFolderId ? 'color:#fff;' : ''}'>${folder.name}</span>` + (folder.description ? `<div style='font-size:0.85em; color:#b0b0b0; margin-top:0.25rem;'>${this.escapeHtml(folder.description)}</div>` : '') + `<button class='delete-folder-btn' title='Delete Folder' style='margin-left:auto; background:none; border:none; color:#f44336; cursor:pointer; font-size:1.1em;'><i class='fas fa-trash'></i></button>`;
+                    folderItem.title = folder.description || '';
+                    folderItem.addEventListener('click', (e) => {
+                        if (e.target.closest('.delete-folder-btn')) return;
+                        e.stopPropagation();
+                        this.currentFolderId = folderId;
+                        this.updateFileList();
+                    });
+                    // Delete folder logic
+                    folderItem.querySelector('.delete-folder-btn').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (confirm('Delete this folder and all its files?')) {
+                            this.deleteFolder(folderId);
+                        }
+                    });
+                    fileList.appendChild(folderItem);
+                    // Files in folder
+                    const filesContainer = document.createElement('div');
+                    filesContainer.style.marginLeft = '2rem';
+                    filesContainer.style.display = 'block';
+                    folder.files.forEach((file, fileId) => {
+                        const fileItem = document.createElement('div');
+                        fileItem.className = 'file-item';
+                        const isSelected = fileId === this.currentFileId && folderId === this.currentFolderId;
+                        fileItem.innerHTML = `
+                            <i class=\"fas fa-file-code file-icon\"></i>
+                            <span class=\"file-name\" title=\"${file.name}\" style='${isSelected ? 'background:rgba(67,233,123,0.15); color:#43e97b; border-radius:6px; padding:0.2em 0.5em;' : ''}'>${file.name}</span>
+                            <button class='delete-file-btn' title='Delete File' style='margin-left:auto; background:none; border:none; color:#f44336; cursor:pointer; font-size:1em;'><i class='fas fa-trash'></i></button>
+                        `;
+                        fileItem.addEventListener('click', (e) => {
+                            if (e.target.closest('.delete-file-btn')) return;
+                            e.stopPropagation();
+                            this.selectFile(fileId, folderId);
+                        });
+                        // Delete file logic
+                        fileItem.querySelector('.delete-file-btn').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            if (confirm('Delete this file?')) {
+                                this.deleteFile(folderId, fileId);
+                            }
+                        });
+                        filesContainer.appendChild(fileItem);
+                    });
+                    fileList.appendChild(filesContainer);
+                });
+                // Disable open file button if no folder selected
+                const openFileInputs = [document.getElementById('fileInput'), document.getElementById('fileInput2')];
+                openFileInputs.forEach(input => {
+                    if (input) input.disabled = !this.currentFolderId;
                 });
             }
 
@@ -1136,6 +1251,57 @@
                 div.textContent = text;
                 return div.innerHTML;
             }
+
+            async deleteFolder(folderId) {
+                // Remove from Firebase
+                const folder = this.folders.get(folderId);
+                if (folder) {
+                    // Remove all files' data and annotations
+                    for (const fileId of folder.files.keys()) {
+                        await this.deleteFileFromFirebase(fileId);
+                    }
+                }
+                // Remove folder from UI
+                this.folders.delete(folderId);
+                if (this.currentFolderId === folderId) {
+                    this.currentFolderId = null;
+                    this.currentFile = null;
+                    this.currentFileId = null;
+                    this.fileContent = '';
+                    this.annotations = {};
+                }
+                this.updateFileList();
+                this.displayFile();
+                this.updateUI();
+                this.showNotification('Folder deleted!', 'success');
+            }
+
+            async deleteFile(folderId, fileId) {
+                // Remove from Firebase
+                await this.deleteFileFromFirebase(fileId);
+                // Remove from UI
+                const folder = this.folders.get(folderId);
+                if (folder) {
+                    folder.files.delete(fileId);
+                    if (this.currentFileId === fileId && this.currentFolderId === folderId) {
+                        this.currentFile = null;
+                        this.currentFileId = null;
+                        this.fileContent = '';
+                        this.annotations = {};
+                    }
+                }
+                this.updateFileList();
+                this.displayFile();
+                this.updateUI();
+                this.showNotification('File deleted!', 'success');
+            }
+
+            async deleteFileFromFirebase(fileId) {
+                // Remove file data
+                await database.ref(`${this.dbRootNode}/${this.filesNode}/${fileId}`).remove();
+                // Remove annotations
+                await database.ref(`${this.dbRootNode}/${this.annotationsNode}/${fileId}`).remove();
+            }
         }
 
         // Add CSS animations
@@ -1149,6 +1315,26 @@
             @keyframes slideOutRight {
                 from { transform: translateX(0); opacity: 1; }
                 to { transform: translateX(100%); opacity: 0; }
+            }
+            /* Modal backdrop and dialog */
+            #folderModal { display: none; align-items: center; justify-content: center; }
+            #folderModal[style*="display: flex"] { display: flex !important; }
+            #folderModal input, #folderModal textarea { outline: none; }
+            #folderModal input:focus, #folderModal textarea:focus { border-color: #64b5f6; box-shadow: 0 0 0 2px rgba(100,181,246,0.2); }
+            /* Folder selection highlight */
+            .file-item.selected-folder {
+                background: linear-gradient(135deg, #183c2b 0%, #1e4740 100%) !important;
+                color: #fff !important;
+                border-radius: 14px;
+                box-shadow: 0 2px 12px 0 rgba(24,60,43,0.18);
+                border: 1.5px solid #2e7d5a;
+            }
+            .file-item.selected-folder .file-name {
+                color: #fff !important;
+            }
+            .file-item .file-name[style*="background:rgba(67,233,123"] {
+                font-weight: 600;
+                letter-spacing: 0.01em;
             }
         `;
         document.head.appendChild(style);
