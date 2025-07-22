@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Annotator - Learning IDE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f1419;
+            background-image: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%);
+            min-height: 100vh;
+            color: #e6e6e6;
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(15, 20, 25, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .current-file {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* File Explorer */
+        .file-explorer {
+            width: 280px;
+            background: rgba(21, 26, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .explorer-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .explorer-header h3 {
+            color: #e6e6e6;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .file-list {
+            flex: 1;
+            padding: 1rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(100, 181, 246, 0.3);
+        }
+
+        .file-item.active {
+            background: linear-gradient(135deg, rgba(100, 181, 246, 0.2) 0%, rgba(66, 165, 245, 0.15) 100%);
+            border-color: #64b5f6;
+        }
+
+        .file-icon {
+            font-size: 1.1rem;
+            color: #64b5f6;
+        }
+
+        .file-name {
+            color: #e6e6e6;
+            font-size: 0.9rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Code Editor Area */
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .editor-header {
+            background: rgba(15, 20, 25, 0.8);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .editor-title {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .editor-tools {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .language-indicator {
+            background: rgba(100, 181, 246, 0.1);
+            color: #64b5f6;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        /* Code Display */
+        .code-display {
+            flex: 1;
+            overflow: auto;
+            background: #0a0e13;
+        }
+
+        .code-line-container {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.2s ease;
+        }
+
+        .code-line-container:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .line-number {
+            width: 60px;
+            padding: 0.5rem 1rem 0.5rem 0.5rem;
+            text-align: right;
+            color: #6c757d;
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+            font-size: 0.85rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .code-content {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .note-toggle {
+            width: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            background: rgba(100, 181, 246, 0.1);
+            margin-right: 0.5rem;
+        }
+
+        .code-line-container:hover .note-toggle {
+            opacity: 1;
+        }
+
+        .note-toggle:hover {
+            background: rgba(100, 181, 246, 0.2);
+            color: #64b5f6;
+        }
+
+        .note-toggle.has-note {
+            opacity: 1;
+            background: linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%);
+            color: white;
+        }
+
+        .note-toggle i {
+            font-size: 0.8rem;
+        }
+
+        /* Expandable Notes */
+        .line-note {
+            background: rgba(100, 181, 246, 0.05);
+            border: 1px solid rgba(100, 181, 246, 0.2);
+            border-radius: 8px;
+            margin: 0.5rem 1rem 0.5rem 90px;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .line-note.expanded {
+            max-height: 500px;
+            padding: 1rem;
+        }
+
+        .note-content {
+            color: #e6e6e6;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .note-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 0.75rem;
+            color: #e6e6e6;
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .note-input:focus {
+            outline: none;
+            border-color: #64b5f6;
+            box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            justify-content: flex-end;
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .welcome-content {
+            max-width: 500px;
+        }
+
+        .welcome-icon {
+            font-size: 4rem;
+            color: #64b5f6;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .welcome-content p {
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%);
+            color: white;
+            border: 1px solid rgba(100, 181, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #42a5f5 0%, #2196f3 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(100, 181, 246, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e6e6e6;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+        }
+
+        /* File input styling */
+        .file-input {
+            display: none;
+        }
+
+        .file-input-label {
+            cursor: pointer;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 0.75rem 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-left,
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .file-explorer {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                height: 100vh;
+                z-index: 1000;
+                transition: left 0.3s ease;
+            }
+
+            .file-explorer.mobile-open {
+                left: 0;
+            }
+
+            .line-note {
+                margin-left: 60px;
+            }
+
+            .note-toggle {
+                opacity: 1;
+            }
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(100, 181, 246, 0.3);
+            border-top: 3px solid #64b5f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Syntax highlighting overrides */
+        pre[class*="language-"] {
+            background: transparent !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        code[class*="language-"] {
+            background: transparent !important;
+            color: #e6e6e6 !important;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(100, 181, 246, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(100, 181, 246, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-code"></i>
+                    Code Annotator
+                </div>
+                <div class="file-actions">
+                    <label for="fileInput" class="btn btn-primary file-input-label">
+                        <i class="fas fa-folder-open"></i>
+                        Open File
+                    </label>
+                    <input type="file" id="fileInput" class="file-input" accept=".js,.ts,.html,.css,.py,.java,.cpp,.c,.php,.sql,.json,.xml,.md,.txt,.jsx,.vue,.go,.rs,.swift,.kt">
+                    <button id="saveBtn" class="btn btn-secondary" style="display: none;">
+                        <i class="fas fa-save"></i>
+                        Save to Firebase
+                    </button>
+                </div>
+                <div class="current-file" id="currentFile">No file selected</div>
+            </div>
+            <div class="header-right">
+                <button id="toggleExplorer" class="btn btn-secondary" style="display: none;">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- File Explorer -->
+            <aside class="file-explorer" id="fileExplorer">
+                <div class="explorer-header">
+                    <h3><i class="fas fa-folder"></i> Opened Files</h3>
+                </div>
+                <div class="file-list" id="fileList">
+                    <p style="text-align: center; color: #888; padding: 2rem 1rem; font-style: italic;">
+                        No files opened yet
+                    </p>
+                </div>
+            </aside>
+
+            <!-- Editor Container -->
+            <div class="editor-container">
+                <!-- Welcome Screen -->
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-content">
+                        <i class="fas fa-code welcome-icon"></i>
+                        <h2>Code Annotator</h2>
+                        <p>Open a code file to start adding line-by-line annotations. Perfect for learning and documenting your code!</p>
+                        <label for="fileInput2" class="btn btn-primary file-input-label">
+                            <i class="fas fa-folder-open"></i>
+                            Open Your First File
+                        </label>
+                        <input type="file" id="fileInput2" class="file-input" accept=".js,.ts,.html,.css,.py,.java,.cpp,.c,.php,.sql,.json,.xml,.md,.txt,.jsx,.vue,.go,.rs,.swift,.kt">
+                    </div>
+                </div>
+
+                <!-- Editor Area -->
+                <div id="editorArea" style="display: none; height: 100%; flex-direction: column;">
+                    <div class="editor-header">
+                        <div class="editor-title" id="editorTitle">Untitled</div>
+                        <div class="editor-tools">
+                            <div class="language-indicator" id="languageIndicator">TEXT</div>
+                            <button id="clearNotesBtn" class="btn btn-sm btn-danger">
+                                <i class="fas fa-eraser"></i>
+                                Clear All Notes
+                            </button>
+                        </div>
+                    </div>
+                    <div class="code-display" id="codeDisplay"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <script>
+        // Firebase configuration (same as Digital Notebook)
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-F0C8l_fOhJPpkYsL6Eb6P7GUFcaC9MQ",
+            authDomain: "portfolio-415e1.firebaseapp.com",
+            databaseURL: "https://portfolio-415e1-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "portfolio-415e1",
+            storageBucket: "portfolio-415e1.firebasestorage.app",
+            messagingSenderId: "959081513500",
+            appId: "1:959081513500:web:e1889367df9e24f25355d9"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        class CodeAnnotator {
+            constructor() {
+                this.currentFile = null;
+                this.currentFileId = null;
+                this.fileContent = '';
+                this.annotations = {};
+                this.openFiles = new Map();
+                
+                // Unique database nodes to avoid conflicts
+                this.dbRootNode = 'code_annotator_2024_v1';
+                this.filesNode = 'annotated_files_2024_v1';
+                this.annotationsNode = 'file_annotations_2024_v1';
+                
+                this.initializeEventListeners();
+                this.loadSavedFiles();
+            }
+
+            initializeEventListeners() {
+                // File input handlers
+                document.getElementById('fileInput').addEventListener('change', (e) => this.handleFileSelect(e));
+                document.getElementById('fileInput2').addEventListener('change', (e) => this.handleFileSelect(e));
+                
+                // Button handlers
+                document.getElementById('saveBtn').addEventListener('click', () => this.saveToFirebase());
+                document.getElementById('clearNotesBtn').addEventListener('click', () => this.clearAllNotes());
+                document.getElementById('toggleExplorer').addEventListener('click', () => this.toggleFileExplorer());
+            }
+
+            async handleFileSelect(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                try {
+                    const content = await this.readFile(file);
+                    const fileId = this.generateFileId(file.name);
+                    
+                    this.currentFile = {
+                        name: file.name,
+                        content: content,
+                        language: this.detectLanguage(file.name),
+                        size: file.size,
+                        lastModified: file.lastModified
+                    };
+                    
+                    this.currentFileId = fileId;
+                    this.fileContent = content;
+                    this.annotations = {};
+                    
+                    // Add to opened files
+                    this.openFiles.set(fileId, this.currentFile);
+                    
+                    // Load existing annotations from Firebase
+                    await this.loadAnnotations(fileId);
+                    
+                    this.displayFile();
+                    this.updateFileList();
+                    this.updateUI();
+                    
+                } catch (error) {
+                    console.error('Error reading file:', error);
+                    this.showNotification('Error reading file', 'error');
+                }
+            }
+
+            readFile(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = (e) => reject(e);
+                    reader.readAsText(file);
+                });
+            }
+
+            generateFileId(fileName) {
+                return fileName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + Date.now();
+            }
+
+            detectLanguage(fileName) {
+                const ext = fileName.toLowerCase().split('.').pop();
+                const languageMap = {
+                    'js': 'javascript',
+                    'jsx': 'jsx',
+                    'ts': 'typescript',
+                    'tsx': 'tsx',
+                    'html': 'html',
+                    'htm': 'html',
+                    'css': 'css',
+                    'scss': 'scss',
+                    'sass': 'sass',
+                    'py': 'python',
+                    'java': 'java',
+                    'cpp': 'cpp',
+                    'c': 'c',
+                    'php': 'php',
+                    'sql': 'sql',
+                    'json': 'json',
+                    'xml': 'xml',
+                    'md': 'markdown',
+                    'vue': 'vue',
+                    'go': 'go',
+                    'rs': 'rust',
+                    'swift': 'swift',
+                    'kt': 'kotlin'
+                };
+                return languageMap[ext] || 'text';
+            }
+
+            displayFile() {
+                const codeDisplay = document.getElementById('codeDisplay');
+                const lines = this.fileContent.split('\n');
+                
+                codeDisplay.innerHTML = '';
+                
+                lines.forEach((line, index) => {
+                    const lineNumber = index + 1;
+                    const lineContainer = this.createLineContainer(line, lineNumber);
+                    codeDisplay.appendChild(lineContainer);
+                });
+                
+                // Apply syntax highlighting
+                Prism.highlightAll();
+                
+                // Hide welcome screen and show editor
+                document.getElementById('welcomeScreen').style.display = 'none';
+                document.getElementById('editorArea').style.display = 'flex';
+            }
+
+            createLineContainer(line, lineNumber) {
+                const container = document.createElement('div');
+                container.className = 'code-line-container';
+                container.dataset.lineNumber = lineNumber;
+                
+                // Line number
+                const lineNumberEl = document.createElement('div');
+                lineNumberEl.className = 'line-number';
+                lineNumberEl.textContent = lineNumber;
+                
+                // Note toggle button
+                const noteToggle = document.createElement('div');
+                noteToggle.className = 'note-toggle';
+                noteToggle.innerHTML = '<i class="fas fa-comment-dots"></i>';
+                noteToggle.addEventListener('click', () => this.toggleNote(lineNumber));
+                
+                // Code content
+                const codeContent = document.createElement('pre');
+                codeContent.className = 'code-content';
+                codeContent.innerHTML = `<code class="language-${this.currentFile.language}">${this.escapeHtml(line || ' ')}</code>`;
+                
+                container.appendChild(lineNumberEl);
+                container.appendChild(noteToggle);
+                container.appendChild(codeContent);
+                
+                // Add note if exists
+                if (this.annotations[lineNumber]) {
+                    noteToggle.classList.add('has-note');
+                    const noteElement = this.createNoteElement(lineNumber, this.annotations[lineNumber]);
+                    container.appendChild(noteElement);
+                }
+                
+                return container;
+            }
+
+            createNoteElement(lineNumber, content = '') {
+                const noteDiv = document.createElement('div');
+                noteDiv.className = 'line-note';
+                noteDiv.dataset.lineNumber = lineNumber;
+                
+                const isEditing = content === '';
+                
+                if (isEditing) {
+                    noteDiv.innerHTML = `
+                        <textarea class="note-input" placeholder="Add your note for line ${lineNumber}...">${content}</textarea>
+                        <div class="note-actions">
+                            <button class="btn btn-sm btn-success" onclick="codeAnnotator.saveNote(${lineNumber})">
+                                <i class="fas fa-check"></i> Save
+                            </button>
+                            <button class="btn btn-sm btn-secondary" onclick="codeAnnotator.cancelNote(${lineNumber})">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    `;
+                    noteDiv.classList.add('expanded');
+                    // Focus on textarea
+                    setTimeout(() => {
+                        const textarea = noteDiv.querySelector('.note-input');
+                        if (textarea) textarea.focus();
+                    }, 100);
+                } else {
+                    noteDiv.innerHTML = `
+                        <div class="note-content">${this.escapeHtml(content)}</div>
+                        <div class="note-actions">
+                            <button class="btn btn-sm btn-secondary" onclick="codeAnnotator.editNote(${lineNumber})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="codeAnnotator.deleteNote(${lineNumber})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    `;
+                    noteDiv.classList.add('expanded');
+                }
+                
+                return noteDiv;
+            }
+
+            toggleNote(lineNumber) {
+                const container = document.querySelector(`[data-line-number="${lineNumber}"]`);
+                const existingNote = container.querySelector('.line-note');
+                const toggle = container.querySelector('.note-toggle');
+                
+                if (existingNote) {
+                    // Toggle expansion
+                    existingNote.classList.toggle('expanded');
+                } else {
+                    // Create new note
+                    const noteElement = this.createNoteElement(lineNumber);
+                    container.appendChild(noteElement);
+                    toggle.classList.add('has-note');
+                }
+            }
+
+            saveNote(lineNumber) {
+                const container = document.querySelector(`[data-line-number="${lineNumber}"]`);
+                const noteElement = container.querySelector('.line-note');
+                const textarea = noteElement.querySelector('.note-input');
+                const content = textarea.value.trim();
+                
+                if (content) {
+                    this.annotations[lineNumber] = content;
+                    
+                    // Replace with display mode
+                    noteElement.innerHTML = `
+                        <div class="note-content">${this.escapeHtml(content)}</div>
+                        <div class="note-actions">
+                            <button class="btn btn-sm btn-secondary" onclick="codeAnnotator.editNote(${lineNumber})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="codeAnnotator.deleteNote(${lineNumber})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    `;
+                    
+                    this.saveAnnotationsToFirebase();
+                    this.showNotification('Note saved!', 'success');
+                } else {
+                    this.cancelNote(lineNumber);
+                }
+            }
+
+            editNote(lineNumber) {
+                const container = document.querySelector(`[data-line-number="${lineNumber}"]`);
+                const noteElement = container.querySelector('.line-note');
+                const currentContent = this.annotations[lineNumber] || '';
+                
+                noteElement.innerHTML = `
+                    <textarea class="note-input" placeholder="Edit your note for line ${lineNumber}...">${currentContent}</textarea>
+                    <div class="note-actions">
+                        <button class="btn btn-sm btn-success" onclick="codeAnnotator.saveNote(${lineNumber})">
+                            <i class="fas fa-check"></i> Save
+                        </button>
+                        <button class="btn btn-sm btn-secondary" onclick="codeAnnotator.cancelNote(${lineNumber})">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                `;
+                
+                // Focus on textarea
+                setTimeout(() => {
+                    const textarea = noteElement.querySelector('.note-input');
+                    if (textarea) {
+                        textarea.focus();
+                        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+                    }
+                }, 100);
+            }
+
+            cancelNote(lineNumber) {
+                const container = document.querySelector(`[data-line-number="${lineNumber}"]`);
+                const noteElement = container.querySelector('.line-note');
+                const toggle = container.querySelector('.note-toggle');
+                
+                if (this.annotations[lineNumber]) {
+                    // Restore display mode
+                    const content = this.annotations[lineNumber];
+                    noteElement.innerHTML = `
+                        <div class="note-content">${this.escapeHtml(content)}</div>
+                        <div class="note-actions">
+                            <button class="btn btn-sm btn-secondary" onclick="codeAnnotator.editNote(${lineNumber})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="codeAnnotator.deleteNote(${lineNumber})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    // Remove note completely
+                    noteElement.remove();
+                    toggle.classList.remove('has-note');
+                }
+            }
+
+            deleteNote(lineNumber) {
+                if (confirm('Are you sure you want to delete this note?')) {
+                    delete this.annotations[lineNumber];
+                    
+                    const container = document.querySelector(`[data-line-number="${lineNumber}"]`);
+                    const noteElement = container.querySelector('.line-note');
+                    const toggle = container.querySelector('.note-toggle');
+                    
+                    noteElement.remove();
+                    toggle.classList.remove('has-note');
+                    
+                    this.saveAnnotationsToFirebase();
+                    this.showNotification('Note deleted!', 'success');
+                }
+            }
+
+            clearAllNotes() {
+                if (confirm('Are you sure you want to clear all notes for this file?')) {
+                    this.annotations = {};
+                    
+                    // Remove all note elements
+                    document.querySelectorAll('.line-note').forEach(note => note.remove());
+                    document.querySelectorAll('.note-toggle.has-note').forEach(toggle => {
+                        toggle.classList.remove('has-note');
+                    });
+                    
+                    this.saveAnnotationsToFirebase();
+                    this.showNotification('All notes cleared!', 'success');
+                }
+            }
+
+            async saveToFirebase() {
+                if (!this.currentFile || !this.currentFileId) {
+                    this.showNotification('No file to save', 'error');
+                    return;
+                }
+
+                try {
+                    this.showLoading(true);
+                    
+                    // Save file data
+                    const fileData = {
+                        name: this.currentFile.name,
+                        content: this.fileContent,
+                        language: this.currentFile.language,
+                        size: this.currentFile.size,
+                        lastModified: this.currentFile.lastModified,
+                        createdAt: Date.now(),
+                        updatedAt: Date.now()
+                    };
+                    
+                    await database.ref(`${this.dbRootNode}/${this.filesNode}/${this.currentFileId}`).set(fileData);
+                    
+                    // Save annotations
+                    await this.saveAnnotationsToFirebase();
+                    
+                    this.showLoading(false);
+                    this.showNotification('File and annotations saved to Firebase!', 'success');
+                    
+                } catch (error) {
+                    console.error('Error saving to Firebase:', error);
+                    this.showLoading(false);
+                    this.showNotification('Error saving to Firebase', 'error');
+                }
+            }
+
+            async saveAnnotationsToFirebase() {
+                if (!this.currentFileId) return;
+                
+                try {
+                    if (Object.keys(this.annotations).length > 0) {
+                        await database.ref(`${this.dbRootNode}/${this.annotationsNode}/${this.currentFileId}`).set({
+                            annotations: this.annotations,
+                            updatedAt: Date.now()
+                        });
+                    } else {
+                        // Remove empty annotations
+                        await database.ref(`${this.dbRootNode}/${this.annotationsNode}/${this.currentFileId}`).remove();
+                    }
+                } catch (error) {
+                    console.error('Error saving annotations:', error);
+                }
+            }
+
+            async loadAnnotations(fileId) {
+                try {
+                    const snapshot = await database.ref(`${this.dbRootNode}/${this.annotationsNode}/${fileId}`).once('value');
+                    const data = snapshot.val();
+                    
+                    if (data && data.annotations) {
+                        this.annotations = data.annotations;
+                    }
+                } catch (error) {
+                    console.error('Error loading annotations:', error);
+                }
+            }
+
+            async loadSavedFiles() {
+                try {
+                    const snapshot = await database.ref(`${this.dbRootNode}/${this.filesNode}`).once('value');
+                    const files = snapshot.val();
+                    
+                    if (files) {
+                        Object.entries(files).forEach(([fileId, fileData]) => {
+                            this.openFiles.set(fileId, fileData);
+                        });
+                        this.updateFileList();
+                    }
+                } catch (error) {
+                    console.error('Error loading saved files:', error);
+                }
+            }
+
+            selectFile(fileId) {
+                const fileData = this.openFiles.get(fileId);
+                if (!fileData) return;
+                
+                this.currentFile = fileData;
+                this.currentFileId = fileId;
+                this.fileContent = fileData.content;
+                this.annotations = {};
+                
+                this.loadAnnotations(fileId).then(() => {
+                    this.displayFile();
+                    this.updateUI();
+                });
+            }
+
+            updateFileList() {
+                const fileList = document.getElementById('fileList');
+                
+                if (this.openFiles.size === 0) {
+                    fileList.innerHTML = `
+                        <p style="text-align: center; color: #888; padding: 2rem 1rem; font-style: italic;">
+                            No files opened yet
+                        </p>
+                    `;
+                    return;
+                }
+                
+                fileList.innerHTML = '';
+                
+                this.openFiles.forEach((file, fileId) => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    if (fileId === this.currentFileId) {
+                        fileItem.classList.add('active');
+                    }
+                    
+                    fileItem.innerHTML = `
+                        <i class="fas fa-file-code file-icon"></i>
+                        <span class="file-name" title="${file.name}">${file.name}</span>
+                    `;
+                    
+                    fileItem.addEventListener('click', () => this.selectFile(fileId));
+                    fileList.appendChild(fileItem);
+                });
+            }
+
+            updateUI() {
+                // Update current file display
+                document.getElementById('currentFile').textContent = this.currentFile ? this.currentFile.name : 'No file selected';
+                
+                // Update editor title and language
+                if (this.currentFile) {
+                    document.getElementById('editorTitle').textContent = this.currentFile.name;
+                    document.getElementById('languageIndicator').textContent = this.currentFile.language.toUpperCase();
+                    document.getElementById('saveBtn').style.display = 'block';
+                } else {
+                    document.getElementById('saveBtn').style.display = 'none';
+                }
+            }
+
+            toggleFileExplorer() {
+                const explorer = document.getElementById('fileExplorer');
+                explorer.classList.toggle('mobile-open');
+            }
+
+            showLoading(show) {
+                if (show) {
+                    document.body.style.cursor = 'wait';
+                } else {
+                    document.body.style.cursor = 'default';
+                }
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 1rem 1.5rem;
+                    border-radius: 8px;
+                    color: white;
+                    z-index: 3000;
+                    max-width: 300px;
+                    animation: slideInRight 0.3s ease;
+                    font-weight: 500;
+                `;
+                
+                switch (type) {
+                    case 'success':
+                        notification.style.background = 'linear-gradient(135deg, #4caf50 0%, #45a049 100%)';
+                        break;
+                    case 'error':
+                        notification.style.background = 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)';
+                        break;
+                    default:
+                        notification.style.background = 'linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%)';
+                }
+                
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'slideOutRight 0.3s ease';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize the app
+        let codeAnnotator;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            codeAnnotator = new CodeAnnotator();
+        });
+
+        // Responsive mobile menu toggle
+        window.addEventListener('resize', () => {
+            const toggleBtn = document.getElementById('toggleExplorer');
+            if (window.innerWidth <= 768) {
+                toggleBtn.style.display = 'block';
+            } else {
+                toggleBtn.style.display = 'none';
+                document.getElementById('fileExplorer').classList.remove('mobile-open');
+            }
+        });
+    </script>
+</body>
+</html>
