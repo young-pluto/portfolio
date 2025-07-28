@@ -1,4 +1,4 @@
-</div><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -62,10 +62,10 @@
         --accent-secondary: #059669;
         --accent-gold: #d97706;
         --border: #e2e8f0;
-        --card-bg: rgba(255, 255, 255, 0.9);
+        --card-bg: rgba(255, 255, 255, 0.95);
         --glass-bg: rgba(0, 0, 0, 0.02);
-        --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        --glow: 0 0 40px rgba(5, 150, 105, 0.2);
+        --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        --glow: 0 0 40px rgba(5, 150, 105, 0.15);
     }
 
     body {
@@ -118,7 +118,53 @@
         transform: rotate(180deg) scale(1.1);
     }
 
+    /* Projects Button */
+    .projects-btn {
+        position: fixed;
+        top: 24px;
+        left: 24px;
+        z-index: 1000;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        padding: 12px 20px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: var(--shadow);
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        opacity: 1;
+        transform: translateY(0);
+    }
 
+    .projects-btn.hidden {
+        opacity: 0;
+        transform: translateY(-20px);
+        pointer-events: none;
+    }
+
+    .projects-btn:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        border-color: var(--accent-secondary);
+        color: var(--accent-secondary);
+    }
+
+    .projects-btn-icon {
+        font-size: 16px;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .projects-btn:hover .projects-btn-icon {
+        transform: translateX(4px);
+    }
 
     /* Floating Elements Background */
     .floating-elements {
@@ -218,6 +264,21 @@
         transform: translateY(40px);
     }
 
+    .hero p .clickable-webapps {
+        color: var(--accent-secondary);
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: underline;
+        text-decoration-color: transparent;
+        text-underline-offset: 4px;
+    }
+
+    .hero p .clickable-webapps:hover {
+        color: var(--accent-gold);
+        text-decoration-color: var(--accent-gold);
+        transform: translateY(-2px);
+    }
+
     .scroll-indicator {
         margin-top: 40px;
         animation: premium-bounce 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
@@ -314,6 +375,18 @@
         box-shadow: var(--shadow);
     }
 
+    [data-theme="light"] .project-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+    }
+
+    [data-theme="light"] .project-card:hover {
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12), var(--glow);
+        transform: translateY(-12px) scale(1.02);
+        border-color: var(--accent-secondary);
+    }
+
     .project-card::before {
         content: '';
         position: absolute;
@@ -390,6 +463,12 @@
         box-shadow: 0 4px 12px rgba(134, 239, 172, 0.3);
     }
 
+    [data-theme="light"] .tech-tag {
+        background: linear-gradient(135deg, var(--accent-secondary), var(--accent-gold));
+        color: white;
+        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+    }
+
     .project-links {
         display: flex;
         gap: 24px;
@@ -443,9 +522,18 @@
         padding-bottom: 50px;
     }
 
+    [data-theme="light"] .learned {
+        background: rgba(5, 150, 105, 0.03);
+        border-left-color: var(--accent-secondary);
+    }
+
     .learned:hover {
         background: rgba(134, 239, 172, 0.05);
         border-left-color: var(--accent-gold);
+    }
+
+    [data-theme="light"] .learned:hover {
+        background: rgba(5, 150, 105, 0.08);
     }
 
     .learned-preview {
@@ -488,16 +576,29 @@
         -webkit-backdrop-filter: blur(10px);
     }
 
+    [data-theme="light"] .expand-button {
+        background: rgba(5, 150, 105, 0.1);
+        border: 1px solid rgba(5, 150, 105, 0.2);
+        color: var(--accent-secondary);
+    }
+
     .expand-button:hover {
         transform: scale(1.05);
-        /* background: rgba(134, 239, 172, 0.15);
-        border-color: rgba(134, 239, 172, 0.3); */
         color: var(--accent-secondary);
+    }
+
+    [data-theme="light"] .expand-button:hover {
+        background: rgba(5, 150, 105, 0.15);
+        border-color: var(--accent-secondary);
     }
 
     .learned.expanded .expand-button {
         transform: rotate(180deg);
         background: rgba(0, 0, 0, 0.12);
+    }
+
+    [data-theme="light"] .learned.expanded .expand-button {
+        background: rgba(5, 150, 105, 0.15);
     }
 
     .learned.expanded .expand-button:hover {
@@ -568,6 +669,11 @@
         overflow: hidden;
     }
 
+    [data-theme="light"] .contact-link {
+        background: var(--card-bg);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    }
+
     .contact-link::before {
         content: '';
         position: absolute;
@@ -588,6 +694,10 @@
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), var(--glow);
         border-color: var(--accent-secondary);
         color: var(--accent-secondary);
+    }
+
+    [data-theme="light"] .contact-link:hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), var(--glow);
     }
 
     .contact-link span:first-child {
@@ -648,6 +758,15 @@
             word-break: keep-all;
             hyphens: none;
         }
+
+        .projects-btn {
+            padding: 10px 16px;
+            font-size: 13px;
+        }
+
+        .theme-toggle {
+            padding: 10px 14px;
+        }
     }
 
     @media (max-width: 480px) {
@@ -659,6 +778,13 @@
             top: 16px;
             right: 16px;
             padding: 10px 14px;
+        }
+
+        .projects-btn {
+            top: 16px;
+            left: 16px;
+            padding: 10px 14px;
+            font-size: 12px;
         }
 
         .project-card {
@@ -698,6 +824,12 @@
 <!-- Floating Background Elements -->
 <div class="floating-elements" id="floatingElements"></div>
 
+<!-- Projects Button -->
+<a href="#projects" class="projects-btn">
+    <span class="projects-btn-icon">🚀</span>
+    <span>Projects</span>
+</a>
+
 <!-- Theme Toggle -->
 <div class="theme-toggle" onclick="toggleTheme()">
     <span class="theme-icon">🌙</span>
@@ -708,7 +840,7 @@
     <div class="container">
         <div class="hero-content">
             <h1>Apoorv Bhardwaj</h1>
-            <p>I build real-world web apps with focus, curiosity, and minimal tools.</p>
+            <p>I build real-world <span class="clickable-webapps" onclick="scrollToSection('projects')">web apps</span> with focus, curiosity, and strong fundamentals.</p>
             <div class="scroll-indicator">↓</div>
         </div>
     </div>
@@ -719,8 +851,8 @@
     <div class="container">
         <div class="about-content fade-in-up">
             <h2>About Me</h2>
-            <p>I'm a self-taught full stack developer driven by the need to solve real problems with technology. My journey began when I faced challenges that needed digital solutions, and rather than getting lost in complex frameworks, I chose to master the fundamental tools that could deliver results quickly and effectively.</p>
-            <p>I focus on HTML, CSS, JavaScript, and Firebase – not because I avoid learning new technologies, but because these tools form a solid foundation that lets me build practical, real-world applications efficiently. I believe in using technology as a means to an end, creating solutions that address genuine problems rather than building for the sake of building. Every project I tackle teaches me something new about both the technical and problem-solving aspects of development.</p>
+            <p>I'm a self-taught full stack developer driven by the need to solve real problems with technology. My journey began when I faced challenges that needed digital solutions, and I chose to master fundamental tools that could deliver results quickly and effectively.</p>
+            <p>I have a strong foundation in HTML, CSS, JavaScript, and Firebase, which allows me to build practical, real-world applications efficiently. I'm eager to grow as a full-stack developer and explore emerging frameworks while continuously upscaling myself through real-world problem solving. I believe in using technology as a means to an end, creating solutions that address genuine problems. Every project I tackle teaches me something new about both the technical and problem-solving aspects of development.</p>
         </div>
     </div>
 </section>
@@ -796,6 +928,17 @@
 }
     ];
 
+    // Scroll to section function
+    function scrollToSection(sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+
     // Toggle learning section expansion
     function toggleLearning(element) {
         element.classList.toggle('expanded');
@@ -846,52 +989,32 @@
         }
     }
 
-    // Enhanced rocket animation
-    function updateRocketPosition() {
-        // Rocket removed - function kept for compatibility
-    }
-
-    // Enhanced section indicators
-    function updateSectionIndicators() {
-        const sections = document.querySelectorAll('section');
-        const indicators = document.querySelectorAll('.section-indicator');
-        
-        sections.forEach((section, index) => {
-            const rect = section.getBoundingClientRect();
-            const indicator = indicators[index];
-            
-            if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
-                indicator.classList.add('active');
-            } else {
-                indicator.classList.remove('active');
-            }
-        });
-    }
-
-    // Apple-style project card animations
+    // Apple-style project card animations with faster trigger
     function animateProjectCards() {
         const cards = document.querySelectorAll('.project-card');
         
         cards.forEach((card, index) => {
             const rect = card.getBoundingClientRect();
-            if (rect.top < window.innerHeight - 150) {
+            // Trigger animation earlier - when 30% of the card is visible
+            if (rect.top < window.innerHeight - 200) {
                 setTimeout(() => {
                     card.classList.add('animate');
-                }, index * 200);
+                }, index * 150);
             }
         });
     }
 
-    // Fade in up animations
+    // Fade in up animations with faster trigger
     function animateFadeInElements() {
         const elements = document.querySelectorAll('.fade-in-up');
         
         elements.forEach((element, index) => {
             const rect = element.getBoundingClientRect();
-            if (rect.top < window.innerHeight - 100) {
+            // Trigger animation earlier
+            if (rect.top < window.innerHeight - 50) {
                 setTimeout(() => {
                     element.classList.add('animate');
-                }, index * 100);
+                }, index * 80);
             }
         });
     }
@@ -903,7 +1026,7 @@
         projects.forEach((project, index) => {
             const projectCard = document.createElement('div');
             projectCard.className = 'project-card';
-            projectCard.style.transitionDelay = `${index * 0.2}s`;
+            projectCard.style.transitionDelay = `${index * 0.1}s`;
             
             projectCard.innerHTML = `
                 <div class="project-number">${String(index + 1).padStart(2, '0')}</div>
@@ -957,18 +1080,36 @@
         }
     }
 
+    // Update projects button visibility based on scroll position
+    function updateProjectsButtonVisibility() {
+        const projectsSection = document.getElementById('projects');
+        const projectsBtn = document.querySelector('.projects-btn');
+        
+        if (projectsSection && projectsBtn) {
+            const rect = projectsSection.getBoundingClientRect();
+            const isInProjectsSection = rect.top <= 100 && rect.bottom >= 100;
+            
+            if (isInProjectsSection) {
+                projectsBtn.classList.add('hidden');
+            } else {
+                projectsBtn.classList.remove('hidden');
+            }
+        }
+    }
+
     // Enhanced scroll handler with performance optimization
     function handleScroll() {
         animateProjectCards();
         animateFadeInElements();
         updateParallax();
+        updateProjectsButtonVisibility();
     }
 
-    // Intersection Observer for better performance
+    // Enhanced Intersection Observer for better performance with faster triggers
     function setupIntersectionObserver() {
         const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            threshold: 0.05, // Reduced threshold for earlier trigger
+            rootMargin: '0px 0px -20px 0px' // Reduced margin for earlier trigger
         };
 
         const observer = new IntersectionObserver((entries) => {
