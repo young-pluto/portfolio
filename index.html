@@ -27,6 +27,11 @@
 <!-- Favicon -->
 <link rel="icon" type="image/png" href="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/A41C917B-797D-406D-A049-A1563EF9DD19%20copy.png?alt=media&token=db3d1b51-ff05-4a20-9ff0-652d450d96c3">
 <link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/A41C917B-797D-406D-A049-A1563EF9DD19%20copy.png?alt=media&token=db3d1b51-ff05-4a20-9ff0-652d450d96c3">
+
+<!-- Firebase SDKs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-storage-compat.min.js"></script>
+
 <style>
     * {
         margin: 0;
@@ -709,6 +714,128 @@
         transform: scale(1.2) rotate(10deg);
     }
 
+    /* Resume Download Styles */
+    .resume-link {
+        position: relative;
+        user-select: none;
+    }
+
+    .resume-link:focus {
+        outline: 2px solid var(--accent-secondary);
+        outline-offset: 4px;
+    }
+
+    /* Context Menu */
+    .context-menu {
+        position: fixed;
+        background: var(--card-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 8px 0;
+        box-shadow: var(--shadow);
+        z-index: 10000;
+        opacity: 0;
+        transform: scale(0.95);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+        min-width: 200px;
+    }
+
+    [data-theme="light"] .context-menu {
+        background: var(--card-bg);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .context-menu.show {
+        opacity: 1;
+        transform: scale(1);
+        pointer-events: all;
+    }
+
+    .context-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: var(--text-primary);
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .context-menu-item:hover {
+        background: var(--glass-bg);
+        color: var(--accent-secondary);
+    }
+
+    [data-theme="light"] .context-menu-item:hover {
+        background: rgba(5, 150, 105, 0.05);
+    }
+
+    .context-menu-item span:first-child {
+        font-size: 16px;
+        width: 20px;
+        text-align: center;
+    }
+
+    /* Toast Notification */
+    .toast {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: var(--card-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px 24px;
+        box-shadow: var(--shadow);
+        z-index: 10001;
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+        color: var(--text-primary);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    [data-theme="light"] .toast {
+        background: var(--card-bg);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+        pointer-events: all;
+    }
+
+    .toast-icon {
+        font-size: 18px;
+        color: var(--accent-secondary);
+    }
+
+    /* Loading Animation */
+    .loading-spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--border);
+        border-top: 2px solid var(--accent-secondary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
     /* Mobile Responsive */
     @media (max-width: 768px) {
         .projects-grid {
@@ -766,6 +893,21 @@
 
         .theme-toggle {
             padding: 10px 14px;
+        }
+
+        .context-menu {
+            min-width: 180px;
+        }
+
+        .toast {
+            left: 16px;
+            right: 16px;
+            transform: translateY(100px);
+            max-width: calc(100vw - 32px);
+        }
+
+        .toast.show {
+            transform: translateY(0);
         }
     }
 
@@ -835,6 +977,28 @@
     <span class="theme-icon">🌙</span>
 </div>
 
+<!-- Context Menu -->
+<div class="context-menu" id="contextMenu">
+    <div class="context-menu-item" onclick="downloadResume()">
+        <span>📄</span>
+        <span>Download Resume</span>
+    </div>
+    <div class="context-menu-item" onclick="copyResumeLink()">
+        <span>🔗</span>
+        <span>Copy Direct Link</span>
+    </div>
+    <div class="context-menu-item" onclick="shareResume()">
+        <span>📤</span>
+        <span>Share Resume</span>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast">
+    <span class="toast-icon">✅</span>
+    <span id="toastMessage">Link copied to clipboard!</span>
+</div>
+
 <!-- Hero Section -->
 <section class="hero" id="hero">
     <div class="container">
@@ -886,12 +1050,48 @@
                     <span>💻</span>
                     <span>GitHub</span>
                 </a>
+                <a href="#" class="contact-link resume-link" id="resumeLink" onclick="downloadResume()" oncontextmenu="showContextMenu(event)">
+                    <span>📄</span>
+                    <span>Resume</span>
+                </a>
             </div>
         </div>
     </div>
 </section>
 
 <script>
+    // Firebase Configuration - Replace with your config
+    const firebaseConfig = {
+    apiKey: "AIzaSyB-F0C8l_fOhJPpkYsL6Eb6P7GUFcaC9MQ",
+    authDomain: "portfolio-415e1.firebaseapp.com",
+    databaseURL: "https://portfolio-415e1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "portfolio-415e1",
+    storageBucket: "portfolio-415e1.firebasestorage.app",
+    messagingSenderId: "959081513500",
+    appId: "1:959081513500:web:e1889367df9e24f25355d9"
+  };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const storage = firebase.storage();
+
+    // Resume URL - This will be the direct download link
+    let resumeDownloadURL = '';
+
+    // Initialize resume URL on page load
+    async function initializeResumeURL() {
+        try {
+            // Get the download URL from Firebase Storage
+            const resumeRef = storage.ref('resume/Apoorv_Bhardwaj_Resume.pdf');
+            resumeDownloadURL = await resumeRef.getDownloadURL();
+            console.log('Resume URL initialized:', resumeDownloadURL);
+        } catch (error) {
+            console.error('Error getting resume URL:', error);
+            // Fallback URL or show error message
+            resumeDownloadURL = '#';
+        }
+    }
+
     // Project data with enhanced structure and expandable learnings
     const projects = [
     {
@@ -927,6 +1127,130 @@
     learnedFull: "This project distinguished itself by implementing a custom Node.js backend with serverless functions, moving beyond Firebase's client-side SDK to build proper server-side API endpoints. I learned to design RESTful APIs with custom authentication middleware, handle CORS properly, and structure serverless functions for Vercel deployment. The key difference from my previous Firebase projects was implementing server-side token verification and creating a traditional client-server architecture rather than direct database access. This taught me about API security, proper error handling in serverless environments, and how to structure backend code for scalability. Working with Firebase Admin SDK showed me the distinction between client-side and server-side Firebase integration, while building custom endpoints gave me experience with backend architecture patterns and deployment strategies for full-stack applications."
 }
     ];
+
+    // Resume Functions
+    async function downloadResume() {
+        try {
+            if (!resumeDownloadURL) {
+                await initializeResumeURL();
+            }
+            
+            if (resumeDownloadURL && resumeDownloadURL !== '#') {
+                // Create a temporary link element and trigger download
+                const link = document.createElement('a');
+                link.href = resumeDownloadURL;
+                link.download = 'Apoorv_Bhardwaj_Resume.pdf';
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showToast('📄', 'Resume download started!');
+            } else {
+                showToast('❌', 'Resume not available. Please try again.');
+            }
+        } catch (error) {
+            console.error('Download error:', error);
+            showToast('❌', 'Download failed. Please try again.');
+        }
+        hideContextMenu();
+    }
+
+    async function copyResumeLink() {
+        try {
+            if (!resumeDownloadURL) {
+                await initializeResumeURL();
+            }
+            
+            if (resumeDownloadURL && resumeDownloadURL !== '#') {
+                await navigator.clipboard.writeText(resumeDownloadURL);
+                showToast('🔗', 'Resume link copied to clipboard!');
+            } else {
+                showToast('❌', 'Resume link not available.');
+            }
+        } catch (error) {
+            console.error('Copy error:', error);
+            showToast('❌', 'Failed to copy link.');
+        }
+        hideContextMenu();
+    }
+
+    async function shareResume() {
+        try {
+            if (!resumeDownloadURL) {
+                await initializeResumeURL();
+            }
+            
+            if (navigator.share && resumeDownloadURL && resumeDownloadURL !== '#') {
+                await navigator.share({
+                    title: 'Apoorv Bhardwaj - Resume',
+                    text: 'Check out my resume!',
+                    url: resumeDownloadURL
+                });
+                showToast('📤', 'Resume shared successfully!');
+            } else {
+                // Fallback: copy to clipboard
+                await copyResumeLink();
+                return;
+            }
+        } catch (error) {
+            console.error('Share error:', error);
+            // Fallback: copy to clipboard
+            await copyResumeLink();
+            return;
+        }
+        hideContextMenu();
+    }
+
+    // Context Menu Functions
+    function showContextMenu(event) {
+        event.preventDefault();
+        const contextMenu = document.getElementById('contextMenu');
+        const menuWidth = 200;
+        const menuHeight = 120;
+        
+        let x = event.clientX;
+        let y = event.clientY;
+        
+        // Adjust position if menu would go off-screen
+        if (x + menuWidth > window.innerWidth) {
+            x = window.innerWidth - menuWidth - 10;
+        }
+        if (y + menuHeight > window.innerHeight) {
+            y = window.innerHeight - menuHeight - 10;
+        }
+        
+        contextMenu.style.left = x + 'px';
+        contextMenu.style.top = y + 'px';
+        contextMenu.classList.add('show');
+        
+        // Add click listener to hide menu when clicking outside
+        setTimeout(() => {
+            document.addEventListener('click', hideContextMenu);
+        }, 100);
+    }
+
+    function hideContextMenu() {
+        const contextMenu = document.getElementById('contextMenu');
+        contextMenu.classList.remove('show');
+        document.removeEventListener('click', hideContextMenu);
+    }
+
+    // Toast Notification
+    function showToast(icon, message) {
+        const toast = document.getElementById('toast');
+        const toastIcon = toast.querySelector('.toast-icon');
+        const toastMessage = document.getElementById('toastMessage');
+        
+        toastIcon.textContent = icon;
+        toastMessage.textContent = message;
+        
+        toast.classList.add('show');
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
 
     // Scroll to section function
     function scrollToSection(sectionId) {
@@ -1150,6 +1474,7 @@
         enableSmoothScrolling();
         setupIntersectionObserver();
         setupMouseParallax();
+        initializeResumeURL(); // Initialize resume URL
         
         // Optimized scroll listener with requestAnimationFrame
         let ticking = false;
@@ -1170,11 +1495,27 @@
         setTimeout(() => {
             document.body.style.opacity = '1';
         }, 100);
+
+        // Handle click outside context menu
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.context-menu') && !e.target.closest('.resume-link')) {
+                hideContextMenu();
+            }
+        });
+
+        // Prevent context menu on other elements
+        document.addEventListener('contextmenu', (e) => {
+            if (!e.target.closest('.resume-link')) {
+                // Allow default context menu for other elements
+                return;
+            }
+        });
     });
 
     // Resize listener for responsive updates
     window.addEventListener('resize', function() {
         handleScroll();
+        hideContextMenu(); // Hide context menu on resize
     });
 
     // Add some premium touches
