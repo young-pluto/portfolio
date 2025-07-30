@@ -390,7 +390,7 @@
     <div class="container">
         <div class="resume-icon">📄</div>
         <h1 class="title">Resume</h1>
-        <p class="subtitle">Redirecting you to the resume...<br>This should open automatically!</p>
+        <p class="subtitle">Redirecting you to the resume...<br>You'll be taken there automatically!</p>
         
         <div class="progress-container">
             <div class="progress-bar">
@@ -440,13 +440,8 @@
             // Start automatic redirect after progress bar completes + extra delay for effect
             setTimeout(() => {
                 try {
-                    // Open resume in new tab/window
-                    window.open(resumeUrl, '_blank');
-                    
-                    // Update UI to show success after opening
-                    setTimeout(() => {
-                        updateToSuccess();
-                    }, 500);
+                    // Redirect to resume (same tab - no popup blocking)
+                    window.location.href = resumeUrl;
                     
                 } catch (error) {
                     console.error('Auto-redirect failed:', error);
