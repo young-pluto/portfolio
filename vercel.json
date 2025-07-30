@@ -430,6 +430,10 @@
       "dest": "/apps/digital-notebook/index.html"
     },
     {
+      "src": "/resume",
+      "dest": "/resume.html"
+    },
+    {
       "src": "/",
       "dest": "/index.html"
     },
