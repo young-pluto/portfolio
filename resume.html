@@ -1,15 +1,505 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Apoorv Bhardwaj - Resume</title>
-    <meta http-equiv="refresh" content="0; url=https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/resume%2FApoorv_Bhardwaj_Resume.pdf?alt=media&token=3a001f18-cadb-4c91-b931-2450dae6d91b">
-    <script>
-        // Fallback JavaScript redirect
-        window.location.href = "https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/resume%2FApoorv_Bhardwaj_Resume.pdf?alt=media&token=3a001f18-cadb-4c91-b931-2450dae6d91b";
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apoorv Bhardwaj - Resume Download</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Download Apoorv Bhardwaj's resume - Full Stack Developer specializing in web applications and Firebase development.">
+    <meta name="keywords" content="Apoorv Bhardwaj, resume, full stack developer, web developer, Firebase">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.builtbyapoorv.in/resume">
+    <meta property="og:title" content="Apoorv Bhardwaj - Resume Download">
+    <meta property="og:description" content="Download my resume - Full Stack Developer with expertise in JavaScript, Firebase, and modern web technologies.">
+    <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/A41C917B-797D-406D-A049-A1563EF9DD19%20copy.png?alt=media&token=db3d1b51-ff05-4a20-9ff0-652d450d96c3">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.builtbyapoorv.in/resume">
+    <meta property="twitter:title" content="Apoorv Bhardwaj - Resume Download">
+    <meta property="twitter:description" content="Download my resume - Full Stack Developer with expertise in JavaScript, Firebase, and modern web technologies.">
+    <meta property="twitter:image" content="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/A41C917B-797D-406D-A049-A1563EF9DD19%20copy.png?alt=media&token=db3d1b51-ff05-4a20-9ff0-652d450d96c3">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/A41C917B-797D-406D-A049-A1563EF9DD19%20copy.png?alt=media&token=db3d1b51-ff05-4a20-9ff0-652d450d96c3">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #111111;
+            --text-primary: #ffffff;
+            --text-secondary: #a3a3a3;
+            --accent-primary: #86efac;
+            --accent-secondary: #fbbf24;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 40px rgba(134, 239, 172, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Animated Background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at center, var(--bg-secondary) 0%, var(--bg-primary) 70%);
+        }
+
+        .background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(134, 239, 172, 0.03) 50%, transparent 70%);
+            animation: shimmer 8s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        /* Floating Elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float-around 20s linear infinite;
+        }
+
+        @keyframes float-around {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        /* Main Container */
+        .container {
+            text-align: center;
+            max-width: 500px;
+            padding: 60px 40px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: container-entrance 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+        }
+
+        @keyframes container-entrance {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+            opacity: 0.8;
+        }
+
+        /* Logo/Icon */
+        .resume-icon {
+            font-size: 4rem;
+            margin-bottom: 24px;
+            animation: bounce 2s ease-in-out infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 20px var(--accent-primary));
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-8px); }
+        }
+
+        /* Text Styles */
+        .title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            animation: text-entrance 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.6;
+            animation: text-entrance 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes text-entrance {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin: 32px 0;
+            animation: text-entrance 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.7s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 2px;
+            animation: progress-fill 3s ease-out forwards;
+            box-shadow: 0 0 10px var(--accent-primary);
+        }
+
+        @keyframes progress-fill {
+            to { width: 100%; }
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--accent-primary);
+            font-weight: 600;
+            animation: progress-text 3s ease-out forwards;
+        }
+
+        @keyframes progress-text {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.9; }
+        }
+
+        /* Loading Dots */
+        .loading-dots {
+            display: inline-flex;
+            gap: 4px;
+            margin-left: 8px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            animation: dot-bounce 1.4s ease-in-out infinite both;
+        }
+
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        .dot:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes dot-bounce {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* Manual Download Button */
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--bg-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 12px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(134, 239, 172, 0.3);
+            animation: text-entrance 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.9s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+            margin-top: 24px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 40px rgba(134, 239, 172, 0.4), var(--glow);
+        }
+
+        .download-btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        /* Back Link */
+        .back-link {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--glass-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .back-link:hover {
+            color: var(--accent-primary);
+            transform: translateX(-4px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 40px 24px;
+                max-width: calc(100vw - 40px);
+            }
+
+            .resume-icon {
+                font-size: 3rem;
+            }
+
+            .title {
+                font-size: 1.6rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .back-link {
+                position: static;
+                margin-bottom: 20px;
+                align-self: flex-start;
+            }
+
+            body {
+                padding: 20px 0;
+                align-items: flex-start;
+            }
+        }
+
+        /* Success State */
+        .success {
+            color: var(--accent-primary);
+        }
+
+        .success .resume-icon {
+            animation: success-pulse 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes success-pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+    </style>
 </head>
 <body>
-    <p>Redirecting to resume download...</p>
+    <div class="background"></div>
+    
+    <!-- Floating Background Elements -->
+    <div class="floating-elements" id="floatingElements"></div>
+
+    <!-- Back to Portfolio Link -->
+    <a href="/" class="back-link">
+        <span>←</span>
+        <span>Back to Portfolio</span>
+    </a>
+
+    <div class="container">
+        <div class="resume-icon">📄</div>
+        <h1 class="title">Resume Download</h1>
+        <p class="subtitle">Preparing your download...<br>This should start automatically!</p>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-text">
+                Redirecting
+                <span class="loading-dots">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </span>
+            </div>
+        </div>
+
+        <a href="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/resume%2FApoorv_Bhardwaj_Resume.pdf?alt=media&token=3a001f18-cadb-4c91-b931-2450dae6d91b" 
+           class="download-btn" 
+           id="downloadBtn" 
+           download="Apoorv_Bhardwaj_Resume.pdf">
+            <span>📥</span>
+            <span>Download Resume</span>
+        </a>
+    </div>
+
+    <script>
+        // Create floating background elements
+        function createFloatingElements() {
+            const container = document.getElementById('floatingElements');
+            const elementCount = 6;
+            
+            for (let i = 0; i < elementCount; i++) {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.style.left = Math.random() * 100 + '%';
+                element.style.width = (Math.random() * 4 + 2) + 'px';
+                element.style.height = element.style.width;
+                element.style.animationDelay = Math.random() * 20 + 's';
+                element.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                container.appendChild(element);
+            }
+        }
+
+        // Auto-download functionality
+        function initializeDownload() {
+            const downloadUrl = 'https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/resume%2FApoorv_Bhardwaj_Resume.pdf?alt=media&token=3a001f18-cadb-4c91-b931-2450dae6d91b';
+            
+            // Start automatic download after progress bar completes + extra delay for effect
+            setTimeout(() => {
+                try {
+                    // Create invisible download link
+                    const link = document.createElement('a');
+                    link.href = downloadUrl;
+                    link.download = 'Apoorv_Bhardwaj_Resume.pdf';
+                    link.target = '_blank';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    // Update UI to show success after a brief moment
+                    setTimeout(() => {
+                        updateToSuccess();
+                    }, 800);
+                    
+                } catch (error) {
+                    console.error('Auto-download failed:', error);
+                    // Fallback: just show the manual download button more prominently
+                    document.querySelector('.download-btn').style.transform = 'scale(1.1)';
+                    document.querySelector('.download-btn').style.animation = 'none';
+                }
+            }, 4000); // 4 seconds: Progress bar (3s) + extra delay (1s) for better UX
+        }
+
+        // Update UI to success state
+        function updateToSuccess() {
+            const container = document.querySelector('.container');
+            const icon = document.querySelector('.resume-icon');
+            const title = document.querySelector('.title');
+            const subtitle = document.querySelector('.subtitle');
+            const progressText = document.querySelector('.progress-text');
+            
+            // Update content
+            icon.textContent = '✅';
+            title.textContent = 'Download Started!';
+            subtitle.innerHTML = 'Your resume should be downloading now.<br>Check your downloads folder.';
+            progressText.innerHTML = 'Complete <span style="color: var(--accent-primary);">✓</span>';
+            
+            // Add success class
+            container.classList.add('success');
+        }
+
+        // Manual download button click handler
+        document.getElementById('downloadBtn').addEventListener('click', function(e) {
+            // Let the default download behavior happen
+            setTimeout(() => {
+                updateToSuccess();
+            }, 500);
+        });
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            createFloatingElements();
+            initializeDownload();
+        });
+
+        // Mouse parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            const floatingElements = document.querySelectorAll('.floating-element');
+            floatingElements.forEach((element, index) => {
+                const speed = (index + 1) * 0.5;
+                const x = (mouseX - 0.5) * speed;
+                const y = (mouseY - 0.5) * speed;
+                element.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+    </script>
 </body>
 </html>
