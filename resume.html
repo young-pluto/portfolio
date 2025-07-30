@@ -298,9 +298,10 @@
 
         /* Back Link */
         .back-link {
-            position: absolute;
+            position: fixed;
             top: 24px;
-            left: 24px;
+            left: 50%;
+            transform: translateX(-50%);
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
@@ -313,11 +314,12 @@
             background: var(--glass-bg);
             border-radius: 20px;
             border: 1px solid var(--border);
+            z-index: 100;
         }
 
         .back-link:hover {
             color: var(--accent-primary);
-            transform: translateX(-4px);
+            transform: translateX(-50%) translateY(-2px);
         }
 
         /* Responsive */
@@ -326,6 +328,7 @@
                 margin: 20px;
                 padding: 40px 24px;
                 max-width: calc(100vw - 40px);
+                margin-top: 80px; /* Add space for back button */
             }
 
             .resume-icon {
@@ -341,9 +344,14 @@
             }
 
             .back-link {
-                position: static;
-                margin-bottom: 20px;
-                align-self: flex-start;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                position: fixed;
+            }
+
+            .back-link:hover {
+                transform: translateX(-50%) translateY(-2px);
             }
 
             body {
@@ -363,7 +371,7 @@
 
         @keyframes success-pulse {
             from { transform: scale(1); }
-            to { transform: scale(1.1); }
+            to { transform: scale(1.05); }
         }
     </style>
 </head>
@@ -381,8 +389,8 @@
 
     <div class="container">
         <div class="resume-icon">📄</div>
-        <h1 class="title">Resume Download</h1>
-        <p class="subtitle">Preparing your download...<br>This should start automatically!</p>
+        <h1 class="title">Resume</h1>
+        <p class="subtitle">Redirecting you to the resume...<br>This should open automatically!</p>
         
         <div class="progress-container">
             <div class="progress-bar">
@@ -401,9 +409,9 @@
         <a href="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/resume%2FApoorv_Bhardwaj_Resume.pdf?alt=media&token=3a001f18-cadb-4c91-b931-2450dae6d91b" 
            class="download-btn" 
            id="downloadBtn" 
-           download="Apoorv_Bhardwaj_Resume.pdf">
-            <span>📥</span>
-            <span>Download Resume</span>
+           target="_blank">
+            <span>📄</span>
+            <span>Open Resume</span>
         </a>
     </div>
 
@@ -425,29 +433,23 @@
             }
         }
 
-        // Auto-download functionality
-        function initializeDownload() {
-            const downloadUrl = 'https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/resume%2FApoorv_Bhardwaj_Resume.pdf?alt=media&token=3a001f18-cadb-4c91-b931-2450dae6d91b';
+        // Auto-redirect functionality
+        function initializeRedirect() {
+            const resumeUrl = 'https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/resume%2FApoorv_Bhardwaj_Resume.pdf?alt=media&token=3a001f18-cadb-4c91-b931-2450dae6d91b';
             
-            // Start automatic download after progress bar completes + extra delay for effect
+            // Start automatic redirect after progress bar completes + extra delay for effect
             setTimeout(() => {
                 try {
-                    // Create invisible download link
-                    const link = document.createElement('a');
-                    link.href = downloadUrl;
-                    link.download = 'Apoorv_Bhardwaj_Resume.pdf';
-                    link.target = '_blank';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    // Open resume in new tab/window
+                    window.open(resumeUrl, '_blank');
                     
-                    // Update UI to show success after a brief moment
+                    // Update UI to show success after opening
                     setTimeout(() => {
                         updateToSuccess();
-                    }, 800);
+                    }, 500);
                     
                 } catch (error) {
-                    console.error('Auto-download failed:', error);
+                    console.error('Auto-redirect failed:', error);
                     // Fallback: just show the manual download button more prominently
                     document.querySelector('.download-btn').style.transform = 'scale(1.1)';
                     document.querySelector('.download-btn').style.animation = 'none';
@@ -465,8 +467,8 @@
             
             // Update content
             icon.textContent = '✅';
-            title.textContent = 'Download Started!';
-            subtitle.innerHTML = 'Your resume should be downloading now.<br>Check your downloads folder.';
+            title.textContent = 'Redirected!';
+            subtitle.innerHTML = 'Resume opened in new tab.<br>Check your browser tabs!';
             progressText.innerHTML = 'Complete <span style="color: var(--accent-primary);">✓</span>';
             
             // Add success class
@@ -484,7 +486,7 @@
         // Initialize everything
         document.addEventListener('DOMContentLoaded', function() {
             createFloatingElements();
-            initializeDownload();
+            initializeRedirect();
         });
 
         // Mouse parallax effect
