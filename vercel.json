@@ -1,11 +1,11 @@
 {
   "version": 2,
   "builds": [
-    { 
+    {
       "src": "apps/tasks/api/**/*.js",
       "use": "@vercel/node"
     },
-    { 
+    {
       "src": "apps/**/frontend/**/*",
       "use": "@vercel/static"
     },
@@ -21,7 +21,7 @@
       "src": "apps/Travel/**/*",
       "use": "@vercel/static"
     },
-    { 
+    {
       "src": "apps/practice/**/*",
       "use": "@vercel/static"
     },
@@ -285,17 +285,27 @@
       "src": "/js-roadmap-v9.html",
       "has": [
         {
-          "type": "host", 
+          "type": "host",
           "value": "practice.builtbyapoorv.in"
         }
       ],
       "dest": "/apps/practice/js-roadmap-v9.html"
     },
     {
+      "src": "/booking-price.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "practice.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/practice/booking-price.html"
+    },
+    {
       "src": "/project-roadmap.html",
       "has": [
         {
-          "type": "host", 
+          "type": "host",
           "value": "practice.builtbyapoorv.in"
         }
       ],
@@ -393,30 +403,22 @@
     },
     {
       "src": "/styles.css",
-      "has": [
-        { "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }
-      ],
+      "has": [{ "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }],
       "dest": "/apps/digital-notebook/styles.css"
     },
     {
       "src": "/script.js",
-      "has": [
-        { "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }
-      ],
+      "has": [{ "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }],
       "dest": "/apps/digital-notebook/script.js"
     },
     {
       "src": "/code-annotator/index.html",
-      "has": [
-        { "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }
-      ],
+      "has": [{ "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }],
       "dest": "/apps/digital-notebook/code-annotator/index.html"
     },
     {
       "src": "/code-annotator",
-      "has": [
-        { "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }
-      ],
+      "has": [{ "type": "host", "value": "digitalnotebook.builtbyapoorv.in" }],
       "dest": "/apps/digital-notebook/code-annotator/index.html"
     },
     {
