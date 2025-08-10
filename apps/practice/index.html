@@ -1,620 +1,750 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JavaScript Job-Ready Roadmap New</title>
     <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #1a1a1a;
+        color: #e8e8e8;
+        transition: all 0.3s ease;
+      }
+
+      h1 {
+        color: #64b5f6;
+        border-bottom: 3px solid #42a5f5;
+        padding-bottom: 10px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      h2 {
+        color: #81c784;
+        margin-top: 30px;
+        border-left: 4px solid #66bb6a;
+        padding-left: 15px;
+        background: rgba(129, 199, 132, 0.1);
+        padding: 10px 15px;
+        border-radius: 5px;
+      }
+
+      h3 {
+        color: #ffb74d;
+        margin-top: 20px;
+      }
+
+      .critical {
+        background: linear-gradient(120deg, #ff5722, #ff9800);
+        color: white;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 0.8em;
+        box-shadow: 0 2px 4px rgba(255, 87, 34, 0.3);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 2px 4px rgba(255, 87, 34, 0.3);
+        }
+        50% {
+          box-shadow: 0 4px 8px rgba(255, 87, 34, 0.6);
+        }
+        100% {
+          box-shadow: 0 2px 4px rgba(255, 87, 34, 0.3);
+        }
+      }
+
+      .overview {
+        background: rgba(66, 165, 245, 0.15);
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border-left: 5px solid #42a5f5;
+        border: 1px solid rgba(66, 165, 245, 0.3);
+      }
+
+      ul,
+      ol {
+        margin: 10px 0;
+      }
+
+      li {
+        margin: 8px 0;
+        padding: 2px 0;
+        transition: all 0.2s ease;
+      }
+
+      li:hover {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 4px 8px;
+        border-radius: 4px;
+        transform: translateX(5px);
+      }
+
+      .checklist li {
+        cursor: pointer;
+        position: relative;
+        padding-left: 25px;
+      }
+
+      .checklist li:before {
+        content: "☐";
+        position: absolute;
+        left: 0;
+        color: #ffc107;
+        font-size: 1.2em;
+        transition: all 0.3s ease;
+      }
+
+      .checklist li:hover:before {
+        content: "✓";
+        color: #4caf50;
+        transform: scale(1.1);
+      }
+
+      strong {
+        color: #81c784;
+        font-weight: 600;
+      }
+      button {
+        all: unset;
+        color: #81c784;
+        font-weight: 600;
+        font-style: italic;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+
+      .method-list {
+        background: rgba(129, 199, 132, 0.15);
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border: 1px solid rgba(129, 199, 132, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .method-list:hover {
+        background: rgba(129, 199, 132, 0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(129, 199, 132, 0.2);
+      }
+
+      .study-plan {
+        background: rgba(76, 175, 80, 0.15);
+        padding: 20px;
+        border-radius: 12px;
+        margin: 20px 0;
+        border: 2px solid rgba(76, 175, 80, 0.4);
+        box-shadow: 0 4px 16px rgba(76, 175, 80, 0.1);
+      }
+
+      .checklist {
+        background: rgba(255, 193, 7, 0.15);
+        padding: 20px;
+        border-radius: 12px;
+        margin: 20px 0;
+        border: 2px solid rgba(255, 193, 7, 0.4);
+      }
+
+      code {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 3px 6px;
+        border-radius: 4px;
+        font-family: "Fira Code", "Courier New", monospace;
+        color: #ffa726;
+        border: 1px solid rgba(255, 167, 38, 0.3);
+        font-weight: 500;
+      }
+
+      .code-block {
+        background: #2e2e2e;
+        color: #f8f8f2;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 15px 0;
+        overflow-x: auto;
+        border: 1px solid #444;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        font-family: "Fira Code", "Courier New", monospace;
+      }
+
+      .tips {
+        background: rgba(23, 162, 184, 0.15);
+        padding: 20px;
+        border-radius: 12px;
+        margin: 20px 0;
+        border: 2px solid rgba(23, 162, 184, 0.4);
+      }
+
+      @media print {
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #1a1a1a;
-            color: #e8e8e8;
-            transition: all 0.3s ease;
+          font-size: 12px;
+          background: white !important;
+          color: black !important;
         }
-        
-        h1 {
-            color: #64b5f6;
-            border-bottom: 3px solid #42a5f5;
-            padding-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        h2 {
-            color: #81c784;
-            margin-top: 30px;
-            border-left: 4px solid #66bb6a;
-            padding-left: 15px;
-            background: rgba(129, 199, 132, 0.1);
-            padding: 10px 15px;
-            border-radius: 5px;
-        }
-        
-        h3 {
-            color: #ffb74d;
-            margin-top: 20px;
-        }
-        
         .critical {
-            background: linear-gradient(120deg, #ff5722, #ff9800);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.8em;
-            box-shadow: 0 2px 4px rgba(255, 87, 34, 0.3);
-            animation: pulse 2s infinite;
+          background: #333;
         }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 2px 4px rgba(255, 87, 34, 0.3); }
-            50% { box-shadow: 0 4px 8px rgba(255, 87, 34, 0.6); }
-            100% { box-shadow: 0 2px 4px rgba(255, 87, 34, 0.3); }
+        * {
+          background: white !important;
+          color: black !important;
         }
-        
-        .overview {
-            background: rgba(66, 165, 245, 0.15);
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border-left: 5px solid #42a5f5;
-            border: 1px solid rgba(66, 165, 245, 0.3);
-        }
-        
-        ul, ol {
-            margin: 10px 0;
-        }
-        
-        li {
-            margin: 8px 0;
-            padding: 2px 0;
-            transition: all 0.2s ease;
-        }
-        
-        li:hover {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 4px 8px;
-            border-radius: 4px;
-            transform: translateX(5px);
-        }
-        
-        .checklist li {
-            cursor: pointer;
-            position: relative;
-            padding-left: 25px;
-        }
-        
-        .checklist li:before {
-            content: '☐';
-            position: absolute;
-            left: 0;
-            color: #ffc107;
-            font-size: 1.2em;
-            transition: all 0.3s ease;
-        }
-        
-        .checklist li:hover:before {
-            content: '✓';
-            color: #4caf50;
-            transform: scale(1.1);
-        }
-        
-        strong {
-            color: #81c784;
-            font-weight: 600;
-        }
-        button {
-    all: unset;
-    color: #81c784;
-    font-weight: 600;
-    font-style: italic;  
-    cursor: pointer;
-    text-decoration: underline;
-}
-        
-        .method-list {
-            background: rgba(129, 199, 132, 0.15);
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            border: 1px solid rgba(129, 199, 132, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .method-list:hover {
-            background: rgba(129, 199, 132, 0.25);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(129, 199, 132, 0.2);
-        }
-        
-        .study-plan {
-            background: rgba(76, 175, 80, 0.15);
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-            border: 2px solid rgba(76, 175, 80, 0.4);
-            box-shadow: 0 4px 16px rgba(76, 175, 80, 0.1);
-        }
-        
-        .checklist {
-            background: rgba(255, 193, 7, 0.15);
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-            border: 2px solid rgba(255, 193, 7, 0.4);
-        }
-        
-        code {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-family: 'Fira Code', 'Courier New', monospace;
-            color: #ffa726;
-            border: 1px solid rgba(255, 167, 38, 0.3);
-            font-weight: 500;
-        }
-        
-        .code-block {
-            background: #2e2e2e;
-            color: #f8f8f2;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 15px 0;
-            overflow-x: auto;
-            border: 1px solid #444;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            font-family: 'Fira Code', 'Courier New', monospace;
-        }
-        
-        .tips {
-            background: rgba(23, 162, 184, 0.15);
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-            border: 2px solid rgba(23, 162, 184, 0.4);
-        }
-        
-        @media print {
-            body { 
-                font-size: 12px; 
-                background: white !important;
-                color: black !important;
-            }
-            .critical { background: #333; }
-            * { background: white !important; color: black !important; }
-        }
-        
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: #2e2e2e;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: #555;
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: #777;
-        }
-        
-        /* Selection styling */
-        ::selection {
-            background: rgba(100, 181, 246, 0.3);
-            color: #fff;
-        }
+      }
+
+      /* Scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #2e2e2e;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #555;
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #777;
+      }
+
+      /* Selection styling */
+      ::selection {
+        background: rgba(100, 181, 246, 0.3);
+        color: #fff;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>🚀 JavaScript Job-Ready Roadmap</h1>
     <p><em>Complete Study Guide for Full-Stack Development (1-2 Weeks)</em></p>
 
     <div class="overview">
-        <h3>🎯 OVERVIEW</h3>
-        <p>This roadmap covers the <strong>90% most-used JavaScript concepts</strong> in real web development jobs. Focus on understanding these topics thoroughly to become job-ready and master your existing projects.</p>
+      <h3>🎯 OVERVIEW</h3>
+      <p>
+        This roadmap covers the
+        <strong>90% most-used JavaScript concepts</strong> in real web
+        development jobs. Focus on understanding these topics thoroughly to
+        become job-ready and master your existing projects.
+      </p>
     </div>
 
     <h2>1. CORE JAVASCRIPT FUNDAMENTALS</h2>
-    
+
     <h3>Variables & Data Types</h3>
     <ul>
-        <li><code>let</code>, <code>const</code>, <code>var</code> (scope differences)</li>
-        <li>Primitive types: <code>string</code>, <code>number</code>, <code>boolean</code>, <code>null</code>, <code>undefined</code>, <code>symbol</code></li>
-        <li>Reference types: <code>object</code>, <code>array</code>, <code>function</code></li>
-        <li>Type checking: <code>typeof</code>, <code>instanceof</code></li>
+      <li>
+        <code>let</code>, <code>const</code>, <code>var</code> (scope
+        differences)
+      </li>
+      <li>
+        Primitive types: <code>string</code>, <code>number</code>,
+        <code>boolean</code>, <code>null</code>, <code>undefined</code>,
+        <code>symbol</code>
+      </li>
+      <li>
+        Reference types: <code>object</code>, <code>array</code>,
+        <code>function</code>
+      </li>
+      <li>Type checking: <code>typeof</code>, <code>instanceof</code></li>
     </ul>
 
     <h3>Functions</h3>
     <ul>
-        <li>Function declarations vs expressions</li>
-        <li>Arrow functions: <code>() => {}</code></li>
-        <li>Parameters: default, rest (<code>...args</code>), destructuring</li>
-        <li>Return statements</li>
-        <li><code>this</code> binding in different contexts</li>
-        <li>IIFE (Immediately Invoked Function Expressions)</li>
+      <li>Function declarations vs expressions</li>
+      <li>Arrow functions: <code>() => {}</code></li>
+      <li>Parameters: default, rest (<code>...args</code>), destructuring</li>
+      <li>Return statements</li>
+      <li><code>this</code> binding in different contexts</li>
+      <li>IIFE (Immediately Invoked Function Expressions)</li>
     </ul>
 
     <h3>Objects</h3>
     <ul>
-        <li>Object creation: literal, <code>new Object()</code>, <code>Object.create()</code></li>
-        <li>Property access: dot notation, bracket notation</li>
+      <li>
+        Object creation: literal, <code>new Object()</code>,
+        <code>Object.create()</code>
+      </li>
+      <li>Property access: dot notation, bracket notation</li>
     </ul>
     <div class="method-list">
-        <strong>Essential Methods:</strong>
-        <ul>
-            <li><code>Object.keys()</code></li>
-            <li><code>Object.values()</code></li>
-            <li><code>Object.entries()</code></li>
-            <li><code>Object.assign()</code></li>
-        </ul>
+      <strong>Essential Methods:</strong>
+      <ul>
+        <li><code>Object.keys()</code></li>
+        <li><code>Object.values()</code></li>
+        <li><code>Object.entries()</code></li>
+        <li><code>Object.assign()</code></li>
+      </ul>
     </div>
     <ul>
-        <li>Spread operator <code>{...obj}</code></li>
-        <li>Destructuring: <code>const {name, age} = user</code></li>
-        <li>Computed property names</li>
+      <li>Spread operator <code>{...obj}</code></li>
+      <li>Destructuring: <code>const {name, age} = user</code></li>
+      <li>Computed property names</li>
     </ul>
 
     <h3>Arrays <span class="critical">CRITICAL</span></h3>
     <div class="method-list">
-        <strong>Essential Methods You Must Know:</strong>
-        <ul>
-            <li><code>push()</code>, <code>pop()</code>, <code>shift()</code>, <code>unshift()</code></li>
-            <li><code>slice()</code>, <code>splice()</code></li>
-            <li><code>map()</code>, <code>filter()</code>, <code>reduce()</code>, <code>forEach()</code></li>
-            <li><code>find()</code>, <code>findIndex()</code>, <code>some()</code>, <code>every()</code></li>
-            <li><code>includes()</code>, <code>indexOf()</code>, <code>join()</code>, <code>sort()</code></li>
-            <li><code>concat()</code>, spread operator <code>[...arr]</code></li>
-            <li>Array destructuring: <code>const [first, second] = arr</code></li>
-        </ul>
+      <strong>Essential Methods You Must Know:</strong>
+      <ul>
+        <li>
+          <code>push()</code>, <code>pop()</code>, <code>shift()</code>,
+          <code>unshift()</code>
+        </li>
+        <li><code>slice()</code>, <code>splice()</code></li>
+        <li>
+          <code>map()</code>, <code>filter()</code>, <code>reduce()</code>,
+          <code>forEach()</code>
+        </li>
+        <li>
+          <code>find()</code>, <code>findIndex()</code>, <code>some()</code>,
+          <code>every()</code>
+        </li>
+        <li>
+          <code>includes()</code>, <code>indexOf()</code>, <code>join()</code>,
+          <code>sort()</code>
+        </li>
+        <li><code>concat()</code>, spread operator <code>[...arr]</code></li>
+        <li>Array destructuring: <code>const [first, second] = arr</code></li>
+      </ul>
     </div>
 
     <h2>2. CONTROL FLOW & LOOPS</h2>
     <ul>
-        <li><code>if/else</code>, <code>switch</code>, ternary operator</li>
-        <li><code>for</code>, <code>for...in</code>, <code>for...of</code>, <code>while</code>, <code>do...while</code></li>
-        <li><code>break</code>, <code>continue</code></li>
+      <li><code>if/else</code>, <code>switch</code>, ternary operator</li>
+      <li>
+        <code>for</code>, <code>for...in</code>, <code>for...of</code>,
+        <code>while</code>, <code>do...while</code>
+      </li>
+      <li><code>break</code>, <code>continue</code></li>
     </ul>
 
     <h2>3. ERROR HANDLING</h2>
     <ul>
-        <li><code>try</code>, <code>catch</code>, <code>finally</code></li>
-        <li><code>throw</code> statements</li>
-        <li>Error objects and custom errors</li>
-        <li>Promise error handling</li>
+      <li><code>try</code>, <code>catch</code>, <code>finally</code></li>
+      <li><code>throw</code> statements</li>
+      <li>Error objects and custom errors</li>
+      <li>Promise error handling</li>
     </ul>
 
     <h2>4. ASYNCHRONOUS JAVASCRIPT <span class="critical">CRITICAL</span></h2>
-    
+
     <h3>Promises</h3>
     <ul>
-        <li><code>new Promise()</code>, <code>resolve()</code>, <code>reject()</code></li>
-        <li><code>.then()</code>, <code>.catch()</code>, <code>.finally()</code></li>
-        <li>Promise chaining</li>
+      <li>
+        <code>new Promise()</code>, <code>resolve()</code>,
+        <code>reject()</code>
+      </li>
+      <li>
+        <code>.then()</code>, <code>.catch()</code>, <code>.finally()</code>
+      </li>
+      <li>Promise chaining</li>
     </ul>
     <div class="method-list">
-        <strong>Promise API Methods:</strong>
-        <ul>
-            <li><code>Promise.all()</code></li>
-            <li><code>Promise.race()</code></li>
-            <li><code>Promise.allSettled()</code></li>
-        </ul>
+      <strong>Promise API Methods:</strong>
+      <ul>
+        <li><code>Promise.all()</code></li>
+        <li><code>Promise.race()</code></li>
+        <li><code>Promise.allSettled()</code></li>
+      </ul>
     </div>
 
     <h3>Async/Await</h3>
     <ul>
-        <li><code>async</code> functions</li>
-        <li><code>await</code> keyword</li>
-        <li>Error handling with <code>try/catch</code></li>
-        <li>Converting promises to async/await</li>
+      <li><code>async</code> functions</li>
+      <li><code>await</code> keyword</li>
+      <li>Error handling with <code>try/catch</code></li>
+      <li>Converting promises to async/await</li>
     </ul>
 
     <h3>Timers</h3>
     <ul>
-        <li><code>setTimeout()</code>, <code>clearTimeout()</code></li>
-        <li><code>setInterval()</code>, <code>clearInterval()</code></li>
+      <li><code>setTimeout()</code>, <code>clearTimeout()</code></li>
+      <li><code>setInterval()</code>, <code>clearInterval()</code></li>
     </ul>
 
-    <h2>5. DOM MANIPULATION <span class="critical">CRITICAL FOR YOUR PROJECTS</span></h2>
-    
+    <h2>
+      5. DOM MANIPULATION
+      <span class="critical">CRITICAL FOR YOUR PROJECTS</span>
+    </h2>
+
     <h3>Element Selection</h3>
     <ul>
-        <li><code>document.getElementById()</code></li>
-        <li><code>document.querySelector()</code>, <code>document.querySelectorAll()</code></li>
-        <li><code>document.getElementsByClassName()</code>, <code>document.getElementsByTagName()</code></li>
+      <li><code>document.getElementById()</code></li>
+      <li>
+        <code>document.querySelector()</code>,
+        <code>document.querySelectorAll()</code>
+      </li>
+      <li>
+        <code>document.getElementsByClassName()</code>,
+        <code>document.getElementsByTagName()</code>
+      </li>
     </ul>
 
     <h3>Element Manipulation</h3>
     <ul>
-        <li><code>element.textContent</code>, <code>element.innerHTML</code></li>
-        <li><code>element.setAttribute()</code>, <code>element.getAttribute()</code></li>
+      <li><code>element.textContent</code>, <code>element.innerHTML</code></li>
+      <li>
+        <code>element.setAttribute()</code>, <code>element.getAttribute()</code>
+      </li>
     </ul>
     <div class="method-list">
-        <strong>ClassList Methods:</strong>
-        <ul>
-            <li><code>element.classList.add()</code></li>
-            <li><code>element.classList.remove()</code></li>
-            <li><code>element.classList.toggle()</code></li>
-            <li><code>element.classList.contains()</code></li>
-        </ul>
+      <strong>ClassList Methods:</strong>
+      <ul>
+        <li><code>element.classList.add()</code></li>
+        <li><code>element.classList.remove()</code></li>
+        <li><code>element.classList.toggle()</code></li>
+        <li><code>element.classList.contains()</code></li>
+      </ul>
     </div>
     <ul>
-        <li><code>element.style.property</code></li>
-        <li><code>element.dataset</code></li>
+      <li><code>element.style.property</code></li>
+      <li><code>element.dataset</code></li>
     </ul>
 
     <h3>Element Creation & Modification</h3>
     <ul>
-        <li><code>document.createElement()</code></li>
-        <li><code>element.appendChild()</code>, <code>element.removeChild()</code></li>
-        <li><code>element.insertBefore()</code>, <code>element.replaceChild()</code></li>
-        <li><code>element.remove()</code></li>
-        <li><code>document.createDocumentFragment()</code></li>
+      <li><code>document.createElement()</code></li>
+      <li>
+        <code>element.appendChild()</code>, <code>element.removeChild()</code>
+      </li>
+      <li>
+        <code>element.insertBefore()</code>, <code>element.replaceChild()</code>
+      </li>
+      <li><code>element.remove()</code></li>
+      <li><code>document.createDocumentFragment()</code></li>
     </ul>
 
     <h3>Event Handling</h3>
     <ul>
-        <li><code>addEventListener()</code>, <code>removeEventListener()</code></li>
+      <li>
+        <code>addEventListener()</code>, <code>removeEventListener()</code>
+      </li>
     </ul>
     <div class="method-list">
-        <strong>Event Object Properties:</strong>
-        <ul>
-            <li><code>event.target</code></li>
-            <li><code>event.preventDefault()</code></li>
-            <li><code>event.stopPropagation()</code></li>
-        </ul>
+      <strong>Event Object Properties:</strong>
+      <ul>
+        <li><code>event.target</code></li>
+        <li><code>event.preventDefault()</code></li>
+        <li><code>event.stopPropagation()</code></li>
+      </ul>
     </div>
     <ul>
-        <li><strong>Common Events:</strong> <code>click</code>, <code>input</code>, <code>change</code>, <code>submit</code>, <code>DOMContentLoaded</code></li>
-        <li>Event delegation</li>
+      <li>
+        <strong>Common Events:</strong> <code>click</code>, <code>input</code>,
+        <code>change</code>, <code>submit</code>, <code>DOMContentLoaded</code>
+      </li>
+      <li>Event delegation</li>
     </ul>
 
     <h2>6. MODULES <span class="critical">USED IN YOUR PROJECTS</span></h2>
     <ul>
-        <li><code>export</code> (named and default exports)</li>
-        <li><code>import</code> statements</li>
-        <li>Dynamic imports: <code>import()</code></li>
-        <li>Module patterns (IIFE modules like in your projects)</li>
+      <li><code>export</code> (named and default exports)</li>
+      <li><code>import</code> statements</li>
+      <li>Dynamic imports: <code>import()</code></li>
+      <li>Module patterns (IIFE modules like in your projects)</li>
     </ul>
 
     <h2>7. JSON & DATA HANDLING</h2>
     <ul>
-        <li><code>JSON.stringify()</code>, <code>JSON.parse()</code></li>
-        <li>Working with APIs and JSON responses</li>
+      <li><code>JSON.stringify()</code>, <code>JSON.parse()</code></li>
+      <li>Working with APIs and JSON responses</li>
     </ul>
     <div class="method-list">
-        <strong>Local Storage:</strong>
-        <ul>
-            <li><code>localStorage.getItem()</code></li>
-            <li><code>localStorage.setItem()</code></li>
-            <li><code>localStorage.removeItem()</code></li>
-        </ul>
+      <strong>Local Storage:</strong>
+      <ul>
+        <li><code>localStorage.getItem()</code></li>
+        <li><code>localStorage.setItem()</code></li>
+        <li><code>localStorage.removeItem()</code></li>
+      </ul>
     </div>
 
-    <h2>8. HTTP REQUESTS & APIs <span class="critical">CRITICAL FOR BACKEND INTEGRATION</span></h2>
-    
+    <h2>
+      8. HTTP REQUESTS & APIs
+      <span class="critical">CRITICAL FOR BACKEND INTEGRATION</span>
+    </h2>
+
     <h3>Fetch API</h3>
     <ul>
-        <li><code>fetch()</code> basics</li>
-        <li><strong>Request Methods:</strong> GET, POST, PUT, DELETE</li>
-        <li>Headers and request configuration</li>
+      <li><code>fetch()</code> basics</li>
+      <li><strong>Request Methods:</strong> GET, POST, PUT, DELETE</li>
+      <li>Headers and request configuration</li>
     </ul>
     <div class="method-list">
-        <strong>Response Methods:</strong>
-        <ul>
-            <li><code>.json()</code></li>
-            <li><code>.text()</code></li>
-            <li><code>.blob()</code></li>
-        </ul>
+      <strong>Response Methods:</strong>
+      <ul>
+        <li><code>.json()</code></li>
+        <li><code>.text()</code></li>
+        <li><code>.blob()</code></li>
+      </ul>
     </div>
     <ul>
-        <li>Error handling with fetch</li>
+      <li>Error handling with fetch</li>
     </ul>
 
     <h3>Async Data Patterns</h3>
     <ul>
-        <li>Loading states</li>
-        <li>Error states</li>
-        <li>Data transformation</li>
+      <li>Loading states</li>
+      <li>Error states</li>
+      <li>Data transformation</li>
     </ul>
 
-    <h2>9. FIREBASE INTEGRATION <span class="critical">YOUR PROJECTS USE THIS</span></h2>
+    <h2>
+      9. FIREBASE INTEGRATION
+      <span class="critical">YOUR PROJECTS USE THIS</span>
+    </h2>
     <ul>
-        <li>Firebase initialization</li>
+      <li>Firebase initialization</li>
     </ul>
     <div class="method-list">
-        <strong>Authentication:</strong>
-        <ul>
-            <li><code>auth.signInWithEmailAndPassword()</code></li>
-            <li><code>auth.createUserWithEmailAndPassword()</code></li>
-            <li><code>auth.signOut()</code></li>
-            <li><code>auth.onAuthStateChanged()</code></li>
-        </ul>
+      <strong>Authentication:</strong>
+      <ul>
+        <li><code>auth.signInWithEmailAndPassword()</code></li>
+        <li><code>auth.createUserWithEmailAndPassword()</code></li>
+        <li><code>auth.signOut()</code></li>
+        <li><code>auth.onAuthStateChanged()</code></li>
+      </ul>
     </div>
     <div class="method-list">
-        <strong>Database:</strong>
-        <ul>
-            <li><code>database.ref()</code></li>
-            <li><code>.set()</code>, <code>.update()</code>, <code>.remove()</code></li>
-            <li><code>.on()</code>, <code>.once()</code></li>
-        </ul>
+      <strong>Database:</strong>
+      <ul>
+        <li><code>database.ref()</code></li>
+        <li>
+          <code>.set()</code>, <code>.update()</code>, <code>.remove()</code>
+        </li>
+        <li><code>.on()</code>, <code>.once()</code></li>
+      </ul>
     </div>
     <ul>
-        <li>Real-time listeners</li>
+      <li>Real-time listeners</li>
     </ul>
 
     <h2>10. COMMON PATTERNS FROM YOUR PROJECTS</h2>
-    
+
     <h3>Module Pattern</h3>
     <div class="code-block">
-const ModuleName = (() => {
-    // Private variables/functions
-    const init = () => { /* ... */ };
-    
-    // Public API
-    return {
-        init,
-        publicMethod
-    };
-})();
+      const ModuleName = (() => { // Private variables/functions const init = ()
+      => { /* ... */ }; // Public API return { init, publicMethod }; })();
     </div>
 
     <h3>Event-Driven Architecture</h3>
     <ul>
-        <li>Setting up event listeners</li>
-        <li>Managing multiple event handlers</li>
-        <li>Form handling and validation</li>
+      <li>Setting up event listeners</li>
+      <li>Managing multiple event handlers</li>
+      <li>Form handling and validation</li>
     </ul>
 
     <h3>State Management</h3>
     <ul>
-        <li>Managing application state in variables</li>
-        <li>State updates and UI synchronization</li>
+      <li>Managing application state in variables</li>
+      <li>State updates and UI synchronization</li>
     </ul>
 
-    <h2>11. NODE.JS BASICS <span class="critical">FOR YOUR PAYMENT GATEWAY PROJECT</span></h2>
-    
+    <h2>
+      11. NODE.JS BASICS
+      <span class="critical">FOR YOUR PAYMENT GATEWAY PROJECT</span>
+    </h2>
+
     <h3>Core Modules</h3>
     <ul>
-        <li><code>require()</code> and <code>module.exports</code></li>
-        <li><code>http</code> module for server creation</li>
-        <li><code>fs</code> module for file operations</li>
-        <li><code>path</code> module</li>
+      <li><code>require()</code> and <code>module.exports</code></li>
+      <li><code>http</code> module for server creation</li>
+      <li><code>fs</code> module for file operations</li>
+      <li><code>path</code> module</li>
     </ul>
 
     <h3>Express.js Essentials</h3>
     <div class="method-list">
-        <strong>Route Handling:</strong>
-        <ul>
-            <li><code>app.get()</code>, <code>app.post()</code>, <code>app.put()</code>, <code>app.delete()</code></li>
-        </ul>
+      <strong>Route Handling:</strong>
+      <ul>
+        <li>
+          <code>app.get()</code>, <code>app.post()</code>,
+          <code>app.put()</code>, <code>app.delete()</code>
+        </li>
+      </ul>
     </div>
     <ul>
-        <li>Middleware: <code>app.use()</code></li>
+      <li>Middleware: <code>app.use()</code></li>
     </ul>
     <div class="method-list">
-        <strong>Request/Response:</strong>
-        <ul>
-            <li><code>req.body</code>, <code>req.params</code>, <code>req.query</code></li>
-            <li><code>res.json()</code>, <code>res.status()</code>, <code>res.send()</code></li>
-        </ul>
+      <strong>Request/Response:</strong>
+      <ul>
+        <li>
+          <code>req.body</code>, <code>req.params</code>, <code>req.query</code>
+        </li>
+        <li>
+          <code>res.json()</code>, <code>res.status()</code>,
+          <code>res.send()</code>
+        </li>
+      </ul>
     </div>
     <ul>
-        <li>CORS handling</li>
+      <li>CORS handling</li>
     </ul>
 
     <h3>API Development</h3>
     <ul>
-        <li>RESTful API principles</li>
-        <li>Request validation</li>
-        <li>Error handling middleware</li>
-        <li>Environment variables (<code>process.env</code>)</li>
+      <li>RESTful API principles</li>
+      <li>Request validation</li>
+      <li>Error handling middleware</li>
+      <li>Environment variables (<code>process.env</code>)</li>
     </ul>
 
     <h2>12. PAYMENT GATEWAY INTEGRATION</h2>
     <ul>
-        <li>API request/response handling</li>
-        <li>Webhook verification</li>
-        <li>Order creation and payment verification</li>
-        <li>Security considerations (API keys, signatures)</li>
+      <li>API request/response handling</li>
+      <li>Webhook verification</li>
+      <li>Order creation and payment verification</li>
+      <li>Security considerations (API keys, signatures)</li>
     </ul>
 
     <h2>13. COMMON UTILITIES</h2>
-    
+
     <h3>String Methods</h3>
     <ul>
-        <li><code>split()</code>, <code>trim()</code>, <code>replace()</code>, <code>includes()</code></li>
-        <li><code>startsWith()</code>, <code>endsWith()</code>, <code>toLowerCase()</code>, <code>toUpperCase()</code></li>
+      <li>
+        <code>split()</code>, <code>trim()</code>, <code>replace()</code>,
+        <code>includes()</code>
+      </li>
+      <li>
+        <code>startsWith()</code>, <code>endsWith()</code>,
+        <code>toLowerCase()</code>, <code>toUpperCase()</code>
+      </li>
     </ul>
 
     <h3>Number Methods</h3>
     <ul>
-        <li><code>parseInt()</code>, <code>parseFloat()</code>, <code>toFixed()</code>, <code>Math.floor()</code>, <code>Math.ceil()</code></li>
+      <li>
+        <code>parseInt()</code>, <code>parseFloat()</code>,
+        <code>toFixed()</code>, <code>Math.floor()</code>,
+        <code>Math.ceil()</code>
+      </li>
     </ul>
 
     <h3>Date Handling</h3>
     <ul>
-        <li><code>new Date()</code>, <code>.getTime()</code>, <code>.toLocaleDateString()</code></li>
-        <li>Date formatting and manipulation</li>
+      <li>
+        <code>new Date()</code>, <code>.getTime()</code>,
+        <code>.toLocaleDateString()</code>
+      </li>
+      <li>Date formatting and manipulation</li>
     </ul>
 
     <h3>Regular Expressions (Basic)</h3>
     <ul>
-        <li>Pattern matching for validation</li>
-        <li>Common patterns for email, phone, etc.</li>
+      <li>Pattern matching for validation</li>
+      <li>Common patterns for email, phone, etc.</li>
     </ul>
 
     <h2>14. ES6+ FEATURES <span class="critical">MODERN JAVASCRIPT</span></h2>
     <ul>
-        <li>Template literals: <code>`Hello ${name}`</code></li>
-        <li>Destructuring assignment</li>
-        <li>Spread operator: <code>...</code></li>
-        <li>Default parameters</li>
-        <li>Arrow functions</li>
-        <li><code>const</code>/<code>let</code> vs <code>var</code></li>
-        <li>Enhanced object literals</li>
+      <li>Template literals: <code>`Hello ${name}`</code></li>
+      <li>Destructuring assignment</li>
+      <li>Spread operator: <code>...</code></li>
+      <li>Default parameters</li>
+      <li>Arrow functions</li>
+      <li><code>const</code>/<code>let</code> vs <code>var</code></li>
+      <li>Enhanced object literals</li>
     </ul>
 
     <div class="study-plan">
-        <h2>📅 STUDY PLAN (1-2 WEEKS)</h2>
-        
-        <h3>Week 1: Fundamentals + Core Skills</h3>
-        <ul>
-            <li><strong>Days 1-3:</strong> Topics 1-4 (Variables, Functions, Objects, Arrays, Async)</li>
-            <li><strong>Days 4-5:</strong> Topics 5-6 (DOM Manipulation, Modules)</li>
-            <li><strong>Days 6-7:</strong> Topics 7-8 (JSON, APIs, Fetch)</li>
-        </ul>
+      <h2>📅 STUDY PLAN (1-2 WEEKS)</h2>
 
-        <h3>Week 2: Framework & Project Skills</h3>
-        <ul>
-            <li><strong>Days 8-10:</strong> Topics 9-11 (Firebase, Node.js, Express)</li>
-            <li><strong>Days 11-12:</strong> Topics 12-14 (Payment Integration, Utilities, ES6+)</li>
-            <li><strong>Days 13-14:</strong> Practice - Rebuild project features from scratch</li>
-        </ul>
+      <h3>Week 1: Fundamentals + Core Skills</h3>
+      <ul>
+        <li>
+          <strong>Days 1-3:</strong> Topics 1-4 (Variables, Functions, Objects,
+          Arrays, Async)
+        </li>
+        <li>
+          <strong>Days 4-5:</strong> Topics 5-6 (DOM Manipulation, Modules)
+        </li>
+        <li><strong>Days 6-7:</strong> Topics 7-8 (JSON, APIs, Fetch)</li>
+      </ul>
 
-        <h3>🎯 DAILY PRACTICE GOALS</h3>
-        <ul>
-            <li><strong>Morning:</strong> Study 2-3 topics from the list</li>
-            <li><strong>Afternoon:</strong> Practice with small coding exercises</li>
-            <li><strong>Evening:</strong> Apply concepts to rebuild features from your projects</li>
-        </ul>
+      <h3>Week 2: Framework & Project Skills</h3>
+      <ul>
+        <li>
+          <strong>Days 8-10:</strong> Topics 9-11 (Firebase, Node.js, Express)
+        </li>
+        <li>
+          <strong>Days 11-12:</strong> Topics 12-14 (Payment Integration,
+          Utilities, ES6+)
+        </li>
+        <li>
+          <strong>Days 13-14:</strong> Practice - Rebuild project features from
+          scratch
+        </li>
+      </ul>
+
+      <h3>🎯 DAILY PRACTICE GOALS</h3>
+      <ul>
+        <li><strong>Morning:</strong> Study 2-3 topics from the list</li>
+        <li>
+          <strong>Afternoon:</strong> Practice with small coding exercises
+        </li>
+        <li>
+          <strong>Evening:</strong> Apply concepts to rebuild features from your
+          projects
+        </li>
+      </ul>
     </div>
 
     <div class="checklist">
-        <h2>✅ PROJECT UNDERSTANDING CHECKLIST</h2>
-        <p>After completing this roadmap, you should be able to:</p>
-        <ul>
-            <li>☐ Explain every line of code in your Food Tracker project</li>
-            <li>☐ Rebuild the user authentication system from scratch</li>
-            <li>☐ Create new Firebase database operations</li>
-            <li>☐ Build API endpoints for payment processing</li>
-            <li>☐ Handle form submissions and data validation</li>
-            <li>☐ Implement real-time data updates</li>
-            <li>☐ Manage application state across modules</li>
-            <li>☐ Debug and fix common JavaScript issues</li>
-        </ul>
+      <h2>✅ PROJECT UNDERSTANDING CHECKLIST</h2>
+      <p>After completing this roadmap, you should be able to:</p>
+      <ul>
+        <li>☐ Explain every line of code in your Food Tracker project</li>
+        <li>☐ Rebuild the user authentication system from scratch</li>
+        <li>☐ Create new Firebase database operations</li>
+        <li>☐ Build API endpoints for payment processing</li>
+        <li>☐ Handle form submissions and data validation</li>
+        <li>☐ Implement real-time data updates</li>
+        <li>☐ Manage application state across modules</li>
+        <li>☐ Debug and fix common JavaScript issues</li>
+      </ul>
     </div>
 
     <div class="tips">
-        <h2>🚀 SUCCESS TIPS</h2>
-        <ol>
-            <li><strong>Focus on understanding, not memorizing</strong></li>
-            <li><strong>Practice each method with real examples</strong></li>
-            <li><strong>Build small projects for each topic</strong></li>
-            <li><strong>Code along with your existing projects</strong></li>
-            <li><strong>Ask yourself "why" for every concept</strong></li>
-        </ol>
+      <h2>🚀 SUCCESS TIPS</h2>
+      <ol>
+        <li><strong>Focus on understanding, not memorizing</strong></li>
+        <li><strong>Practice each method with real examples</strong></li>
+        <li><strong>Build small projects for each topic</strong></li>
+        <li><strong>Code along with your existing projects</strong></li>
+        <li><strong>Ask yourself "why" for every concept</strong></li>
+      </ol>
     </div>
 
-    <p style="text-align: center; font-style: italic; margin-top: 40px;">
-    <strong>Master these topics and you'll be ready for 90% of JavaScript job interviews and can confidently work on any web development <button onclick="window.open('project-roadmap.html', '_blank')">project</button> <button onclick="window.open('js-roadmap-v9.html', '_blank')">Click here for practice</button></strong> 
+    <p style="text-align: center; font-style: italic; margin-top: 40px">
+      <strong
+        >Master these topics and you'll be ready for 90% of JavaScript job
+        interviews and can confidently work on any web development
+        <button onclick="window.open('project-roadmap.html', '_blank')">
+          project
+        </button>
+        <button onclick="window.open('js-roadmap-v9.html', '_blank')">
+          Click here for practice
+        </button></strong
+      >
+      <strong
+        >Master these topics and you'll be ready for 90% of JavaScript job
+        interviews and can confidently work on any web development
+        <button onclick="window.open('project-roadmap.html', '_blank')">
+          project
+        </button>
+        <button onclick="window.open('booking-price.html', '_blank')">
+          Click here for practice
+        </button></strong
+      >
     </p>
-</body>
+  </body>
 </html>
-

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>Loyal Customer Pricing — Mobile Friendly</title>
+    <style>
+      :root {
+        --bg: #f6f8fb;
+        --card: #ffffff;
+        --muted: #6b7280;
+        --accent: #0f6cff;
+        --accent-2: #3b82f6;
+        --glass: rgba(15, 108, 255, 0.06);
+        --success: #0b9a4a;
+        --danger: #d0443e;
+        --surface: #eef6ff;
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, #fbfdff 0%, #eef6ff 60%);
+        color: #0f1724;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        padding: 18px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        min-height: 100vh;
+      }
+
+      .main,
+      .container {
+        width: 100%;
+        max-width: 980px;
+        margin: 0 auto;
+      }
+
+      header.appbar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px;
+        border-radius: 12px;
+        background: linear-gradient(
+          90deg,
+          rgba(59, 130, 246, 0.06),
+          rgba(15, 108, 255, 0.04)
+        );
+        border: 1px solid rgba(15, 108, 255, 0.08);
+      }
+      .logo {
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--accent-2), var(--accent));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 46px;
+      }
+      header h1 {
+        font-size: 16px;
+        margin: 0;
+      }
+      header p.lead {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .card {
+        background: var(--card);
+        border-radius: 12px;
+        padding: 16px;
+        border: 1px solid rgba(15, 108, 255, 0.06);
+        box-shadow: 0 8px 20px rgba(15, 30, 60, 0.06);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+      input[type="number"],
+      input[type="text"],
+      select {
+        width: 100%;
+        padding: 12px 12px;
+        border-radius: 10px;
+        border: 1px solid #e6edf8;
+        font-size: 15px;
+        background: #fbfdff;
+        color: #0f1724;
+        outline: none;
+        transition: box-shadow 0.12s, transform 0.06s;
+      }
+      input[type="number"]:focus,
+      select:focus {
+        box-shadow: 0 8px 30px rgba(15, 108, 255, 0.12);
+        transform: translateY(-1px);
+        border-color: rgba(15, 108, 255, 0.2);
+      }
+
+      .small {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+
+      /* Discount row: larger touch target */
+      .discount-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .discount-row select {
+        flex: 0 0 120px;
+        border-radius: 10px;
+        padding: 12px;
+        font-weight: 600;
+        background: #fbfdff;
+        border: 1px solid #e6edf8;
+      }
+      .discount-row input {
+        flex: 1;
+        padding: 16px 14px;
+        font-size: 18px;
+        border-radius: 10px;
+        border: 1px solid #e6edf8;
+      }
+
+      .controls {
+        display: flex;
+        gap: 10px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+      button {
+        cursor: pointer;
+        border: 0;
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 14px;
+      }
+      button.primary {
+        background: linear-gradient(90deg, var(--accent-2), var(--accent));
+        color: white;
+        box-shadow: 0 12px 28px rgba(59, 130, 246, 0.12);
+      }
+      button.ghost {
+        background: transparent;
+        border: 1px solid rgba(15, 108, 255, 0.09);
+        color: var(--accent-2);
+      }
+      button.fillwide {
+        flex: 1;
+      }
+
+      .results {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .result {
+        background: linear-gradient(180deg, #ffffff, #fbfdff);
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #eef6ff;
+        text-align: center;
+      }
+      .result .muted {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .result .big {
+        font-size: 18px;
+        font-weight: 800;
+        margin-top: 6px;
+        color: #0f1724;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+        font-size: 14px;
+      }
+      th,
+      td {
+        padding: 10px;
+        border-bottom: 1px dashed #eef4ff;
+        text-align: left;
+      }
+      th {
+        color: var(--muted);
+        font-weight: 700;
+      }
+      .note {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+
+      .alert {
+        padding: 10px;
+        border-radius: 8px;
+        background: #fff6f6;
+        color: var(--danger);
+        border: 1px solid rgba(208, 68, 62, 0.06);
+      }
+
+      /* Responsive tweaks */
+      @media (max-width: 920px) {
+        .grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 720px) {
+        body {
+          padding: 12px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .results {
+          grid-template-columns: 1fr;
+        }
+        .discount-row select {
+          flex: 0 0 115px;
+        }
+        .discount-row input {
+          padding: 18px 14px;
+          font-size: 20px;
+        }
+        .controls {
+          flex-direction: column-reverse;
+        }
+        button.fillwide {
+          width: 100%;
+        }
+        header.appbar {
+          padding: 12px;
+        }
+        .logo {
+          width: 42px;
+          height: 42px;
+        }
+        header h1 {
+          font-size: 15px;
+        }
+      }
+      @media (max-width: 420px) {
+        .discount-row select {
+          flex: 0 0 96px;
+          font-size: 13px;
+          padding: 10px;
+        }
+        .discount-row input {
+          font-size: 18px;
+          padding: 14px;
+        }
+        input[type="number"] {
+          padding: 12px;
+        }
+        header p.lead {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <header class="appbar card" role="banner">
+        <div class="logo" aria-hidden="true">
+          <!-- simple lightning icon -->
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 2L3 14h7l-1 8L21 10h-7l-1-8z"
+              fill="white"
+              opacity="0.95"
+            />
+          </svg>
+        </div>
+        <div>
+          <h1>Loyal Customer Pricing — Calculator</h1>
+          <p class="lead">
+            Mobile-first. Enter numbers (left blank if you want) and tap
+            Calculate.
+          </p>
+        </div>
+      </header>
+
+      <section class="card" aria-label="Inputs">
+        <div class="grid">
+          <div>
+            <label for="old_avg">Old average price per slot (₹)</label>
+            <input
+              id="old_avg"
+              type="number"
+              placeholder="e.g. 1300 or 1400"
+              min="0"
+            />
+            <div class="small">
+              What regulars were paying on average before (per slot).
+            </div>
+          </div>
+
+          <div>
+            <label for="new_base">New base price per slot (₹)</label>
+            <input
+              id="new_base"
+              type="number"
+              placeholder="e.g. 1650"
+              min="0"
+            />
+            <div class="small">Price for first (full-price) bookings.</div>
+          </div>
+
+          <div>
+            <label for="bookings_month"
+              >Bookings per month (regular customer)</label
+            >
+            <input
+              id="bookings_month"
+              type="number"
+              placeholder="e.g. 12"
+              min="0"
+            />
+            <div class="small">Total slots this customer books in a month.</div>
+          </div>
+
+          <div>
+            <label for="weeks_per_month">Weeks per month</label>
+            <input
+              id="weeks_per_month"
+              type="number"
+              placeholder="Default 4"
+              min="1"
+            />
+            <div class="small">
+              Usually 4 — used to calculate full-price slots per month.
+            </div>
+          </div>
+
+          <div>
+            <label for="full_price_per_week">Full-price slots per week</label>
+            <input
+              id="full_price_per_week"
+              type="number"
+              placeholder="e.g. 2"
+              min="0"
+            />
+            <div class="small">
+              E.g. 2 = first two bookings each week are full-price.
+            </div>
+          </div>
+
+          <div>
+            <label for="discount_value">Discount on discounted slot</label>
+            <div class="discount-row">
+              <select id="discount_type" aria-label="Discount type">
+                <option value="absolute">₹ off</option>
+                <option value="percent">Percent %</option>
+              </select>
+              <input
+                id="discount_value"
+                type="number"
+                placeholder="Enter discount (e.g. 200 or 18)"
+                min="0"
+              />
+            </div>
+            <div class="small">
+              Choose ₹ off (absolute) or % off (percent). Discount applies to
+              3rd+ booking each week (per your rule).
+            </div>
+          </div>
+        </div>
+
+        <div class="controls" style="margin-top: 12px">
+          <button class="primary fillwide" id="calcBtn">Calculate</button>
+          <button class="ghost" id="exampleBtn">Fill example</button>
+          <button class="ghost" id="resetBtn">Reset</button>
+        </div>
+
+        <div
+          class="results"
+          id="resultsGrid"
+          style="display: none; margin-top: 14px"
+        >
+          <div class="result" aria-live="polite">
+            <div class="muted">Old monthly revenue</div>
+            <div class="big" id="oldMonthly">—</div>
+          </div>
+          <div class="result">
+            <div class="muted">New monthly revenue</div>
+            <div class="big" id="newMonthly">—</div>
+          </div>
+          <div class="result">
+            <div class="muted">Monthly gain / (loss)</div>
+            <div class="big" id="gainMonthly">—</div>
+          </div>
+        </div>
+
+        <div id="details" style="display: none; margin-top: 14px">
+          <div class="card" style="padding: 12px">
+            <strong>Breakdown</strong>
+            <table aria-live="polite">
+              <thead>
+                <tr>
+                  <th style="width: 62%">Item</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody id="breakdownBody"></tbody>
+            </table>
+
+            <div class="note" id="minNote"></div>
+          </div>
+        </div>
+
+        <div id="message" style="margin-top: 12px"></div>
+      </section>
+
+      <footer
+        class="card"
+        style="
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          align-items: center;
+        "
+      >
+        <div class="small">
+          Tip: tap the example button to pre-fill the values you mentioned (1650
+          base, 300 discount).
+        </div>
+        <div style="font-size: 12px; color: var(--muted)">
+          Want CSV export or a weekly graph? Tell me and I'll add it.
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+
+        function formatRupee(n) {
+          if (isNaN(n) || n === null) return "—";
+          return (
+            "₹" +
+            Number(n).toLocaleString("en-IN", {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: Math.round(n) === n ? 0 : 2,
+            })
+          );
+        }
+
+        function parseNum(val) {
+          if (val === null || val === undefined || val === "") return NaN;
+          let num = Number(String(val).replace(/,/g, ""));
+          return isNaN(num) ? NaN : num;
+        }
+
+        function showMessage(html) {
+          const msg = $("message");
+          msg.innerHTML = html ? '<div class="alert">' + html + "</div>" : "";
+        }
+
+        function calculate() {
+          showMessage("");
+          const oldAvg = parseNum($("old_avg").value);
+          const newBase = parseNum($("new_base").value);
+          const bookingsMonth = parseNum($("bookings_month").value);
+          const weeksPerMonth = parseNum($("weeks_per_month").value) || 4;
+          const fullPerWeek = parseNum($("full_price_per_week").value) || 2;
+
+          const discountType = $("discount_type").value;
+          const discountVal = parseNum($("discount_value").value);
+
+          // Basic validation
+          if (isNaN(newBase) || newBase <= 0) {
+            showMessage(
+              "Please enter a valid <strong>New base price per slot</strong>."
+            );
+            return;
+          }
+          if (isNaN(bookingsMonth) || bookingsMonth < 0) {
+            showMessage(
+              "Please enter a valid <strong>Bookings per month</strong>."
+            );
+            return;
+          }
+          if (isNaN(oldAvg) || oldAvg <= 0) {
+            showMessage(
+              "Please enter a valid <strong>Old average price per slot</strong> to compare results."
+            );
+            return;
+          }
+          if (isNaN(discountVal) || discountVal < 0) {
+            showMessage("Please enter a valid discount amount (0 or greater).");
+            return;
+          }
+
+          // Compute slots
+          const fullPriceSlots = weeksPerMonth * fullPerWeek;
+          const discountedSlots = Math.max(0, bookingsMonth - fullPriceSlots);
+
+          // discounted slot price calculation
+          let discountedPrice;
+          if (discountType === "absolute") {
+            discountedPrice = newBase - discountVal;
+          } else {
+            discountedPrice = newBase * (1 - discountVal / 100);
+          }
+          if (discountedPrice < 0) discountedPrice = 0;
+
+          // Determine actual counts (if customer books fewer than full-price slots)
+          const actualFullSlots = Math.min(bookingsMonth, fullPriceSlots);
+          const actualDiscountedSlots = Math.max(
+            0,
+            bookingsMonth - actualFullSlots
+          );
+
+          const newMonthly =
+            actualFullSlots * newBase + actualDiscountedSlots * discountedPrice;
+          const oldMonthly = bookingsMonth * oldAvg;
+
+          const gain = newMonthly - oldMonthly;
+          const gainPct = oldMonthly === 0 ? NaN : (gain / oldMonthly) * 100;
+
+          // Minimum discounted slot price d_min to match old revenue
+          let minDiscountedPriceText = "—";
+          let minDiscountedPrice = NaN;
+          let maxAllowableDiscountText = "—";
+          if (actualDiscountedSlots === 0) {
+            minDiscountedPriceText =
+              "No discounted slots (customer books ≤ full-price slots).";
+          } else {
+            minDiscountedPrice =
+              (oldMonthly - actualFullSlots * newBase) / actualDiscountedSlots;
+            if (minDiscountedPrice <= 0) {
+              minDiscountedPriceText =
+                "Even ₹0 for discounted slots still yields ≥ old revenue";
+              maxAllowableDiscountText =
+                "You can give full discount (₹" +
+                newBase +
+                ") and still match old revenue";
+            } else {
+              minDiscountedPrice = Math.max(0, minDiscountedPrice);
+              minDiscountedPriceText = formatRupee(
+                minDiscountedPrice.toFixed(2)
+              );
+              const maxDiscount = newBase - minDiscountedPrice;
+              maxAllowableDiscountText =
+                maxDiscount < 0
+                  ? "No discount allowed (must charge more than base)"
+                  : formatRupee(maxDiscount.toFixed(2)) +
+                    " off per discounted slot";
+            }
+          }
+
+          // Populate UI
+          $("resultsGrid").style.display = "grid";
+          $("oldMonthly").textContent = formatRupee(oldMonthly.toFixed(2));
+          $("newMonthly").textContent = formatRupee(newMonthly.toFixed(2));
+          const gainText =
+            (gain >= 0 ? "+" : "") +
+            formatRupee(gain.toFixed(2)) +
+            (isNaN(gainPct) ? "" : " (" + gainPct.toFixed(2) + "%)");
+          $("gainMonthly").textContent = gainText;
+
+          // Breakdown table
+          const tbody = $("breakdownBody");
+          tbody.innerHTML = `
+      <tr><td>Bookings / month</td><td>${bookingsMonth}</td></tr>
+      <tr><td>Weeks per month</td><td>${weeksPerMonth}</td></tr>
+      <tr><td>Full-price slots per week</td><td>${fullPerWeek}</td></tr>
+      <tr><td>Total full-price slots counted</td><td>${actualFullSlots}</td></tr>
+      <tr><td>Total discounted slots counted</td><td>${actualDiscountedSlots}</td></tr>
+      <tr><td>New base price (per full slot)</td><td>${formatRupee(
+        newBase
+      )}</td></tr>
+      <tr><td>Discount type/value</td><td>${
+        discountType === "absolute" ? "₹" + discountVal : discountVal + "%"
+      }</td></tr>
+      <tr><td>Discounted slot price (computed)</td><td>${formatRupee(
+        discountedPrice.toFixed(2)
+      )}</td></tr>
+      <tr><td>Old avg price (per slot)</td><td>${formatRupee(oldAvg)}</td></tr>
+    `;
+          $("details").style.display = "block";
+
+          // min notes
+          const minNote = $("minNote");
+          minNote.innerHTML = `<strong>Minimum discounted slot price to match old monthly revenue:</strong> ${minDiscountedPriceText}<br><strong>Max allowable discount off ₹${newBase}:</strong> ${maxAllowableDiscountText}`;
+
+          // friendly tip
+          if (gain > 0) {
+            showMessage(
+              `<strong>Nice —</strong> with these inputs you'd earn ${formatRupee(
+                gain.toFixed(2)
+              )} more per month from this customer.`
+            );
+          } else if (gain < 0) {
+            showMessage(
+              `<strong>Heads up —</strong> this configuration would earn ${formatRupee(
+                Math.abs(gain).toFixed(2)
+              )} less per month vs old pricing.`
+            );
+          } else {
+            showMessage(
+              `<strong>Break-even —</strong> revenue matches old monthly revenue.`
+            );
+          }
+        }
+
+        // events
+        $("calcBtn").addEventListener("click", calculate);
+        $("resetBtn").addEventListener("click", function () {
+          [
+            "old_avg",
+            "new_base",
+            "bookings_month",
+            "weeks_per_month",
+            "full_price_per_week",
+            "discount_value",
+          ].forEach((id) => ($(id).value = ""));
+          $("discount_type").value = "absolute";
+          $("resultsGrid").style.display = "none";
+          $("details").style.display = "none";
+          showMessage("");
+        });
+        $("exampleBtn").addEventListener("click", function () {
+          $("old_avg").value = "1400";
+          $("new_base").value = "1650";
+          $("bookings_month").value = "12";
+          $("weeks_per_month").value = "4";
+          $("full_price_per_week").value = "2";
+          $("discount_type").value = "absolute";
+          $("discount_value").value = "300";
+          // auto run calc for convenience on mobile
+          setTimeout(calculate, 120);
+        });
+
+        // allow Enter to calculate from any field
+        [
+          "old_avg",
+          "new_base",
+          "bookings_month",
+          "weeks_per_month",
+          "full_price_per_week",
+          "discount_value",
+        ].forEach((id) => {
+          $(id).addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+              calculate();
+            }
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>
