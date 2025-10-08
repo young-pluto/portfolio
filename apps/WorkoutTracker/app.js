@@ -11,6 +11,11 @@ const AppModule = (() => {
 
     // Show exercises section
     const showExercisesSection = () => {
+        // Cleanup workout history when navigating away
+        if (typeof WorkoutsModule !== 'undefined' && WorkoutsModule.cleanupWorkoutHistory) {
+            WorkoutsModule.cleanupWorkoutHistory();
+        }
+        
         exercisesSection.classList.remove('hidden');
         newWorkoutSection.classList.add('hidden');
         workoutHistorySection.classList.add('hidden');
@@ -22,6 +27,11 @@ const AppModule = (() => {
 
     // Show new workout section
     const showNewWorkoutSection = () => {
+        // Cleanup workout history when navigating away
+        if (typeof WorkoutsModule !== 'undefined' && WorkoutsModule.cleanupWorkoutHistory) {
+            WorkoutsModule.cleanupWorkoutHistory();
+        }
+        
         exercisesSection.classList.add('hidden');
         newWorkoutSection.classList.remove('hidden');
         workoutHistorySection.classList.add('hidden');
@@ -43,6 +53,12 @@ const AppModule = (() => {
         
         // Update active nav button
         updateActiveNavButton(workoutHistoryBtn);
+        
+        // Load workout history only when accessing the section
+        // This prevents unnecessary memory usage when not viewing history
+        if (typeof WorkoutsModule !== 'undefined' && WorkoutsModule.loadWorkoutHistory) {
+            WorkoutsModule.loadWorkoutHistory();
+        }
     };
 
     // Update active nav button

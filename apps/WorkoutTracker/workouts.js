@@ -31,6 +31,7 @@ const WorkoutsModule = (() => {
     let isWorkoutActive = false;
     let editingWorkoutId = null;
     let editingSavedEntryId = null;
+    let workoutHistoryListener = null; // Track the listener for cleanup
 
     // Firebase references
     const getWorkoutsRef = () => {
@@ -43,11 +44,13 @@ const WorkoutsModule = (() => {
         return database.ref(`users/${user.uid}/savedWorkoutEntries`);
     };
 
-    // Load workout history from Firebase
+    // Load workout history from Firebase (optimized for mobile)
     const loadWorkoutHistory = () => {
         const workoutsRef = getWorkoutsRef();
         
-        workoutsRef.on('value', (snapshot) => {
+        // Use 'once' instead of 'on' to avoid continuous listeners
+        // Limit to last 50 workouts to reduce memory usage on mobile
+        workoutsRef.orderByChild('timestamp').limitToLast(50).once('value', (snapshot) => {
             workoutHistory = [];
             
             if (workoutHistoryList) {
@@ -71,12 +74,35 @@ const WorkoutsModule = (() => {
             } else if (workoutHistoryList) {
                 workoutHistoryList.innerHTML = '<p>No workout history yet. Start a new workout to see your history here.</p>';
             }
+        }).catch(error => {
+            console.error("Error loading workout history:", error);
+            if (workoutHistoryList) {
+                workoutHistoryList.innerHTML = '<p>Error loading workout history. Please try again.</p>';
+            }
         });
         
         // Update history title with user's name
         const userData = AuthModule.getUserData();
         if (userData && userData.name && workoutHistoryTitle) {
             workoutHistoryTitle.textContent = `${userData.name}'s Workout History`;
+        }
+    };
+    
+    // Cleanup function to remove event listeners and free memory
+    const cleanupWorkoutHistory = () => {
+        // Clear the workout history array
+        workoutHistory = [];
+        
+        // Clear the DOM
+        if (workoutHistoryList) {
+            workoutHistoryList.innerHTML = '';
+        }
+        
+        // Remove any Firebase listeners if they exist
+        if (workoutHistoryListener) {
+            const workoutsRef = getWorkoutsRef();
+            workoutsRef.off('value', workoutHistoryListener);
+            workoutHistoryListener = null;
         }
     };
 
@@ -111,7 +137,7 @@ const WorkoutsModule = (() => {
         });
     };
 
-    // Render workout history
+    // Render workout history (optimized with event delegation)
     const renderWorkoutHistory = () => {
         if (!workoutHistoryList) return;
         
@@ -122,10 +148,52 @@ const WorkoutsModule = (() => {
             return;
         }
         
+        // Create a document fragment for better performance
+        const fragment = document.createDocumentFragment();
+        
         workoutHistory.forEach(workout => {
             const workoutItem = createWorkoutHistoryElement(workout);
-            workoutHistoryList.appendChild(workoutItem);
+            fragment.appendChild(workoutItem);
         });
+        
+        workoutHistoryList.appendChild(fragment);
+        
+        // Use event delegation instead of individual listeners
+        setupWorkoutHistoryEventDelegation();
+    };
+    
+    // Setup event delegation for workout history items (more memory efficient)
+    const setupWorkoutHistoryEventDelegation = () => {
+        if (!workoutHistoryList) return;
+        
+        // Remove any existing listener to avoid duplicates
+        const newList = workoutHistoryList.cloneNode(true);
+        workoutHistoryList.parentNode.replaceChild(newList, workoutHistoryList);
+        const updatedList = document.getElementById('workout-history-list');
+        
+        if (updatedList) {
+            updatedList.addEventListener('click', (e) => {
+                const target = e.target.closest('.view-workout-btn');
+                if (target) {
+                    const workoutItem = target.closest('.workout-history-item');
+                    if (workoutItem) {
+                        const detailsContainer = workoutItem.querySelector('.workout-details');
+                        if (detailsContainer) {
+                            detailsContainer.classList.toggle('hidden');
+                        }
+                    }
+                    return;
+                }
+                
+                const editTarget = e.target.closest('.edit-workout-btn');
+                if (editTarget) {
+                    const workoutItem = editTarget.closest('.workout-history-item');
+                    if (workoutItem && workoutItem.dataset.id) {
+                        editWorkout(workoutItem.dataset.id);
+                    }
+                }
+            });
+        }
     };
 
     // Create workout history element from template
@@ -209,21 +277,8 @@ const WorkoutsModule = (() => {
             detailsContainer.appendChild(exercisesList);
         }
         
-        // Add event listeners
-        const viewWorkoutBtn = workoutItem.querySelector('.view-workout-btn');
-        if (viewWorkoutBtn) {
-            viewWorkoutBtn.addEventListener('click', () => {
-                detailsContainer.classList.toggle('hidden');
-            });
-        }
-        
-        // Add edit button event listener
-        const editWorkoutBtn = workoutItem.querySelector('.edit-workout-btn');
-        if (editWorkoutBtn) {
-            editWorkoutBtn.addEventListener('click', () => {
-                editWorkout(workout.id);
-            });
-        }
+        // Event listeners are now handled via event delegation in setupWorkoutHistoryEventDelegation()
+        // No need to add individual listeners here - this saves memory on mobile
         
         return workoutItem;
     };
@@ -1191,8 +1246,8 @@ if (closeSavedWorkoutsBtn) {
     });
 }
 
-// Load workout history
-loadWorkoutHistory();
+// Note: loadWorkoutHistory() is now called on-demand when the history section is accessed
+// This prevents unnecessary memory usage and improves mobile performance
 
 } catch (error) {
 console.error("Error initializing WorkoutsModule:", error);
@@ -1204,6 +1259,8 @@ return {
 init,
 initNewWorkout,
 loadSavedEntries,
-createNewWorkout
+createNewWorkout,
+loadWorkoutHistory,
+cleanupWorkoutHistory
 };
 })();
