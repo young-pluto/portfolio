@@ -17,7 +17,11 @@
     --chart-green: #10b981;
     --chart-purple: #8b5cf6;
     
-    /* UI Elements */
+    /* UI Elements - Light Mode */
+    --bg-gradient-1: #6366f1;
+    --bg-gradient-2: #4ECDC4;
+    --bg-gradient-3: #FF6B6B;
+    --bg-gradient-4: #4f46e5;
     --card-bg: rgba(255, 255, 255, 0.85);
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(255, 255, 255, 0.2);
@@ -26,6 +30,8 @@
     --text-light: #94a3b8;
     --border: rgba(226, 232, 240, 0.8);
     --border-hover: #cbd5e1;
+    --input-bg: rgba(255, 255, 255, 0.8);
+    --set-item-bg: rgba(248, 250, 252, 0.8);
     
     /* Effects */
     --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -43,6 +49,71 @@
     --radius-full: 9999px;
 }
 
+/* Dark Mode - iOS 26 Refined Aesthetic */
+body.dark-mode {
+    --bg-gradient-1: #000000;
+    --bg-gradient-2: #0a0a0a;
+    --bg-gradient-3: #111111;
+    --bg-gradient-4: #050505;
+    --card-bg: rgba(18, 18, 18, 0.95);
+    --glass-bg: rgba(28, 28, 30, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #f5f5f7;
+    --text-secondary: #a1a1a6;
+    --text-light: #6e6e73;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(255, 255, 255, 0.12);
+    --input-bg: rgba(28, 28, 30, 0.7);
+    --set-item-bg: rgba(28, 28, 30, 0.6);
+    --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+/* Dark mode specific overrides for premium feel */
+body.dark-mode .auth-card,
+body.dark-mode section,
+body.dark-mode .form-container,
+body.dark-mode .exercise-item,
+body.dark-mode .workout-exercise,
+body.dark-mode .set-item,
+body.dark-mode .workout-history-item,
+body.dark-mode .info-container,
+body.dark-mode .graph-container,
+body.dark-mode .table-container {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+}
+
+body.dark-mode .checklist-container,
+body.dark-mode .saved-workouts-list,
+body.dark-mode .dialog-content {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+body.dark-mode thead {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+body.dark-mode th {
+    background: rgba(28, 28, 30, 0.95);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+body.dark-mode .exercise-search input:focus,
+body.dark-mode input:focus,
+body.dark-mode select:focus,
+body.dark-mode textarea:focus {
+    background-color: rgba(28, 28, 30, 0.9);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -52,12 +123,13 @@
 
 body {
     min-height: 100vh;
-    background: linear-gradient(45deg, #6366f1, #4ECDC4, #FF6B6B, #4f46e5);
+    background: linear-gradient(45deg, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3), var(--bg-gradient-4));
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
+    transition: background 0.5s ease, color 0.3s ease;
 }
 
 @keyframes gradientBG {
@@ -138,7 +210,7 @@ body {
     border: 2px solid var(--border);
     border-radius: var(--radius-md);
     font-size: 1rem;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: var(--input-bg);
     color: var(--text-primary);
     transition: all var(--transition-fast);
 }
@@ -321,6 +393,45 @@ header h1::after {
     box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
 }
 
+/* Dark Mode Toggle */
+.theme-toggle {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-medium);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle i {
+    font-size: 1.1rem;
+    transition: transform 0.5s ease;
+}
+
+.theme-toggle:hover i {
+    transform: rotate(20deg);
+}
+
+body.dark-mode .theme-toggle {
+    background: rgba(99, 102, 241, 0.3);
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
 nav {
     display: flex;
     background: var(--glass-bg);
@@ -400,6 +511,15 @@ section {
     overflow: hidden;
 }
 
+/* MOBILE: Dramatically reduce section padding! */
+@media (max-width: 768px) {
+    section {
+        padding: 10px !important;
+        margin-bottom: 15px;
+        border-radius: 12px;
+    }
+}
+
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -473,6 +593,48 @@ section {
     box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
 }
 
+/* Auto-Save Indicator */
+.auto-save-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(45deg, var(--success), #0d9488);
+    color: white;
+    padding: 12px 20px;
+    border-radius: var(--radius-full);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    z-index: 1000;
+    animation: slideInRight 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    pointer-events: none;
+}
+
+.auto-save-indicator i {
+    font-size: 1.1rem;
+    animation: checkMark 0.5s ease;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes checkMark {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
 .icon-btn {
     background: transparent;
     width: 36px;
@@ -486,12 +648,30 @@ section {
     font-size: 1rem;
     cursor: pointer;
     transition: all var(--transition-medium);
+    flex-shrink: 0;
 }
 
 .icon-btn:hover {
     background: rgba(0, 0, 0, 0.05);
     transform: scale(1.1);
     color: var(--primary);
+}
+
+body.dark-mode .icon-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Mobile optimizations for icon buttons */
+@media (max-width: 768px) {
+    .icon-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+    }
+    
+    .set-item .icon-btn {
+        align-self: flex-start;
+    }
 }
 
 .button-group {
@@ -602,7 +782,7 @@ section {
     border: 2px solid var(--border);
     border-radius: var(--radius-md);
     font-size: 1rem;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: var(--input-bg);
     color: var(--text-primary);
     transition: all var(--transition-fast);
     font-family: 'Outfit', sans-serif;
@@ -653,7 +833,7 @@ section {
     border: 2px solid var(--border);
     border-radius: var(--radius-md);
     font-size: 1rem;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: var(--input-bg);
     color: var(--text-primary);
     transition: all var(--transition-fast);
 }
@@ -703,16 +883,64 @@ section {
     transform: scaleX(1);
 }
 
+
+
 .exercise-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.workout-exercise.collapsed .exercise-header {
+    margin-bottom: 0;
+}
+
+.exercise-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.collapse-toggle {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary);
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-medium);
+    flex-shrink: 0;
+}
+
+.collapse-toggle:hover {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.05);
+}
+
+.collapse-toggle i {
+    transition: transform var(--transition-medium);
+}
+
+.workout-exercise.collapsed .collapse-toggle i {
+    transform: rotate(-90deg);
 }
 
 .exercise-actions {
     display: flex;
     gap: 10px;
+}
+
+.workout-exercise.collapsed .exercise-actions {
+    opacity: 0.5;
 }
 
 .exercise-name {
@@ -758,6 +986,43 @@ section {
     overflow: hidden;
     animation: fadeSlideUp 0.5s ease;
     border: 1px solid var(--border);
+    transition: all var(--transition-medium);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* MOBILE: Reduce padding dramatically */
+@media (max-width: 768px) {
+    .workout-exercise {
+        padding: 12px !important;
+        margin-bottom: 15px;
+    }
+    
+    .workout-exercise.collapsed {
+        padding: 10px 12px !important;
+    }
+}
+
+.workout-exercise.collapsed {
+    padding: 20px 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.workout-exercise.collapsed .exercise-content {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    margin-top: 0;
+    transition: all var(--transition-medium);
+}
+
+.workout-exercise .exercise-content {
+    max-height: 2000px;
+    opacity: 1;
+    margin-top: 15px;
+    transition: all var(--transition-medium);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .workout-exercise::before {
@@ -769,6 +1034,10 @@ section {
     height: 100%;
     background: linear-gradient(to bottom, var(--primary), var(--accent));
     border-radius: 6px 0 0 6px;
+}
+
+.workout-exercise.collapsed::before {
+    background: linear-gradient(to bottom, var(--text-light), var(--border));
 }
 
 .exercise-history {
@@ -790,66 +1059,458 @@ section {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .set-item {
     display: flex;
-    align-items: center;
-    background: rgba(248, 250, 252, 0.8);
-    padding: 15px;
+    align-items: flex-start;
+    background: var(--set-item-bg);
+    padding: 16px;
     border-radius: var(--radius-md);
     border: 1px solid var(--border);
     transition: all var(--transition-fast);
+    position: relative;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .set-item:hover {
-    background: white;
+    background: var(--card-bg);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Mobile optimizations for set-item */
+@media (max-width: 768px) {
+    .set-item {
+        padding: 12px 8px !important;
+        gap: 8px;
+        align-items: flex-start;
+    }
+}
+
+/* Saved/Logged set view */
+.set-item.saved {
+    cursor: pointer;
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+body.dark-mode .set-item.saved {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.set-item.saved:hover {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    transform: translateY(-2px);
+}
+
+body.dark-mode .set-item.saved:hover {
+    background: rgba(16, 185, 129, 0.12);
+}
+
+/* Static text view for saved sets */
+.set-static-view {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1;
+    padding: 5px 0;
+    flex-wrap: wrap;
+}
+
+.set-static-value {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Weight and Reps side by side */
+.set-static-value:nth-child(1),
+.set-static-value:nth-child(2) {
+    flex: 1 1 calc(50% - 5px);
+    min-width: 0;
+}
+
+/* Remarks takes full width below */
+.set-static-value:nth-child(3) {
+    flex: 1 1 100%;
+    margin-top: 4px;
+}
+
+.set-static-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+.set-static-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+/* Mobile optimizations for static view */
+@media (max-width: 768px) {
+    .set-static-view {
+        gap: 12px;
+    }
+    
+    .set-static-value:nth-child(1),
+    .set-static-value:nth-child(2) {
+        flex: 1 1 calc(50% - 6px);
+    }
+    
+    .set-static-value:nth-child(3) {
+        flex: 1 1 100%;
+        margin-top: 6px;
+    }
+    
+    .set-static-label {
+        font-size: 0.65rem;
+    }
+    
+    .set-static-text {
+        font-size: 1.05rem;
+    }
+}
+
+.set-saved-badge {
+    margin-left: auto;
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    backdrop-filter: blur(10px);
+}
+
+body.dark-mode .set-saved-badge {
+    background: rgba(16, 185, 129, 0.2);
+}
+
+/* Glassmorphic tick button (iOS 26 style) */
+.set-save-btn {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--success);
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-medium);
+    flex-shrink: 0;
+    align-self: flex-start;
+}
+
+body.dark-mode .set-save-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.set-save-btn:hover {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+body.dark-mode .set-save-btn:hover {
+    background: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.set-save-btn i {
+    font-size: 1.05rem;
+}
+
+/* Mobile optimizations for tick button */
+@media (max-width: 768px) {
+    .set-save-btn {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .set-save-btn i {
+        font-size: 1.1rem;
+    }
+}
+
+/* Hide save button when set is saved */
+.set-item.saved .set-save-btn {
+    display: none;
+}
+
+/* Hide inputs when saved */
+.set-item.saved .set-inputs {
+    display: none;
+}
+
+/* Show static view when saved */
+.set-item:not(.saved) .set-static-view {
+    display: none;
 }
 
 .set-label {
     font-weight: 600;
-    margin-right: 15px;
-    min-width: 60px;
+    min-width: 50px;
     color: white;
     background: linear-gradient(45deg, var(--primary), var(--accent));
-    padding: 6px 10px;
-    border-radius: var(--radius-md);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
     text-align: center;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+}
+
+/* Mobile optimizations for set label */
+@media (max-width: 768px) {
+    .set-label {
+        min-width: 45px !important;
+        padding: 8px 10px !important;
+        font-size: 0.85rem !important;
+    }
 }
 
 .set-inputs {
     display: flex;
     flex: 1;
-    gap: 15px;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: 100%;
+    min-width: 0;
 }
 
 .input-group {
     flex: 1;
+    min-width: 0;
+}
+
+/* Weight and Reps side by side */
+.input-group:nth-child(1),
+.input-group:nth-child(2) {
+    flex: 1 1 calc(50% - 5px);
+    min-width: calc(50% - 5px);
+}
+
+/* Make weight and reps inputs bigger */
+.input-group:nth-child(1) input,
+.input-group:nth-child(2) input,
+.weight-input,
+.reps-input {
+    min-height: 52px !important;
+    padding: 15px 18px !important;
+    font-size: 1.05rem !important;
+}
+
+/* Remarks takes full width below - FORCE IT! */
+.input-group:nth-child(3) {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Make remarks input specifically larger */
+.input-group:nth-child(3) input,
+.remarks-input {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    padding: 16px 18px !important;
+    min-height: 54px !important;
+    font-size: 1.05rem !important;
+    box-sizing: border-box !important;
 }
 
 .input-group label {
     display: block;
     margin-bottom: 5px;
-    font-size: 0.8rem;
-    font-weight: 500;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     color: var(--text-secondary);
 }
 
 .input-group input {
     width: 100%;
-    padding: 10px 12px;
+    padding: 14px 16px;
     border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 0.95rem;
+    border-radius: 8px;
+    font-size: 1rem;
     margin-bottom: 0;
     transition: all var(--transition-fast);
+    background: var(--input-bg);
+    color: var(--text-primary);
+    min-height: 50px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* Hide number input spinners */
+.input-group input::-webkit-outer-spin-button,
+.input-group input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.input-group input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+body.dark-mode .input-group input {
+    background: rgba(40, 40, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-primary);
 }
 
 .input-group input:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    background: rgba(40, 40, 42, 1);
+}
+
+body.dark-mode .input-group input:focus {
+    background: rgba(50, 50, 52, 1);
+    border-color: var(--primary);
+}
+
+/* Remarks display - truncated with expand */
+.remarks-display {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    min-height: 50px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+body.dark-mode .remarks-display {
+    background: rgba(40, 40, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.remarks-display.truncated {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.remarks-display.expanded {
+    white-space: normal;
+}
+
+.remarks-display:hover {
+    border-color: var(--primary);
+}
+
+.remarks-expand-hint {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 4px;
+    font-style: italic;
+}
+
+/* Hide default remarks input when using display mode */
+.input-group.remarks-mode input {
+    display: none;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .set-inputs {
+        gap: 12px;
+    }
+    
+    .input-group label {
+        font-size: 0.7rem;
+        margin-bottom: 6px;
+    }
+    
+    .input-group input {
+        padding: 16px 18px;
+        font-size: 1.05rem;
+        min-height: 54px;
+        border-radius: 10px;
+    }
+    
+    .remarks-display {
+        padding: 16px 18px;
+        font-size: 1.05rem;
+        min-height: 54px;
+        border-radius: 10px;
+    }
+    
+    /* Ensure remarks is always below on mobile */
+    .input-group:nth-child(1),
+    .input-group:nth-child(2) {
+        flex: 1 1 calc(50% - 6px);
+        min-width: calc(50% - 6px);
+    }
+    
+    /* MAKE WEIGHT AND REPS BIGGER ON MOBILE */
+    .input-group:nth-child(1) input,
+    .input-group:nth-child(2) input,
+    .weight-input,
+    .reps-input {
+        min-height: 56px !important;
+        padding: 16px 18px !important;
+        font-size: 1.1rem !important;
+        border-radius: 12px !important;
+    }
+    
+    .input-group:nth-child(3) {
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        margin-top: 4px;
+    }
+    
+    /* MAKE REMARKS MASSIVE ON MOBILE */
+    .input-group:nth-child(3) input,
+    .remarks-input {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        padding: 18px 20px !important;
+        min-height: 60px !important;
+        font-size: 1.1rem !important;
+        border-radius: 12px !important;
+        box-sizing: border-box !important;
+    }
 }
 
 /* Workout History Styles */
@@ -1005,7 +1666,8 @@ section {
     border-radius: var(--radius-md);
     font-size: 1rem;
     transition: all var(--transition-fast);
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: var(--input-bg);
+    color: var(--text-primary);
 }
 
 .exercise-search input:focus {

@@ -4,6 +4,16 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>✨ Workout Tracker</title>
+        <script>
+            // Enable dark mode by default on page load
+            (function() {
+                // Check if user has a saved preference, otherwise default to dark
+                const savedTheme = localStorage.getItem('theme');
+                if (!savedTheme) {
+                    localStorage.setItem('theme', 'dark');
+                }
+            })();
+        </script>
         <link rel="stylesheet" href="styles.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,6 +24,13 @@
         <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABCBJREFUWEe9l1toXFUUhr+1z5lJJpNkJr2ltrQGW7QKpRQviCgiaNUHoRREEFHEFx98EXwVfPHJFwXxAir4IIgg4ouIYBWvRcFaRUvT1DTNJZlMMpnMZM5Z8p+cM3SSSS5Dc9KBYTJn9t5r/Wet/1/rCDMe+eW9y1fSzb1Igo8mULAK5RqUUyRnpskFtcGOUlhj2LGVK/xUYdrFyRJvXU48M4IEWbCXm9k3d4G5/Rn1wTWE/nZCPI1/4l+yfz1l4oIjxbsyffPd8XxRbfXLOCuJZJquwcshNuTWO/DcZpR/I8ZbT3FyFyvCDQy+VhGGVUz4VnpCGk0UZ7yKo9u14zSGXfO2vDiISe9Cc+dACQmKSHgS1h6iOPoXWvg2Xt/cj1YI3Siy8zEieQQljRIn6c7uRIsfEgmhMALhR9j8BYpSoNR9G/Kv4aUvxe3Z7DaHW22uDUYdoHu48fh/c9R2Qb5siBxcXdM9CU9hvSHc/PmYdBIn6KHvFdLp42jxCXCTaP55zJnPscIJiIw5J0iQGcYOvY+TGiDzwKrXqRXgJhwqCNuSAoGBYMIH4nJQKHt1n5e0EGY9MfQjHT1riNNXYQsv4LiXUQrfQPEfnOA4Ycp2Zm/e04KIgRAqTpD0wXVACCRCx+eYMIgTJOlW6OxI07PqUspH3yM7/jtanKCWDcMiU5HLcSffwOleJPP0mtdqBHj++oJmLSQdS5B0zORgBnrHJrDTETLt40lLwgJBFvXXkLnrbKJwbXW2NXqb2zVCJkHbI6GlgLAz4afGKDw6hsQTJJOLKY1foHDiKMHcHZh8DquXI8lwYvhP/K7VuL3nzXluFgKqAqo6QZ97I+KmyIxsJsz+RX7iGGHxS7ygj2h+W3YRMT57BLf3QtzeJgKaStCmwRFI2Ip4rihxOo+T6COZ7qNneCWZrbvIje2icOpvrJzcOCzjsZGT+Kk1pC9eQO/WFgrMAtx6MHQswpnMnN8LPZsuxl97MemL1lPIjJAbP9RYXWPITxzF9d/EXX5h8wGsBXCRvrhSXTc2RRgWKM8sMeAGBuYTVdbKbxfWKEK7HxiCyMTcF1nqxTqtBHCeAXdVH5VVzHCJtbO/Y+cuRMTU5V4jEJ+yVmItA9bFGMZWH8LtHqjTQgHSFRaEkKuYM2y/jR8fwJaPQ7kf8caxZcEqlcW3BtavDaJRguuP0F3IEB4+jrlmb726Fgb8r2zOxbAn5kZECdK9eDLBgu4Ep8eTRFGJiMqQXFXcx3jCkTSvfWX0i91+7uVWBvw6Q+rvdJRIRNGKxXNWU7LriI05aEzEGX2+e/xo4nSrzP8HzCLXFQHVF1YS5PLvfg11jLSyRbRSbpf6/AdJWug/16eTqwAAAABJRU5ErkJggg==">
     </head>
 <body>
+    <script>
+        // Apply dark mode immediately on load (before content renders)
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
     <!-- Authentication Section -->
     <div id="auth-container">
         <div class="auth-card">
@@ -42,7 +59,13 @@
         
         <header>
             <h1>Workout Tracker</h1>
-            <button id="logout-btn">Logout</button>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                    <span>Dark</span>
+                </button>
+                <button id="logout-btn">Logout</button>
+            </div>
         </header>
 
         <nav>
@@ -224,7 +247,12 @@
     <template id="workout-exercise-template">
         <div class="workout-exercise">
             <div class="exercise-header">
-                <h3 class="exercise-name"></h3>
+                <div class="exercise-header-left">
+                    <button class="collapse-toggle">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <h3 class="exercise-name"></h3>
+                </div>
                 <div class="exercise-actions">
                     <button class="history-btn icon-btn" title="View History"><i class="fas fa-history"></i></button>
                     <button class="view-progress-btn icon-btn" title="View Progress"><i class="fas fa-chart-line"></i></button>
@@ -232,31 +260,61 @@
                     <button class="remove-exercise-btn icon-btn" title="Remove"><i class="fas fa-times"></i></button>
                 </div>
             </div>
-            <div class="exercise-history hidden">
-                <h4>Previous Data</h4>
-                <div class="history-data"></div>
+            <div class="exercise-content">
+                <div class="exercise-history hidden">
+                    <h4>Previous Data</h4>
+                    <div class="history-data"></div>
+                </div>
+                <div class="sets-container"></div>
             </div>
-            <div class="sets-container"></div>
         </div>
     </template>
 
     <template id="set-template">
         <div class="set-item">
             <div class="set-label"></div>
+            
+            <!-- Edit Mode: Input fields -->
             <div class="set-inputs">
                 <div class="input-group">
                     <label>Weight (kg/lbs)</label>
-                    <input type="number" class="weight-input" min="0" step="0.5">
+                    <input type="text" inputmode="decimal" class="weight-input" placeholder="55">
                 </div>
                 <div class="input-group">
                     <label>Reps</label>
-                    <input type="number" class="reps-input" min="0" step="1">
+                    <input type="text" inputmode="numeric" class="reps-input" placeholder="10">
                 </div>
                 <div class="input-group">
                     <label>Remarks</label>
-                    <input type="text" class="remarks-input" placeholder="Notes, feelings, etc.">
+                    <input type="text" class="remarks-input" placeholder="Feeling strong today...">
                 </div>
             </div>
+            
+            <!-- View Mode: Static text (shown when saved) -->
+            <div class="set-static-view">
+                <div class="set-static-value">
+                    <div class="set-static-label">Weight</div>
+                    <div class="set-static-text weight-static">—</div>
+                </div>
+                <div class="set-static-value">
+                    <div class="set-static-label">Reps</div>
+                    <div class="set-static-text reps-static">—</div>
+                </div>
+                <div class="set-static-value">
+                    <div class="set-static-label">Remarks</div>
+                    <div class="set-static-text remarks-static">—</div>
+                </div>
+                <div class="set-saved-badge">
+                    <i class="fas fa-check-circle"></i>
+                    Logged
+                </div>
+            </div>
+            
+            <!-- Glassmorphic tick button -->
+            <button class="set-save-btn" title="Save set">
+                <i class="fas fa-check"></i>
+            </button>
+            
             <button class="delete-set-btn icon-btn"><i class="fas fa-trash"></i></button>
         </div>
     </template>

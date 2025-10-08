@@ -8,6 +8,7 @@ const AppModule = (() => {
     const newWorkoutSection = document.getElementById('new-workout-section');
     const workoutHistorySection = document.getElementById('workout-history-section');
     const exerciseProgressSection = document.getElementById('exercise-progress-section');
+    const themeToggleBtn = document.getElementById('theme-toggle');
 
     // Show exercises section
     const showExercisesSection = () => {
@@ -73,12 +74,60 @@ const AppModule = (() => {
         activeButton.classList.add('active');
     };
 
+    // Dark mode toggle functionality
+    const toggleTheme = () => {
+        const body = document.body;
+        const isDark = body.classList.toggle('dark-mode');
+        
+        // Update button text and icon
+        if (themeToggleBtn) {
+            const icon = themeToggleBtn.querySelector('i');
+            const text = themeToggleBtn.querySelector('span');
+            
+            if (isDark) {
+                icon.className = 'fas fa-sun';
+                text.textContent = 'Light';
+            } else {
+                icon.className = 'fas fa-moon';
+                text.textContent = 'Dark';
+            }
+        }
+        
+        // Save preference to localStorage
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    };
+
+    // Load saved theme preference (defaults to dark)
+    const loadThemePreference = () => {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            if (themeToggleBtn) {
+                const icon = themeToggleBtn.querySelector('i');
+                const text = themeToggleBtn.querySelector('span');
+                if (icon && text) {
+                    icon.className = 'fas fa-sun';
+                    text.textContent = 'Light';
+                }
+            }
+        }
+    };
+
     // Initialize
     const init = () => {
+        // Load theme preference
+        loadThemePreference();
+        
         // Event listeners
         viewExercisesBtn.addEventListener('click', showExercisesSection);
         newWorkoutBtn.addEventListener('click', showNewWorkoutSection);
         workoutHistoryBtn.addEventListener('click', showWorkoutHistorySection);
+        
+        // Theme toggle
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', toggleTheme);
+        }
         
         // Show exercises section by default
         showExercisesSection();
