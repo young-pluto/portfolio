@@ -1013,13 +1013,16 @@
 <!-- About Section -->
 <section class="about" id="about">
     <div class="container">
-        <div class="about-content fade-in-up">
-            <h2>About Me</h2>
-            <p>I'm a self-taught full stack developer driven by the need to solve real problems with technology. My journey began when I faced challenges that needed digital solutions, and I chose to master fundamental tools that could deliver results quickly and effectively.</p>
-            <p>I have a strong foundation in HTML, CSS, JavaScript, and Firebase, which allows me to build practical, real-world applications efficiently. I'm eager to grow as a full-stack developer and explore emerging frameworks while continuously upscaling myself through real-world problem solving. I believe in using technology as a means to an end, creating solutions that address genuine problems. Every project I tackle teaches me something new about both the technical and problem-solving aspects of development.</p>
-        </div>
+      <div class="about-content fade-in-up">
+        <h2>About Me</h2>
+        <p>I’m a full-stack developer who builds complete, production-ready systems, not just websites. I design solutions that are fast, reliable, and genuinely improve how businesses operate and how users interact online.</p>
+  
+        <p>My stack includes <strong>React, Node.js, Express, Firebase</strong>, and modern UI frameworks. I’ve built platforms with <strong>payment gateway integrations, secure authentication, automated notifications, and real-time admin dashboards</strong>. Every system is engineered to feel seamless, intuitive, and stable under real-world use.</p>
+  
+        <p>I don’t build for aesthetics alone. I build for <strong>efficiency, usability, and long-term scalability</strong>. My focus is always on making technology serve a purpose: reducing effort, increasing clarity, and creating a smoother experience for both businesses and their customers.</p>
+      </div>
     </div>
-</section>
+  </section>
 
 <!-- Projects Section -->
 <section class="projects" id="projects">
@@ -1082,9 +1085,8 @@
     // Initialize resume URL on page load
     async function initializeResumeURL() {
         try {
-            // Get the download URL from Firebase Storage
-            const resumeRef = storage.ref('resume/Apoorv_Bhardwaj_Resume.pdf');
-            resumeDownloadURL = await resumeRef.getDownloadURL();
+            // Direct Firebase Storage URL - resume/Apoorv Bhardwaj.pdf
+            resumeDownloadURL = 'https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/resume%2FApoorv%20Bhardwaj.pdf?alt=media&token=ce20e7aa-ddef-422d-a57c-5b9d043a0910';
             console.log('Resume URL initialized:', resumeDownloadURL);
         } catch (error) {
             console.error('Error getting resume URL:', error);
@@ -1102,6 +1104,14 @@
     demoLink: "https://bookings.ball4life.in",
     learnedPreview: "Built a production-ready booking system with real-time data sync and payment integration.",
     learnedFull: "This project was my deep dive into building a production-ready booking system from scratch. I learned how to implement real-time data synchronization using Firebase, ensuring that slot availability updates instantly across all user sessions. The biggest challenge was integrating the Cashfree payment gateway and handling webhook verification for secure payment processing. I gained extensive experience with Firebase Cloud Functions, setting up automated notification systems using Twilio's WhatsApp API. The project taught me about handling complex state management in vanilla JavaScript, implementing proper error handling for payment failures, and creating a robust admin interface with modal-based booking forms. Working with webhooks and payment verification taught me about security considerations in financial applications, including signature verification and proper data validation."
+},
+{
+    title: "Upscale Marketing Solutions",
+    description: "A modern single-screen SPA with PayPal-powered checkout for marketing services. Built with vanilla JavaScript featuring dynamic section swapping (select package → enter details → pay), secure server-side PayPal order creation/capture, and an admin dashboard for live order tracking with Firebase Auth and Realtime Database. Optimized for mobile with seamless UX, minimal reloads, and frictionless form handling.",
+    technologies: ["JavaScript ES6", "Node.js", "Express", "Firebase Authentication", "Firebase Realtime Database", "PayPal JS SDK", "PayPal Server SDK", "Vercel Serverless Functions", "RESTful API", "SPA Architecture", "Responsive Design"],
+    demoLink: "https://upscalemarketingsolutions.com",
+    learnedPreview: "Built a full-stack payments platform with PayPal integration and secure server-side order processing.",
+    learnedFull: "This project was a deep dive into building a production-grade payment platform from scratch without using React or other frameworks. I learned the true complexity of manual DOM manipulation and state management in vanilla JavaScript - significantly harder than using React's declarative approach, but absolutely practical for focused, small-catalog flows. The biggest technical challenge was integrating PayPal's Smart Buttons with secure server-side order creation and capture using both the PayPal JS SDK (client-side) and PayPal Server SDK (Node.js/Express). I gained extensive experience building an SPA-like experience with dynamic section swapping, fine-grained DOM updates, and maintaining state across multiple steps without a state management library. Implementing the admin dashboard taught me about real-time data subscriptions with Firebase Realtime Database and building secure admin interfaces with Firebase Authentication. The project emphasized mobile-first design principles, creating clear CTAs, implementing loading overlays and duplicate-click prevention for better UX. Working with Vercel's serverless functions showed me how to structure Node.js/Express APIs for serverless deployment, handle CORS properly, and implement secure API endpoints for payment processing. This project reinforced that vanilla JavaScript can be powerful for small to medium applications when you need full control over every aspect of the user experience."
 },
 {
     title: "Fitness Progress Tracker",
@@ -1140,7 +1150,7 @@
                 // Create a temporary link element and trigger download
                 const link = document.createElement('a');
                 link.href = resumeDownloadURL;
-                link.download = 'Apoorv_Bhardwaj_Resume.pdf';
+                link.download = 'Apoorv Bhardwaj.pdf';
                 link.target = '_blank';
                 document.body.appendChild(link);
                 link.click();
