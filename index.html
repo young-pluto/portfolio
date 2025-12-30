@@ -1,1561 +1,1106 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apoorv Bhardwaj - Full Stack Developer</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- Preload Image -->
-<link rel="preload" href="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/A41C917B-797D-406D-A049-A1563EF9DD19%20copy.png?alt=media&token=db3d1b51-ff05-4a20-9ff0-652d450d96c3" as="image">
-
-<!-- Open Graph / Facebook / WhatsApp -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://www.builtbyapoorv.in">
-<meta property="og:title" content="Built by Apoorv - Full Stack Developer">
-<meta property="og:description" content="A showcase of all the full stack projects built by Apoorv. Explore powerful, scalable, and well-designed apps.">
-<meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/A41C917B-797D-406D-A049-A1563EF9DD19%20copy.png?alt=media&token=db3d1b51-ff05-4a20-9ff0-652d450d96c3">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://www.builtbyapoorv.in">
-<meta property="twitter:title" content="Built by Apoorv - Full Stack Developer">
-<meta property="twitter:description" content="A showcase of all the full stack projects built by Apoorv. Explore powerful, scalable, and well-designed apps.">
-<meta property="twitter:image" content="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/A41C917B-797D-406D-A049-A1563EF9DD19%20copy.png?alt=media&token=db3d1b51-ff05-4a20-9ff0-652d450d96c3">
-
-<!-- Favicon -->
-<link rel="icon" type="image/png" href="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/A41C917B-797D-406D-A049-A1563EF9DD19%20copy.png?alt=media&token=db3d1b51-ff05-4a20-9ff0-652d450d96c3">
-<link rel="apple-touch-icon" href="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/A41C917B-797D-406D-A049-A1563EF9DD19%20copy.png?alt=media&token=db3d1b51-ff05-4a20-9ff0-652d450d96c3">
-
-<!-- Firebase SDKs -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app-compat.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-storage-compat.min.js"></script>
-
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    :root {
-        --bg-primary: #000000;
-        --bg-secondary: #111111;
-        --bg-tertiary: #1a1a1a;
-        --text-primary: #ffffff;
-        --text-secondary: #a3a3a3;
-        --text-muted: #737373;
-        --accent: #f5f5f7;
-        --accent-secondary: #86efac;
-        --accent-gold: #fbbf24;
-        --border: #262626;
-        --card-bg: rgba(23, 23, 23, 0.8);
-        --glass-bg: rgba(255, 255, 255, 0.05);
-        --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        --glow: 0 0 40px rgba(134, 239, 172, 0.3);
-    }
-
-    [data-theme="light"] {
-        --bg-primary: #f8fafc;
-        --bg-secondary: #ffffff;
-        --bg-tertiary: #f1f5f9;
-        --text-primary: #0f172a;
-        --text-secondary: #475569;
-        --text-muted: #64748b;
-        --accent: #0f172a;
-        --accent-secondary: #059669;
-        --accent-gold: #d97706;
-        --border: #e2e8f0;
-        --card-bg: rgba(255, 255, 255, 0.95);
-        --glass-bg: rgba(0, 0, 0, 0.02);
-        --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-        --glow: 0 0 40px rgba(5, 150, 105, 0.15);
-    }
-
-    body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        background: var(--bg-primary);
-        color: var(--text-primary);
-        line-height: 1.6;
-        overflow-x: hidden;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 24px;
-    }
-
-    /* Enhanced Theme Toggle */
-    .theme-toggle {
-        position: fixed;
-        top: 24px;
-        right: 24px;
-        z-index: 1000;
-        background: var(--glass-bg);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid var(--border);
-        border-radius: 50px;
-        padding: 12px 16px;
-        cursor: pointer;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: var(--shadow);
-    }
-
-    .theme-toggle:hover {
-        transform: translateY(-2px) scale(1.05);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-        border-color: var(--accent-secondary);
-    }
-
-    .theme-icon {
-        font-size: 20px;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        display: block;
-    }
-
-    .theme-toggle:hover .theme-icon {
-        transform: rotate(180deg) scale(1.1);
-    }
-
-    /* Projects Button */
-    .projects-btn {
-        position: fixed;
-        top: 24px;
-        left: 24px;
-        z-index: 1000;
-        background: var(--glass-bg);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid var(--border);
-        border-radius: 50px;
-        padding: 12px 20px;
-        cursor: pointer;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: var(--shadow);
-        color: var(--text-primary);
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .projects-btn.hidden {
-        opacity: 0;
-        transform: translateY(-20px);
-        pointer-events: none;
-    }
-
-    .projects-btn:hover {
-        transform: translateY(-2px) scale(1.05);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-        border-color: var(--accent-secondary);
-        color: var(--accent-secondary);
-    }
-
-    .projects-btn-icon {
-        font-size: 16px;
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .projects-btn:hover .projects-btn-icon {
-        transform: translateX(4px);
-    }
-
-    /* Floating Elements Background */
-    .floating-elements {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: -1;
-    }
-
-    .floating-element {
-        position: absolute;
-        background: var(--accent-secondary);
-        border-radius: 50%;
-        opacity: 0.1;
-        animation: float-around 20s linear infinite;
-    }
-
-    @keyframes float-around {
-        0% { transform: translateY(100vh) rotate(0deg); }
-        100% { transform: translateY(-100px) rotate(360deg); }
-    }
-
-    /* Premium Sections */
-    section {
-        min-height: 100vh;
-        padding: 120px 0;
-        display: flex;
-        align-items: center;
-        position: relative;
-    }
-
-    /* Premium Hero Section */
-    .hero {
-        background: radial-gradient(ellipse at center, var(--bg-secondary) 0%, var(--bg-primary) 70%);
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(45deg, transparent 30%, rgba(134, 239, 172, 0.03) 50%, transparent 70%);
-        animation: hero-shimmer 8s ease-in-out infinite;
-    }
-
-    @keyframes hero-shimmer {
-        0%, 100% { transform: translateX(-100%); }
-        50% { transform: translateX(100%); }
-    }
-
-    .hero-content {
-        position: relative;
-        z-index: 2;
-    }
-
-    .hero h1 {
-        font-size: clamp(3rem, 8vw, 6rem);
-        font-weight: 800;
-        margin-bottom: 24px;
-        background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-secondary) 50%, var(--accent-gold) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        letter-spacing: -0.02em;
-        animation: hero-text-entrance 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        opacity: 0;
-        transform: translateY(40px);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    @keyframes hero-text-entrance {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .hero p {
-        font-size: clamp(1.2rem, 3vw, 1.6rem);
-        color: var(--text-secondary);
-        max-width: 700px;
-        margin: 0 auto 40px;
-        font-weight: 400;
-        letter-spacing: -0.01em;
-        animation: hero-text-entrance 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
-        opacity: 0;
-        transform: translateY(40px);
-    }
-
-    .hero p .clickable-webapps {
-        color: var(--accent-secondary);
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        text-decoration: underline;
-        text-decoration-color: transparent;
-        text-underline-offset: 4px;
-    }
-
-    .hero p .clickable-webapps:hover {
-        color: var(--accent-gold);
-        text-decoration-color: var(--accent-gold);
-        transform: translateY(-2px);
-    }
-
-    .scroll-indicator {
-        margin-top: 40px;
-        animation: premium-bounce 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        font-size: 28px;
-        color: var(--accent-secondary);
-        filter: drop-shadow(0 0 10px var(--accent-secondary));
-        display: inline-block;
-    }
-
-    @keyframes premium-bounce {
-        0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-        40% { transform: translateX(-50%) translateY(-15px); }
-        60% { transform: translateX(-50%) translateY(-8px); }
-    }
-
-    /* Premium About Section */
-    .about {
-        background: var(--bg-secondary);
-        position: relative;
-    }
-
-    .about::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, var(--accent-secondary), transparent);
-    }
-
-    .about-content {
-        max-width: 900px;
-        margin: 0 auto;
-        text-align: center;
-    }
-
-    .about h2 {
-        font-size: clamp(2.5rem, 6vw, 4rem);
-        font-weight: 700;
-        margin-bottom: 40px;
-        background: linear-gradient(135deg, var(--text-primary), var(--accent-secondary));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        letter-spacing: -0.02em;
-    }
-
-    .about p {
-        font-size: 1.2rem;
-        color: var(--text-secondary);
-        margin-bottom: 32px;
-        line-height: 1.8;
-        font-weight: 400;
-    }
-
-    /* Apple-Style Projects Section */
-    .projects {
-        background: var(--bg-primary);
-        padding: 160px 0;
-    }
-
-    .projects h2 {
-        font-size: clamp(2.5rem, 6vw, 4rem);
-        font-weight: 700;
-        margin-bottom: 80px;
-        text-align: center;
-        background: linear-gradient(135deg, var(--text-primary), var(--accent-secondary));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        letter-spacing: -0.02em;
-    }
-
-    .projects-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-        gap: 60px;
-        margin-top: 80px;
-    }
-
-    .project-card {
-        background: var(--card-bg);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-radius: 24px;
-        padding: 48px;
-        border: 1px solid var(--border);
-        position: relative;
-        overflow: hidden;
-        opacity: 0;
-        transform: translateY(60px) rotateX(10deg);
-        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: var(--shadow);
-    }
-
-    [data-theme="light"] .project-card {
-        background: var(--card-bg);
-        border: 1px solid var(--border);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
-    }
-
-    [data-theme="light"] .project-card:hover {
-        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12), var(--glow);
-        transform: translateY(-12px) scale(1.02);
-        border-color: var(--accent-secondary);
-    }
-
-    .project-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, var(--accent-secondary), transparent);
-        opacity: 0;
-        transition: opacity 0.6s ease;
-    }
-
-    .project-card.animate {
-        opacity: 1;
-        transform: translateY(0) rotateX(0deg);
-    }
-
-    .project-card:hover {
-        transform: translateY(-12px) scale(1.02);
-        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), var(--glow);
-        border-color: var(--accent-secondary);
-    }
-
-    .project-card:hover::before {
-        opacity: 1;
-    }
-
-    .project-number {
-        position: absolute;
-        top: 24px;
-        right: 24px;
-        font-size: 3rem;
-        font-weight: 800;
-        color: var(--accent-secondary);
-        opacity: 0.2;
-        transition: all 0.4s ease;
-    }
-
-    .project-card:hover .project-number {
-        opacity: 0.6;
-        transform: scale(1.1);
-    }
-
-    .project-card h3 {
-        font-size: 1.8rem;
-        font-weight: 700;
-        margin-bottom: 20px;
-        color: var(--text-primary);
-        letter-spacing: -0.01em;
-    }
-
-    .project-card p {
-        color: var(--text-secondary);
-        margin-bottom: 32px;
-        line-height: 1.7;
-        font-size: 1.1rem;
-    }
-
-    .tech-stack {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-bottom: 32px;
-    }
-
-    .tech-tag {
-        background: linear-gradient(135deg, var(--accent-secondary), var(--accent-gold));
-        color: var(--bg-primary);
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        letter-spacing: -0.01em;
-        box-shadow: 0 4px 12px rgba(134, 239, 172, 0.3);
-    }
-
-    [data-theme="light"] .tech-tag {
-        background: linear-gradient(135deg, var(--accent-secondary), var(--accent-gold));
-        color: white;
-        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
-    }
-
-    .project-links {
-        display: flex;
-        gap: 24px;
-        margin-bottom: 24px;
-    }
-
-    .project-link {
-        color: var(--accent-secondary);
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 1.1rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-    }
-
-    .project-link::after {
-        content: '';
-        position: absolute;
-        bottom: -4px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background: linear-gradient(90deg, var(--accent-secondary), var(--accent-gold));
-        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .project-link:hover::after {
-        width: 100%;
-    }
-
-    .project-link:hover {
-        color: var(--accent-gold);
-        transform: translateY(-2px);
-    }
-
-    .learned {
-        font-style: italic;
-        color: var(--text-muted);
-        font-size: 1rem;
-        border-left: 3px solid var(--accent-secondary);
-        padding: 20px;
-        margin-top: 24px;
-        line-height: 1.6;
-        background: var(--glass-bg);
-        border-radius: 12px;
-        backdrop-filter: blur(10px);
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-        padding-bottom: 50px;
-    }
-
-    [data-theme="light"] .learned {
-        background: rgba(5, 150, 105, 0.03);
-        border-left-color: var(--accent-secondary);
-    }
-
-    .learned:hover {
-        background: rgba(134, 239, 172, 0.05);
-        border-left-color: var(--accent-gold);
-    }
-
-    [data-theme="light"] .learned:hover {
-        background: rgba(5, 150, 105, 0.08);
-    }
-
-    .learned-preview {
-        display: block;
-    }
-
-    .learned-full {
-        display: none;
-        margin-top: 16px;
-        font-style: normal;
-        color: var(--text-secondary);
-        padding-right: 60px;
-    }
-
-    .learned.expanded .learned-preview {
-        display: none;
-    }
-
-    .learned.expanded .learned-full {
-        display: block;
-    }
-
-    .expand-button {
-        position: absolute;
-        bottom: 16px;
-        right: 16px;
-        width: 28px;
-        height: 28px;
-        background: rgba(1, 12, 5, 0.489);
-        color: var(--text-secondary);
-        border: 1px solid rgba(239, 240, 228, 0.812);
-        border-radius: 50%;
-        font-size: 12px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-    }
-
-    [data-theme="light"] .expand-button {
-        background: rgba(5, 150, 105, 0.1);
-        border: 1px solid rgba(5, 150, 105, 0.2);
-        color: var(--accent-secondary);
-    }
-
-    .expand-button:hover {
-        transform: scale(1.05);
-        color: var(--accent-secondary);
-    }
-
-    [data-theme="light"] .expand-button:hover {
-        background: rgba(5, 150, 105, 0.15);
-        border-color: var(--accent-secondary);
-    }
-
-    .learned.expanded .expand-button {
-        transform: rotate(180deg);
-        background: rgba(0, 0, 0, 0.12);
-    }
-
-    [data-theme="light"] .learned.expanded .expand-button {
-        background: rgba(5, 150, 105, 0.15);
-    }
-
-    .learned.expanded .expand-button:hover {
-        transform: rotate(180deg) scale(1.05);
-    }
-
-    /* Premium Contact Section */
-    .contact {
-        background: var(--bg-tertiary);
-        text-align: center;
-        position: relative;
-    }
-
-    .contact::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, var(--accent-secondary), transparent);
-    }
-
-    .contact h2 {
-        font-size: clamp(2.5rem, 6vw, 4rem);
-        font-weight: 700;
-        margin-bottom: 32px;
-        background: linear-gradient(135deg, var(--text-primary), var(--accent-secondary));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        letter-spacing: -0.02em;
-    }
-
-    .contact p {
-        font-size: 1.2rem;
-        color: var(--text-secondary);
-        margin-bottom: 60px;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-        line-height: 1.7;
-    }
-
-    .contact-links {
-        display: flex;
-        justify-content: center;
-        gap: 40px;
-        flex-wrap: wrap;
-    }
-
-    .contact-link {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        color: var(--text-primary);
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 1.1rem;
-        padding: 20px 32px;
-        background: var(--card-bg);
-        backdrop-filter: blur(20px);
-        border-radius: 16px;
-        border: 1px solid var(--border);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: var(--shadow);
-        position: relative;
-        overflow: hidden;
-    }
-
-    [data-theme="light"] .contact-link {
-        background: var(--card-bg);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-    }
-
-    .contact-link::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(134, 239, 172, 0.1), transparent);
-        transition: left 0.6s ease;
-    }
-
-    .contact-link:hover::before {
-        left: 100%;
-    }
-
-    .contact-link:hover {
-        transform: translateY(-8px) scale(1.05);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), var(--glow);
-        border-color: var(--accent-secondary);
-        color: var(--accent-secondary);
-    }
-
-    [data-theme="light"] .contact-link:hover {
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), var(--glow);
-    }
-
-    .contact-link span:first-child {
-        font-size: 1.4rem;
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .contact-link:hover span:first-child {
-        transform: scale(1.2) rotate(10deg);
-    }
-
-    /* Resume Download Styles */
-    .resume-link {
-        position: relative;
-        user-select: none;
-    }
-
-    .resume-link:focus {
-        outline: 2px solid var(--accent-secondary);
-        outline-offset: 4px;
-    }
-
-    /* Context Menu */
-    .context-menu {
-        position: fixed;
-        background: var(--card-bg);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 8px 0;
-        box-shadow: var(--shadow);
-        z-index: 10000;
-        opacity: 0;
-        transform: scale(0.95);
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        pointer-events: none;
-        min-width: 200px;
-    }
-
-    [data-theme="light"] .context-menu {
-        background: var(--card-bg);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .context-menu.show {
-        opacity: 1;
-        transform: scale(1);
-        pointer-events: all;
-    }
-
-    .context-menu-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 16px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        color: var(--text-primary);
-        font-size: 14px;
-        font-weight: 500;
-    }
-
-    .context-menu-item:hover {
-        background: var(--glass-bg);
-        color: var(--accent-secondary);
-    }
-
-    [data-theme="light"] .context-menu-item:hover {
-        background: rgba(5, 150, 105, 0.05);
-    }
-
-    .context-menu-item span:first-child {
-        font-size: 16px;
-        width: 20px;
-        text-align: center;
-    }
-
-    /* Toast Notification */
-    .toast {
-        position: fixed;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%) translateY(100px);
-        background: var(--card-bg);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 16px 24px;
-        box-shadow: var(--shadow);
-        z-index: 10001;
-        opacity: 0;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        pointer-events: none;
-        color: var(--text-primary);
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    [data-theme="light"] .toast {
-        background: var(--card-bg);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .toast.show {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-        pointer-events: all;
-    }
-
-    .toast-icon {
-        font-size: 18px;
-        color: var(--accent-secondary);
-    }
-
-    /* Loading Animation */
-    .loading-spinner {
-        width: 20px;
-        height: 20px;
-        border: 2px solid var(--border);
-        border-top: 2px solid var(--accent-secondary);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
-    /* Mobile Responsive */
-    @media (max-width: 768px) {
-        .projects-grid {
-            grid-template-columns: 1fr;
-            gap: 40px;
-        }
-
-        .project-card {
-            padding: 32px;
-        }
-
-        .contact-links {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .contact-link {
-            width: 100%;
-            max-width: 320px;
-            justify-content: center;
-        }
-
-        section {
-            padding: 80px 0;
-        }
-
-        .learned {
-            padding: 16px;
-            padding-bottom: 50px;
-        }
-
-        .learned-full {
-            padding-right: 45px;
-        }
-
-        .expand-button {
-            width: 26px;
-            height: 26px;
-            font-size: 11px;
-            bottom: 14px;
-            right: 14px;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.2rem, 7vw, 4rem);
-            white-space: normal;
-            word-break: keep-all;
-            hyphens: none;
-        }
-
-        .projects-btn {
-            padding: 10px 16px;
-            font-size: 13px;
-        }
-
-        .theme-toggle {
-            padding: 10px 14px;
-        }
-
-        .context-menu {
-            min-width: 180px;
-        }
-
-        .toast {
-            left: 16px;
-            right: 16px;
-            transform: translateY(100px);
-            max-width: calc(100vw - 32px);
-        }
-
-        .toast.show {
-            transform: translateY(0);
-        }
-    }
-
-    @media (max-width: 480px) {
-        .container {
-            padding: 0 16px;
-        }
-
-        .theme-toggle {
-            top: 16px;
-            right: 16px;
-            padding: 10px 14px;
-        }
-
-        .projects-btn {
-            top: 16px;
-            left: 16px;
-            padding: 10px 14px;
-            font-size: 12px;
-        }
-
-        .project-card {
-            padding: 24px;
-        }
-
-        .hero h1 {
-            font-size: clamp(1.8rem, 6vw, 3rem);
-            white-space: normal;
-            word-break: keep-all;
-            hyphens: none;
-            line-height: 1.1;
-        }
-        .about p {
-        font-size: 15px;
-        color: var(--text-secondary);
-        margin-bottom: 32px;
-        line-height: 1.8;
-        font-weight: 400;
-    }
-    }
-
-    /* Scroll-triggered animations */
-    .fade-in-up {
-        opacity: 0;
-        transform: translateY(40px);
-        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .fade-in-up.animate {
-        opacity: 1;
-        transform: translateY(0);
-    }
-</style>
-</head>
-<body>
-<!-- Floating Background Elements -->
-<div class="floating-elements" id="floatingElements"></div>
-
-<!-- Projects Button -->
-<a href="#projects" class="projects-btn">
-    <span class="projects-btn-icon">🚀</span>
-    <span>Projects</span>
-</a>
-
-<!-- Theme Toggle -->
-<div class="theme-toggle" onclick="toggleTheme()">
-    <span class="theme-icon">🌙</span>
-</div>
-
-<!-- Context Menu -->
-<div class="context-menu" id="contextMenu">
-    <div class="context-menu-item" onclick="downloadResume()">
-        <span>📄</span>
-        <span>Download Resume</span>
-    </div>
-    <div class="context-menu-item" onclick="copyResumeLink()">
-        <span>🔗</span>
-        <span>Copy Direct Link</span>
-    </div>
-    <div class="context-menu-item" onclick="shareResume()">
-        <span>📤</span>
-        <span>Share Resume</span>
-    </div>
-</div>
-
-<!-- Toast Notification -->
-<div class="toast" id="toast">
-    <span class="toast-icon">✅</span>
-    <span id="toastMessage">Link copied to clipboard!</span>
-</div>
-
-<!-- Hero Section -->
-<section class="hero" id="hero">
-    <div class="container">
-        <div class="hero-content">
-            <h1>Apoorv Bhardwaj</h1>
-            <p>I build real-world <span class="clickable-webapps" onclick="scrollToSection('projects')">web apps</span> with focus, curiosity, and strong fundamentals.</p>
-            <div class="scroll-indicator">↓</div>
-        </div>
-    </div>
-</section>
-
-<!-- About Section -->
-<section class="about" id="about">
-    <div class="container">
-      <div class="about-content fade-in-up">
-        <h2>About Me</h2>
-        <p>I’m a full-stack developer who builds complete, production-ready systems, not just websites. I design solutions that are fast, reliable, and genuinely improve how businesses operate and how users interact online.</p>
-  
-        <p>My stack includes <strong>React, Node.js, Express, Firebase</strong>, and modern UI frameworks. I’ve built platforms with <strong>payment gateway integrations, secure authentication, automated notifications, and real-time admin dashboards</strong>. Every system is engineered to feel seamless, intuitive, and stable under real-world use.</p>
-  
-        <p>I don’t build for aesthetics alone. I build for <strong>efficiency, usability, and long-term scalability</strong>. My focus is always on making technology serve a purpose: reducing effort, increasing clarity, and creating a smoother experience for both businesses and their customers.</p>
-      </div>
-    </div>
-  </section>
-
-<!-- Projects Section -->
-<section class="projects" id="projects">
-    <div class="container">
-        <h2 class="fade-in-up">My Projects</h2>
-        <div class="projects-grid" id="projectsGrid">
-            <!-- Projects will be dynamically inserted here -->
-        </div>
-    </div>
-</section>
-
-<!-- Contact Section -->
-<section class="contact" id="contact">
-    <div class="container">
-        <div class="fade-in-up">
-            <h2>Let's Connect</h2>
-            <p>I'm always interested in discussing new opportunities, collaborating on projects, or just talking about web development.</p>
-            <div class="contact-links">
-                <a href="mailto:apoorvbhardwajabz@gmail.com" class="contact-link">
-                    <span>📧</span>
-                    <span>Email</span>
-                </a>
-                <a href="https://in.linkedin.com/in/apoorv-bhardwaj-96a345175" class="contact-link" target="_blank">
-                    <span>💼</span>
-                    <span>LinkedIn</span>
-                </a>
-                <a href="https://github.com/young-pluto" class="contact-link" target="_blank">
-                    <span>💻</span>
-                    <span>GitHub</span>
-                </a>
-                <a href="#" class="contact-link resume-link" id="resumeLink" onclick="downloadResume()" oncontextmenu="showContextMenu(event)">
-                    <span>📄</span>
-                    <span>Resume</span>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<script>
-    // Firebase Configuration - Replace with your config
-    const firebaseConfig = {
-            apiKey: "AIzaSyCHxp5gn_XWdIa-FGTQOVeqm-X_2DLif4o",
-            authDomain: "slot-booking-c28d8.firebaseapp.com",
-            projectId: "slot-booking-c28d8",
-            storageBucket: "slot-booking-c28d8.appspot.com",
-            messagingSenderId: "208015740505",
-            appId: "1:208015740505:web:c44451b8162388823fab48",
-            measurementId: "G-2CBM0QEYW3",
-            databaseURL: "https://slot-booking-c28d8-default-rtdb.firebaseio.com/"
-        };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const storage = firebase.storage();
-
-    // Resume URL - This will be the direct download link
-    let resumeDownloadURL = '';
-
-    // Initialize resume URL on page load
-    async function initializeResumeURL() {
-        try {
-            // Direct Firebase Storage URL - resume/Apoorv Bhardwaj.pdf
-            resumeDownloadURL = 'https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/resume%2FApoorv%20Bhardwaj.pdf?alt=media&token=ce20e7aa-ddef-422d-a57c-5b9d043a0910';
-            console.log('Resume URL initialized:', resumeDownloadURL);
-        } catch (error) {
-            console.error('Error getting resume URL:', error);
-            // Fallback URL or show error message
-            resumeDownloadURL = '#';
-        }
-    }
-
-    // Project data with enhanced structure and expandable learnings
-    const projects = [
-    {
-    title: "Ball4Life Arena - Sports Facility Booking System",
-    description: "A complete real-time slot booking system for a sports arena with online payments, admin management, and automated notifications. Features real-time availability tracking and integrated WhatsApp/email notifications.",
-    technologies: ["HTML5", "CSS3", "JavaScript ES6", "Firebase Realtime Database", "Firebase Authentication", "Firebase Cloud Functions", "Cashfree Payment Gateway", "Twilio WhatsApp API", "Nodemailer", "Vercel", "Webhook Integration"],
-    demoLink: "https://bookings.ball4life.in",
-    learnedPreview: "Built a production-ready booking system with real-time data sync and payment integration.",
-    learnedFull: "This project was my deep dive into building a production-ready booking system from scratch. I learned how to implement real-time data synchronization using Firebase, ensuring that slot availability updates instantly across all user sessions. The biggest challenge was integrating the Cashfree payment gateway and handling webhook verification for secure payment processing. I gained extensive experience with Firebase Cloud Functions, setting up automated notification systems using Twilio's WhatsApp API. The project taught me about handling complex state management in vanilla JavaScript, implementing proper error handling for payment failures, and creating a robust admin interface with modal-based booking forms. Working with webhooks and payment verification taught me about security considerations in financial applications, including signature verification and proper data validation."
-},
-{
-    title: "Upscale Marketing Solutions",
-    description: "A modern single-screen SPA with PayPal-powered checkout for marketing services. Built with vanilla JavaScript featuring dynamic section swapping (select package → enter details → pay), secure server-side PayPal order creation/capture, and an admin dashboard for live order tracking with Firebase Auth and Realtime Database. Optimized for mobile with seamless UX, minimal reloads, and frictionless form handling.",
-    technologies: ["JavaScript ES6", "Node.js", "Express", "Firebase Authentication", "Firebase Realtime Database", "PayPal JS SDK", "PayPal Server SDK", "Vercel Serverless Functions", "RESTful API", "SPA Architecture", "Responsive Design"],
-    demoLink: "https://upscalemarketingsolutions.com",
-    learnedPreview: "Built a full-stack payments platform with PayPal integration and secure server-side order processing.",
-    learnedFull: "This project was a deep dive into building a production-grade payment platform from scratch without using React or other frameworks. I learned the true complexity of manual DOM manipulation and state management in vanilla JavaScript - significantly harder than using React's declarative approach, but absolutely practical for focused, small-catalog flows. The biggest technical challenge was integrating PayPal's Smart Buttons with secure server-side order creation and capture using both the PayPal JS SDK (client-side) and PayPal Server SDK (Node.js/Express). I gained extensive experience building an SPA-like experience with dynamic section swapping, fine-grained DOM updates, and maintaining state across multiple steps without a state management library. Implementing the admin dashboard taught me about real-time data subscriptions with Firebase Realtime Database and building secure admin interfaces with Firebase Authentication. The project emphasized mobile-first design principles, creating clear CTAs, implementing loading overlays and duplicate-click prevention for better UX. Working with Vercel's serverless functions showed me how to structure Node.js/Express APIs for serverless deployment, handle CORS properly, and implement secure API endpoints for payment processing. This project reinforced that vanilla JavaScript can be powerful for small to medium applications when you need full control over every aspect of the user experience."
-},
-{
-    title: "Fitness Progress Tracker",
-    description: "A comprehensive fitness tracking application with custom exercise libraries, real-time workout logging, and progress visualization. Features include workout timers, progress charts, and detailed exercise history tracking.",
-    technologies: ["HTML5", "CSS3", "JavaScript ES6", "Firebase Realtime Database", "Firebase Authentication", "Chart.js", "Glassmorphism UI", "Modular JavaScript Architecture", "Progressive Web App", "Data Visualization"],
-    demoLink: "https://fitrack.builtbyapoorv.in",
-    learnedPreview: "Built a comprehensive fitness app with real-time logging and data visualization.",
-    learnedFull: "This project was born out of frustration with existing fitness apps that were either too expensive or didn't match my specific tracking needs. Building this taught me about creating modular JavaScript applications using the module pattern for better code organization and maintainability. I gained extensive experience with Chart.js for data visualization, learning how to create interactive charts that display weight progression, volume trends, and strength-to-bodyweight ratios over time. The challenge of handling complex state management across multiple modules (exercises, workouts, timer, progress) taught me about proper data flow and event handling in vanilla JavaScript. Working with Firebase Realtime Database helped me understand real-time data synchronization and how to structure data for fitness tracking applications. The UI/UX design process taught me about creating intuitive interfaces for data entry and visualization, implementing glassmorphism effects and responsive design principles to create a premium user experience."
-},
-{
-    title: "Personal Food & Nutrition Tracker",
-    description: "A comprehensive nutrition tracking application with detailed meal logging, macronutrient analysis, and trend visualization. Features body weight tracking, data export, and interactive charts for nutrition insights.",
-    technologies: ["HTML5", "CSS3", "JavaScript ES6", "Firebase Realtime Database", "Firebase Authentication", "Chart.js", "Data Visualization", "CSV Export", "Glassmorphism UI", "Responsive Design"],
-    demoLink: "https://fitrack.builtbyapoorv.in/foodtracker",
-    learnedPreview: "Built a comprehensive nutrition tracker with data visualization and trend analysis.",
-    learnedFull: "This project emerged from my frustration with existing food tracking apps that didn't provide the level of detailed data analysis and visualization I needed for effective nutrition monitoring. Building this application taught me about handling complex data relationships and creating meaningful visualizations from user-generated content. I gained valuable experience with Chart.js, learning how to create multiple chart types including line charts for weight trends, bar charts for calorie tracking, and doughnut charts for macronutrient breakdowns. The challenge of processing and aggregating nutritional data across multiple meals and days taught me about efficient data structure design and manipulation. Working with Firebase for storing nested meal and food item data helped me understand how to design database schemas for complex relational data. I learned about data aggregation techniques and how to perform calculations on client-side data for real-time trend analysis. The project also taught me about data export functionality and creating intuitive forms for food entry while maintaining data accuracy."
-},
-{
-    title: "Task Manager",
-    description: "A complete task management application with secure user authentication, real-time data sync, and a modern interface. Features user registration, task CRUD operations, and persistent storage with Firebase backend.",
-    technologies: ["HTML5", "CSS3", "JavaScript ES6", "Node.js", "Firebase Admin SDK", "Firebase Authentication", "Firebase Realtime Database", "Vercel Serverless Functions", "RESTful API", "JWT Authentication", "CORS Handling"],
-    demoLink: "https://tasks.builtbyapoorv.in",
-    learnedPreview: "Built my first full-stack application with authentication and RESTful API design.",
-    learnedFull: "This project distinguished itself by implementing a custom Node.js backend with serverless functions, moving beyond Firebase's client-side SDK to build proper server-side API endpoints. I learned to design RESTful APIs with custom authentication middleware, handle CORS properly, and structure serverless functions for Vercel deployment. The key difference from my previous Firebase projects was implementing server-side token verification and creating a traditional client-server architecture rather than direct database access. This taught me about API security, proper error handling in serverless environments, and how to structure backend code for scalability. Working with Firebase Admin SDK showed me the distinction between client-side and server-side Firebase integration, while building custom endpoints gave me experience with backend architecture patterns and deployment strategies for full-stack applications."
-}
-    ];
-
-    // Resume Functions
-    async function downloadResume() {
-        try {
-            if (!resumeDownloadURL) {
-                await initializeResumeURL();
-            }
-            
-            if (resumeDownloadURL && resumeDownloadURL !== '#') {
-                // Create a temporary link element and trigger download
-                const link = document.createElement('a');
-                link.href = resumeDownloadURL;
-                link.download = 'Apoorv Bhardwaj.pdf';
-                link.target = '_blank';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
-                showToast('📄', 'Resume download started!');
-            } else {
-                showToast('❌', 'Resume not available. Please try again.');
-            }
-        } catch (error) {
-            console.error('Download error:', error);
-            showToast('❌', 'Download failed. Please try again.');
-        }
-        hideContextMenu();
-    }
-
-    async function copyResumeLink() {
-        try {
-            if (!resumeDownloadURL) {
-                await initializeResumeURL();
-            }
-            
-            if (resumeDownloadURL && resumeDownloadURL !== '#') {
-                await navigator.clipboard.writeText(resumeDownloadURL);
-                showToast('🔗', 'Resume link copied to clipboard!');
-            } else {
-                showToast('❌', 'Resume link not available.');
-            }
-        } catch (error) {
-            console.error('Copy error:', error);
-            showToast('❌', 'Failed to copy link.');
-        }
-        hideContextMenu();
-    }
-
-    async function shareResume() {
-        try {
-            if (!resumeDownloadURL) {
-                await initializeResumeURL();
-            }
-            
-            if (navigator.share && resumeDownloadURL && resumeDownloadURL !== '#') {
-                await navigator.share({
-                    title: 'Apoorv Bhardwaj - Resume',
-                    text: 'Check out my resume!',
-                    url: resumeDownloadURL
-                });
-                showToast('📤', 'Resume shared successfully!');
-            } else {
-                // Fallback: copy to clipboard
-                await copyResumeLink();
-                return;
-            }
-        } catch (error) {
-            console.error('Share error:', error);
-            // Fallback: copy to clipboard
-            await copyResumeLink();
-            return;
-        }
-        hideContextMenu();
-    }
-
-    // Context Menu Functions
-    function showContextMenu(event) {
-        event.preventDefault();
-        const contextMenu = document.getElementById('contextMenu');
-        const menuWidth = 200;
-        const menuHeight = 120;
-        
-        let x = event.clientX;
-        let y = event.clientY;
-        
-        // Adjust position if menu would go off-screen
-        if (x + menuWidth > window.innerWidth) {
-            x = window.innerWidth - menuWidth - 10;
-        }
-        if (y + menuHeight > window.innerHeight) {
-            y = window.innerHeight - menuHeight - 10;
-        }
-        
-        contextMenu.style.left = x + 'px';
-        contextMenu.style.top = y + 'px';
-        contextMenu.classList.add('show');
-        
-        // Add click listener to hide menu when clicking outside
-        setTimeout(() => {
-            document.addEventListener('click', hideContextMenu);
-        }, 100);
-    }
-
-    function hideContextMenu() {
-        const contextMenu = document.getElementById('contextMenu');
-        contextMenu.classList.remove('show');
-        document.removeEventListener('click', hideContextMenu);
-    }
-
-    // Toast Notification
-    function showToast(icon, message) {
-        const toast = document.getElementById('toast');
-        const toastIcon = toast.querySelector('.toast-icon');
-        const toastMessage = document.getElementById('toastMessage');
-        
-        toastIcon.textContent = icon;
-        toastMessage.textContent = message;
-        
-        toast.classList.add('show');
-        
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3000);
-    }
-
-    // Scroll to section function
-    function scrollToSection(sectionId) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-            element.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    }
-
-    // Toggle learning section expansion
-    function toggleLearning(element) {
-        element.classList.toggle('expanded');
-    }
-
-    // Enhanced theme functionality
-    function toggleTheme() {
-        const body = document.body;
-        const themeIcon = document.querySelector('.theme-icon');
-        
-        if (body.getAttribute('data-theme') === 'light') {
-            body.removeAttribute('data-theme');
-            themeIcon.textContent = '🌙';
-            localStorage.setItem('theme', 'dark');
-        } else {
-            body.setAttribute('data-theme', 'light');
-            themeIcon.textContent = '☀️';
-            localStorage.setItem('theme', 'light');
-        }
-    }
-
-    function loadTheme() {
-        const savedTheme = localStorage.getItem('theme');
-        const themeIcon = document.querySelector('.theme-icon');
-        
-        if (savedTheme === 'light') {
-            document.body.setAttribute('data-theme', 'light');
-            themeIcon.textContent = '☀️';
-        } else {
-            themeIcon.textContent = '🌙';
-        }
-    }
-
-    // Create floating background elements
-    function createFloatingElements() {
-        const container = document.getElementById('floatingElements');
-        const elementCount = 6;
-        
-        for (let i = 0; i < elementCount; i++) {
-            const element = document.createElement('div');
-            element.className = 'floating-element';
-            element.style.left = Math.random() * 100 + '%';
-            element.style.width = (Math.random() * 4 + 2) + 'px';
-            element.style.height = element.style.width;
-            element.style.animationDelay = Math.random() * 20 + 's';
-            element.style.animationDuration = (Math.random() * 10 + 15) + 's';
-            container.appendChild(element);
-        }
-    }
-
-    // Apple-style project card animations with faster trigger
-    function animateProjectCards() {
-        const cards = document.querySelectorAll('.project-card');
-        
-        cards.forEach((card, index) => {
-            const rect = card.getBoundingClientRect();
-            // Trigger animation earlier - when 30% of the card is visible
-            if (rect.top < window.innerHeight - 200) {
-                setTimeout(() => {
-                    card.classList.add('animate');
-                }, index * 150);
-            }
-        });
-    }
-
-    // Fade in up animations with faster trigger
-    function animateFadeInElements() {
-        const elements = document.querySelectorAll('.fade-in-up');
-        
-        elements.forEach((element, index) => {
-            const rect = element.getBoundingClientRect();
-            // Trigger animation earlier
-            if (rect.top < window.innerHeight - 50) {
-                setTimeout(() => {
-                    element.classList.add('animate');
-                }, index * 80);
-            }
-        });
-    }
-
-    // Enhanced project rendering
-    function renderProjects() {
-        const projectsGrid = document.getElementById('projectsGrid');
-        
-        projects.forEach((project, index) => {
-            const projectCard = document.createElement('div');
-            projectCard.className = 'project-card';
-            projectCard.style.transitionDelay = `${index * 0.1}s`;
-            
-            projectCard.innerHTML = `
-                <div class="project-number">${String(index + 1).padStart(2, '0')}</div>
-                <h3>${project.title}</h3>
-                <p>${project.description}</p>
-                <div class="tech-stack">
-                    ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
-                </div>
-                <div class="project-links">
-                    <a href="${project.demoLink}" class="project-link" target="_blank">Live Demo →</a>
-                </div>
-                <div class="learned" onclick="toggleLearning(this)">
-                    <div class="learned-preview">
-                        <strong>Key Learning:</strong> ${project.learnedPreview}
-                    </div>
-                    <div class="learned-full">
-                        <strong>Detailed Learning:</strong> ${project.learnedFull}
-                    </div>
-                    <button class="expand-button">▼</button>
-                </div>
-            `;
-            
-            projectsGrid.appendChild(projectCard);
-        });
-    }
-
-    // Smooth scrolling with easing
-    function enableSmoothScrolling() {
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Apoorv Bhardwaj - Full Stack Developer</title>
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.builtbyapoorv.in">
+    <meta property="og:title" content="Built by Apoorv - Full Stack Developer">
+    <meta property="og:description"
+        content="A showcase of all the full stack projects built by Apoorv. Explore powerful, scalable, and well-designed apps.">
+    <meta property="og:image"
+        content="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/A41C917B-797D-406D-A049-A1563EF9DD19%20copy.png?alt=media&token=db3d1b51-ff05-4a20-9ff0-652d450d96c3">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.builtbyapoorv.in">
+    <meta property="twitter:title" content="Built by Apoorv - Full Stack Developer">
+    <meta property="twitter:description"
+        content="A showcase of all the full stack projects built by Apoorv. Explore powerful, scalable, and well-designed apps.">
+    <meta property="twitter:image"
+        content="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/A41C917B-797D-406D-A049-A1563EF9DD19%20copy.png?alt=media&token=db3d1b51-ff05-4a20-9ff0-652d450d96c3">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png"
+        href="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/A41C917B-797D-406D-A049-A1563EF9DD19%20copy.png?alt=media&token=db3d1b51-ff05-4a20-9ff0-652d450d96c3">
+    <link rel="apple-touch-icon"
+        href="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/A41C917B-797D-406D-A049-A1563EF9DD19%20copy.png?alt=media&token=db3d1b51-ff05-4a20-9ff0-652d450d96c3">
+
+    <!-- Fonts - Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+                        serif: ['Instrument Serif', 'Georgia', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        dark: {
+                            950: '#09090b',
+                            900: '#0c0c0e',
+                            800: '#141416',
+                            700: '#1c1c1f',
+                            600: '#27272a',
+                        },
+                        accent: {
+                            primary: '#e4e4e7',
+                            muted: '#71717a',
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            violet: '#8b5cf6',
+                            amber: '#f59e0b',
+                            rose: '#f43f5e',
+                            slate: '#64748b',
+                            indigo: '#6366f1',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 8s ease-in-out infinite',
+                        'glow': 'glow 3s ease-in-out infinite alternate',
+                        'shimmer': 'shimmer 3s linear infinite',
+                        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'scale-in': 'scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'gradient': 'gradient 12s ease infinite',
+                        'pulse-subtle': 'pulseSubtle 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-15px) rotate(1deg)' },
+                        },
+                        glow: {
+                            '0%': { opacity: '0.3' },
+                            '100%': { opacity: '0.6' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        scaleIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.96)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        },
+                        gradient: {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        },
+                        pulseSubtle: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.7' },
+                        },
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    },
                 }
-            });
-        });
-    }
-
-    // Parallax effect for hero section
-    function updateParallax() {
-        const hero = document.querySelector('.hero');
-        const scrolled = window.pageYOffset;
-        const rate = scrolled * -0.5;
-        
-        if (hero) {
-            hero.style.transform = `translateY(${rate}px)`;
-        }
-    }
-
-    // Update projects button visibility based on scroll position
-    function updateProjectsButtonVisibility() {
-        const projectsSection = document.getElementById('projects');
-        const projectsBtn = document.querySelector('.projects-btn');
-        
-        if (projectsSection && projectsBtn) {
-            const rect = projectsSection.getBoundingClientRect();
-            const isInProjectsSection = rect.top <= 100 && rect.bottom >= 100;
-            
-            if (isInProjectsSection) {
-                projectsBtn.classList.add('hidden');
-            } else {
-                projectsBtn.classList.remove('hidden');
             }
         }
-    }
+    </script>
 
-    // Enhanced scroll handler with performance optimization
-    function handleScroll() {
-        animateProjectCards();
-        animateFadeInElements();
-        updateParallax();
-        updateProjectsButtonVisibility();
-    }
+    <!-- React & Dependencies -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/framer-motion@11.0.8/dist/framer-motion.js"></script>
 
-    // Enhanced Intersection Observer for better performance with faster triggers
-    function setupIntersectionObserver() {
-        const observerOptions = {
-            threshold: 0.05, // Reduced threshold for earlier trigger
-            rootMargin: '0px 0px -20px 0px' // Reduced margin for earlier trigger
-        };
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
-                }
-            });
-        }, observerOptions);
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
 
-        // Observe all project cards and fade-in elements
-        document.querySelectorAll('.project-card, .fade-in-up').forEach(el => {
-            observer.observe(el);
-        });
-    }
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
 
-    // Mouse move parallax effect
-    function setupMouseParallax() {
-        document.addEventListener('mousemove', (e) => {
-            const mouseX = e.clientX / window.innerWidth;
-            const mouseY = e.clientY / window.innerHeight;
-            
-            const floatingElements = document.querySelectorAll('.floating-element');
-            floatingElements.forEach((element, index) => {
-                const speed = (index + 1) * 0.5;
-                const x = (mouseX - 0.5) * speed;
-                const y = (mouseY - 0.5) * speed;
-                element.style.transform = `translate(${x}px, ${y}px)`;
-            });
-        });
-    }
+        /* Premium Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
 
-    // Initialize everything
-    document.addEventListener('DOMContentLoaded', function() {
-        loadTheme();
-        createFloatingElements();
-        renderProjects();
-        enableSmoothScrolling();
-        setupIntersectionObserver();
-        setupMouseParallax();
-        initializeResumeURL(); // Initialize resume URL
-        
-        // Optimized scroll listener with requestAnimationFrame
-        let ticking = false;
-        window.addEventListener('scroll', function() {
-            if (!ticking) {
-                requestAnimationFrame(function() {
-                    handleScroll();
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        });
-        
-        // Initial calls
-        handleScroll();
-        
-        // Add loading animation
-        setTimeout(() => {
-            document.body.style.opacity = '1';
-        }, 100);
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
 
-        // Handle click outside context menu
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.context-menu') && !e.target.closest('.resume-link')) {
-                hideContextMenu();
-            }
-        });
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 3px;
+        }
 
-        // Prevent context menu on other elements
-        document.addEventListener('contextmenu', (e) => {
-            if (!e.target.closest('.resume-link')) {
-                // Allow default context menu for other elements
-                return;
-            }
-        });
-    });
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
 
-    // Resize listener for responsive updates
-    window.addEventListener('resize', function() {
-        handleScroll();
-        hideContextMenu(); // Hide context menu on resize
-    });
+        .light ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.08);
+        }
 
-    // Add some premium touches
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add subtle cursor trail effect
-        const cursor = document.createElement('div');
-        cursor.style.cssText = `
+        .light ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.12);
+        }
+
+        /* Elegant Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #e4e4e7 0%, #a1a1aa 50%, #71717a 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-text-accent {
+            background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Premium Glass */
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .glass-elevated {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .glass-light {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Subtle Noise Overlay */
+        .noise::before {
+            content: '';
             position: fixed;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle, var(--accent-secondary) 0%, transparent 70%);
-            border-radius: 50%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.015;
+            z-index: 100;
             pointer-events: none;
-            z-index: 9999;
-            opacity: 0.3;
-            transition: transform 0.1s ease;
-        `;
-        document.body.appendChild(cursor);
-
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX - 10 + 'px';
-            cursor.style.top = e.clientY - 10 + 'px';
-        });
-
-        // Hide cursor trail on mobile
-        if (window.innerWidth <= 768) {
-            cursor.style.display = 'none';
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
-    });
-</script>
+
+        /* Premium Grid Pattern */
+        .grid-pattern {
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
+            background-size: 64px 64px;
+        }
+
+        .grid-pattern-light {
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+            background-size: 64px 64px;
+        }
+
+        /* Smooth Transitions */
+        * {
+            transition-property: background-color, border-color, color, opacity, transform;
+            transition-duration: 200ms;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Selection */
+        ::selection {
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        /* Focus */
+        :focus-visible {
+            outline: 1px solid rgba(139, 92, 246, 0.5);
+            outline-offset: 2px;
+        }
+
+        /* Mobile Touch Optimizations */
+        @media (hover: none) {
+            .hover-scale:active {
+                transform: scale(0.98);
+            }
+        }
+
+        /* Line clamp utilities */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Prevent text selection on interactive elements */
+        .no-select {
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* Safe area for notched devices */
+        @supports (padding: max(0px)) {
+            .safe-area-inset {
+                padding-left: max(1rem, env(safe-area-inset-left));
+                padding-right: max(1rem, env(safe-area-inset-right));
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo, useCallback } = React;
+        const { motion, AnimatePresence, useScroll, useTransform, useInView } = Motion;
+
+        // ============ DATA ============
+        const projects = [
+            {
+                id: 1,
+                title: "Ball4Life Arena",
+                subtitle: "Sports Facility Booking",
+                description: "Real-time slot booking with payments, admin management, and automated notifications.",
+                longDescription: "A complete real-time slot booking system for a sports arena with online payments, admin management, and automated notifications. Features real-time availability tracking and integrated WhatsApp/email notifications.",
+                technologies: ["Firebase", "Cashfree", "Twilio", "Cloud Functions", "Webhooks"],
+                demoLink: "https://bookings.ball4life.in",
+                color: "cyan",
+                icon: "🏟️",
+                learned: "Built production-ready booking with real-time sync, payment gateway integration, and webhook verification for secure transactions."
+            },
+            {
+                id: 2,
+                title: "Upscale Marketing",
+                subtitle: "E-Commerce with PayPal",
+                description: "Single-page marketing services shop with PayPal checkout and admin dashboard.",
+                longDescription: "A modern single-screen SPA with PayPal-powered checkout. Features dynamic section swapping, secure server-side order creation, and Firebase admin dashboard.",
+                technologies: ["PayPal SDK", "Node.js", "Express", "Firebase", "Vercel"],
+                demoLink: "https://upscalemarketingsolutions.com",
+                color: "violet",
+                icon: "📈",
+                learned: "Deep dive into vanilla JS state management and PayPal's Smart Buttons with server-side order handling."
+            },
+            {
+                id: 3,
+                title: "QueryFlow AI",
+                subtitle: "OpenAI-Powered Query Ops",
+                description: "Live contact-center simulator with AI classification, routing, and real-time analytics.",
+                longDescription: "A live, interactive contact-center simulator that triages, classifies, and routes multi-channel conversations using OpenAI + Supabase. Features User Console, Routing Hub with sentiment analytics, and Admin Inbox with real-time updates.",
+                technologies: ["React", "TypeScript", "OpenAI", "Supabase", "TanStack Query", "Zustand"],
+                demoLink: "https://query-flow-ai-beta.vercel.app",
+                githubLink: "https://github.com/young-pluto/queryFlowAI",
+                color: "indigo",
+                icon: "🤖",
+                learned: "Built real-time AI classification pipeline with OpenAI's Responses API, Supabase Edge Functions, and optimistic UI updates."
+            },
+            {
+                id: 4,
+                title: "SoccerStore Chatbot",
+                subtitle: "AI Customer Support",
+                description: "Intelligent chatbot for e-commerce with product queries, returns, and shipping info.",
+                longDescription: "AI-powered customer support chatbot for a soccer store. Handles product inquiries, return policies, shipping info, and payment queries with natural language understanding powered by GPT-4o-mini.",
+                technologies: ["React", "TypeScript", "Node.js", "Express", "OpenAI GPT-4", "SQLite"],
+                demoLink: "https://soccer-store-ai-chat-bot.vercel.app",
+                githubLink: "https://github.com/young-pluto/SoccerStore-AI-ChatBot",
+                color: "emerald",
+                icon: "⚽",
+                learned: "Implemented conversational AI with context persistence, session management, and mobile-optimized chat interface."
+            },
+            {
+                id: 5,
+                title: "Fitness Tracker",
+                subtitle: "Workout & Progress App",
+                description: "Comprehensive fitness tracking with custom exercises, real-time logging, and charts.",
+                longDescription: "Track workouts with custom exercise libraries, real-time logging, and progress visualization with Chart.js.",
+                technologies: ["Chart.js", "Firebase Auth", "PWA", "Modular JS"],
+                demoLink: "https://fitrack.builtbyapoorv.in",
+                color: "amber",
+                icon: "💪",
+                learned: "Created modular JS architecture with interactive data visualization and real-time sync."
+            },
+            {
+                id: 6,
+                title: "Nutrition Tracker",
+                subtitle: "Food & Macro Analysis",
+                description: "Detailed meal logging with macronutrient analysis and trend visualization.",
+                longDescription: "Comprehensive nutrition tracking with body weight tracking, data export, and interactive charts.",
+                technologies: ["Chart.js", "Firebase", "CSV Export", "Data Viz"],
+                demoLink: "https://fitrack.builtbyapoorv.in/foodtracker",
+                color: "rose",
+                icon: "🥗",
+                learned: "Complex data aggregation and meaningful visualizations from user-generated nutrition data."
+            },
+            {
+                id: 7,
+                title: "Task Manager",
+                subtitle: "Full-Stack CRUD App",
+                description: "Task management with secure auth, real-time sync, and RESTful API.",
+                longDescription: "Complete task app with user registration, CRUD operations, and Firebase backend.",
+                technologies: ["Node.js", "Firebase Admin", "JWT", "REST API", "Vercel"],
+                demoLink: "https://tasks.builtbyapoorv.in",
+                color: "slate",
+                icon: "✅",
+                learned: "First custom Node.js backend with serverless functions and proper API security patterns."
+            }
+        ];
+
+        const colorClasses = {
+            cyan: {
+                bg: 'bg-cyan-500/8',
+                bgHover: 'hover:bg-cyan-500/12',
+                border: 'border-cyan-500/15',
+                text: 'text-cyan-400',
+                textLight: 'text-cyan-600',
+                gradient: 'from-cyan-500 to-cyan-400',
+                glow: 'shadow-cyan-500/10',
+                line: 'bg-gradient-to-r from-cyan-500/60 to-cyan-400/40',
+            },
+            emerald: {
+                bg: 'bg-emerald-500/8',
+                bgHover: 'hover:bg-emerald-500/12',
+                border: 'border-emerald-500/15',
+                text: 'text-emerald-400',
+                textLight: 'text-emerald-600',
+                gradient: 'from-emerald-500 to-emerald-400',
+                glow: 'shadow-emerald-500/10',
+                line: 'bg-gradient-to-r from-emerald-500/60 to-emerald-400/40',
+            },
+            violet: {
+                bg: 'bg-violet-500/8',
+                bgHover: 'hover:bg-violet-500/12',
+                border: 'border-violet-500/15',
+                text: 'text-violet-400',
+                textLight: 'text-violet-600',
+                gradient: 'from-violet-500 to-violet-400',
+                glow: 'shadow-violet-500/10',
+                line: 'bg-gradient-to-r from-violet-500/60 to-violet-400/40',
+            },
+            amber: {
+                bg: 'bg-amber-500/8',
+                bgHover: 'hover:bg-amber-500/12',
+                border: 'border-amber-500/15',
+                text: 'text-amber-400',
+                textLight: 'text-amber-600',
+                gradient: 'from-amber-500 to-amber-400',
+                glow: 'shadow-amber-500/10',
+                line: 'bg-gradient-to-r from-amber-500/60 to-amber-400/40',
+            },
+            rose: {
+                bg: 'bg-rose-500/8',
+                bgHover: 'hover:bg-rose-500/12',
+                border: 'border-rose-500/15',
+                text: 'text-rose-400',
+                textLight: 'text-rose-600',
+                gradient: 'from-rose-500 to-rose-400',
+                glow: 'shadow-rose-500/10',
+                line: 'bg-gradient-to-r from-rose-500/60 to-rose-400/40',
+            },
+            slate: {
+                bg: 'bg-slate-500/8',
+                bgHover: 'hover:bg-slate-500/12',
+                border: 'border-slate-500/15',
+                text: 'text-slate-400',
+                textLight: 'text-slate-600',
+                gradient: 'from-slate-500 to-slate-400',
+                glow: 'shadow-slate-500/10',
+                line: 'bg-gradient-to-r from-slate-500/60 to-slate-400/40',
+            },
+            indigo: {
+                bg: 'bg-indigo-500/8',
+                bgHover: 'hover:bg-indigo-500/12',
+                border: 'border-indigo-500/15',
+                text: 'text-indigo-400',
+                textLight: 'text-indigo-600',
+                gradient: 'from-indigo-500 to-indigo-400',
+                glow: 'shadow-indigo-500/10',
+                line: 'bg-gradient-to-r from-indigo-500/60 to-indigo-400/40',
+            },
+        };
+
+        // ============ COMPONENTS ============
+
+        // Ambient Background
+        const AmbientBackground = ({ isDark }) => (
+            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+                <motion.div
+                    className="absolute w-[800px] h-[800px] rounded-full"
+                    style={{
+                        background: isDark
+                            ? 'radial-gradient(circle, rgba(139, 92, 246, 0.04) 0%, transparent 60%)'
+                            : 'radial-gradient(circle, rgba(139, 92, 246, 0.06) 0%, transparent 60%)',
+                        top: '-20%',
+                        right: '-20%',
+                    }}
+                    animate={{
+                        scale: [1, 1.1, 1],
+                        opacity: [0.5, 0.7, 0.5],
+                    }}
+                    transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <motion.div
+                    className="absolute w-[600px] h-[600px] rounded-full"
+                    style={{
+                        background: isDark
+                            ? 'radial-gradient(circle, rgba(6, 182, 212, 0.03) 0%, transparent 60%)'
+                            : 'radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 60%)',
+                        bottom: '10%',
+                        left: '-10%',
+                    }}
+                    animate={{
+                        scale: [1, 1.15, 1],
+                        opacity: [0.4, 0.6, 0.4],
+                    }}
+                    transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+                />
+            </div>
+        );
+
+        // Theme Toggle
+        const ThemeToggle = ({ isDark, toggle }) => (
+            <motion.button
+                onClick={toggle}
+                className={`fixed top-4 right-4 md:top-6 md:right-6 z-50 w-10 h-10 md:w-11 md:h-11 rounded-full ${isDark ? 'glass' : 'glass-light'
+                    } flex items-center justify-center no-select`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Toggle theme"
+            >
+                <motion.span
+                    className="text-base md:text-lg"
+                    animate={{ rotate: isDark ? 0 : 180 }}
+                    transition={{ duration: 0.4 }}
+                >
+                    {isDark ? '🌙' : '☀️'}
+                </motion.span>
+            </motion.button>
+        );
+
+        // Floating Navigation
+        const Navbar = ({ isDark }) => {
+            const [scrolled, setScrolled] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 80);
+                window.addEventListener('scroll', handleScroll, { passive: true });
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            return (
+                <motion.nav
+                    className={`fixed top-4 left-4 md:top-6 md:left-6 z-50 ${isDark ? 'glass-elevated' : 'glass-light'
+                        } rounded-full px-4 py-2.5 md:px-5 md:py-3`}
+                    initial={{ y: -100, opacity: 0 }}
+                    animate={{
+                        y: scrolled ? 0 : -100,
+                        opacity: scrolled ? 1 : 0
+                    }}
+                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                >
+                    <div className="flex items-center gap-4 md:gap-6">
+                        {['Projects', 'About', 'Contact'].map((item) => (
+                            <a
+                                key={item}
+                                href={`#${item.toLowerCase()}`}
+                                className={`text-xs md:text-sm font-medium ${isDark
+                                    ? 'text-white/60 hover:text-white'
+                                    : 'text-gray-500 hover:text-gray-900'
+                                    } transition-colors`}
+                            >
+                                {item}
+                            </a>
+                        ))}
+                    </div>
+                </motion.nav>
+            );
+        };
+
+        // Hero Section
+        const Hero = ({ isDark }) => {
+            const ref = useRef(null);
+            const { scrollYProgress } = useScroll({
+                target: ref,
+                offset: ["start start", "end start"]
+            });
+
+            const y = useTransform(scrollYProgress, [0, 1], [0, 150]);
+            const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+
+            return (
+                <motion.section
+                    ref={ref}
+                    className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 md:px-6"
+                    style={{ opacity }}
+                >
+                    <motion.div
+                        className="relative z-10 text-center max-w-4xl mx-auto"
+                        style={{ y }}
+                    >
+                        {/* Status Badge */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                            className={`inline-flex items-center gap-2.5 ${isDark ? 'glass' : 'glass-light'
+                                } rounded-full px-4 py-2 mb-8 md:mb-10`}
+                        >
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                            </span>
+                            <span className={`text-xs md:text-sm font-medium tracking-wide ${isDark ? 'text-white/60' : 'text-gray-500'
+                                }`}>
+                                Available for opportunities
+                            </span>
+                        </motion.div>
+
+                        {/* Main Heading */}
+                        <motion.h1
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.1 }}
+                            className="mb-6 md:mb-8"
+                        >
+                            <span className={`block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif italic tracking-tight ${isDark ? 'text-white' : 'text-gray-900'
+                                }`}>
+                                Apoorv
+                            </span>
+                            <span className={`block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mt-1 ${isDark ? 'text-white/90' : 'text-gray-800'
+                                }`}>
+                                Bhardwaj
+                            </span>
+                        </motion.h1>
+
+                        {/* Subtitle */}
+                        <motion.p
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className={`text-base sm:text-lg md:text-xl ${isDark ? 'text-white/50' : 'text-gray-400'
+                                } max-w-lg mx-auto mb-10 md:mb-12 font-light leading-relaxed`}
+                        >
+                            Building thoughtful{' '}
+                            <a
+                                href="#projects"
+                                className={`${isDark ? 'text-white/80' : 'text-gray-600'} hover:underline underline-offset-4 decoration-1`}
+                            >
+                                web applications
+                            </a>
+                            {' '}with clean code and modern technologies.
+                        </motion.p>
+
+                        {/* CTA Buttons */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.3 }}
+                            className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4"
+                        >
+                            <motion.a
+                                href="#projects"
+                                className={`w-full sm:w-auto px-6 md:px-8 py-3 md:py-3.5 ${isDark
+                                    ? 'bg-white text-black'
+                                    : 'bg-gray-900 text-white'
+                                    } rounded-full font-medium text-sm md:text-base flex items-center justify-center gap-2 no-select`}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                            >
+                                View Projects
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </motion.a>
+                            <motion.a
+                                href="#contact"
+                                className={`w-full sm:w-auto px-6 md:px-8 py-3 md:py-3.5 ${isDark ? 'glass text-white/80' : 'glass-light text-gray-600'
+                                    } rounded-full font-medium text-sm md:text-base no-select`}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                            >
+                                Get in Touch
+                            </motion.a>
+                        </motion.div>
+
+                        {/* Scroll Indicator */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 1.2 }}
+                            className="absolute -bottom-20 left-1/2 -translate-x-1/2 hidden md:block"
+                        >
+                            <motion.div
+                                animate={{ y: [0, 8, 0] }}
+                                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                                className={`w-5 h-8 rounded-full border ${isDark ? 'border-white/15' : 'border-gray-300'
+                                    } flex justify-center pt-1.5`}
+                            >
+                                <motion.div
+                                    animate={{ opacity: [1, 0], y: [0, 10] }}
+                                    transition={{ duration: 2.5, repeat: Infinity }}
+                                    className={`w-0.5 h-1.5 rounded-full ${isDark ? 'bg-white/40' : 'bg-gray-400'
+                                        }`}
+                                />
+                            </motion.div>
+                        </motion.div>
+                    </motion.div>
+                </motion.section>
+            );
+        };
+
+        // Project Card
+        const ProjectCard = ({ project, index, isDark, isExpanded, onToggle }) => {
+            const ref = useRef(null);
+            const isInView = useInView(ref, { once: true, margin: "-50px" });
+            const colors = colorClasses[project.color];
+
+            return (
+                <motion.div
+                    ref={ref}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.5, delay: index * 0.08, ease: [0.4, 0, 0.2, 1] }}
+                >
+                    <motion.div
+                        layout
+                        className={`relative overflow-hidden rounded-2xl ${isDark ? 'glass' : 'glass-light'
+                            } cursor-pointer group`}
+                        onClick={onToggle}
+                        whileHover={{ y: -2 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        {/* Accent Line */}
+                        <div className={`absolute top-0 left-0 right-0 h-px ${colors.line}`} />
+
+                        <div className="p-5 md:p-6">
+                            {/* Header */}
+                            <div className="flex items-start justify-between mb-3">
+                                <div className="flex items-center gap-3">
+                                    <span className="text-2xl">{project.icon}</span>
+                                    <div className="min-w-0">
+                                        <h3 className={`text-base md:text-lg font-semibold truncate ${isDark ? 'text-white' : 'text-gray-900'
+                                            }`}>
+                                            {project.title}
+                                        </h3>
+                                        <p className={`text-xs md:text-sm truncate ${isDark ? 'text-white/40' : 'text-gray-400'
+                                            }`}>
+                                            {project.subtitle}
+                                        </p>
+                                    </div>
+                                </div>
+                                <motion.div
+                                    animate={{ rotate: isExpanded ? 180 : 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className={`w-7 h-7 rounded-full ${colors.bg} flex items-center justify-center flex-shrink-0 ml-2`}
+                                >
+                                    <svg className={`w-3.5 h-3.5 ${colors.text}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </motion.div>
+                            </div>
+
+                            {/* Description */}
+                            <p className={`text-sm leading-relaxed mb-4 ${isDark ? 'text-white/50' : 'text-gray-500'
+                                } ${!isExpanded ? 'line-clamp-2' : ''}`}>
+                                {isExpanded ? project.longDescription : project.description}
+                            </p>
+
+                            {/* Tech Tags */}
+                            <div className="flex flex-wrap gap-1.5 mb-4">
+                                {project.technologies.slice(0, isExpanded ? undefined : 3).map((tech, i) => (
+                                    <span
+                                        key={i}
+                                        className={`px-2.5 py-1 rounded-md text-xs font-medium ${colors.bg} ${isDark ? colors.text : colors.textLight
+                                            }`}
+                                    >
+                                        {tech}
+                                    </span>
+                                ))}
+                                {!isExpanded && project.technologies.length > 3 && (
+                                    <span className={`px-2.5 py-1 rounded-md text-xs font-medium ${isDark ? 'bg-white/5 text-white/30' : 'bg-gray-100 text-gray-400'
+                                        }`}>
+                                        +{project.technologies.length - 3}
+                                    </span>
+                                )}
+                            </div>
+
+                            {/* Expanded Content */}
+                            <AnimatePresence>
+                                {isExpanded && (
+                                    <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: "auto" }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        transition={{ duration: 0.25 }}
+                                    >
+                                        {/* Learning */}
+                                        <div className={`p-3.5 rounded-xl mb-4 ${isDark ? 'bg-white/3' : 'bg-gray-50'
+                                            }`}>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <span className="text-amber-400 text-sm">💡</span>
+                                                <span className={`text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-white/50' : 'text-gray-500'
+                                                    }`}>
+                                                    Key Learning
+                                                </span>
+                                            </div>
+                                            <p className={`text-sm leading-relaxed ${isDark ? 'text-white/40' : 'text-gray-400'
+                                                }`}>
+                                                {project.learned}
+                                            </p>
+                                        </div>
+
+                                        {/* Action Buttons */}
+                                        <div className="flex flex-wrap gap-2">
+                                            <motion.a
+                                                href={project.demoLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${isDark ? 'bg-white text-black' : 'bg-gray-900 text-white'
+                                                    }`}
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.98 }}
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                Live Demo
+                                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                </svg>
+                                            </motion.a>
+                                            {project.githubLink && (
+                                                <motion.a
+                                                    href={project.githubLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${isDark ? 'glass text-white/70' : 'glass-light text-gray-600'
+                                                        }`}
+                                                    whileHover={{ scale: 1.02 }}
+                                                    whileTap={{ scale: 0.98 }}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    GitHub
+                                                    <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                                        <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+                                                    </svg>
+                                                </motion.a>
+                                            )}
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
+                            {/* Collapsed Link */}
+                            {!isExpanded && (
+                                <a
+                                    href={project.demoLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`inline-flex items-center gap-1.5 text-sm font-medium ${colors.text} opacity-80 hover:opacity-100`}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    View Demo
+                                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                </a>
+                            )}
+                        </div>
+                    </motion.div>
+                </motion.div>
+            );
+        };
+
+        // Projects Section
+        const Projects = ({ isDark }) => {
+            const [expandedId, setExpandedId] = useState(null);
+            const ref = useRef(null);
+            const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+            return (
+                <section id="projects" className="relative py-20 md:py-32 px-4 md:px-6">
+                    <div className="max-w-6xl mx-auto">
+                        {/* Section Header */}
+                        <motion.div
+                            ref={ref}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={isInView ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 0.6 }}
+                            className="text-center mb-12 md:mb-16"
+                        >
+                            <span className={`inline-block text-xs md:text-sm font-medium tracking-widest uppercase mb-4 ${isDark ? 'text-white/40' : 'text-gray-400'
+                                }`}>
+                                Portfolio
+                            </span>
+                            <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'
+                                }`}>
+                                Featured{' '}
+                                <span className="font-serif italic font-normal">Projects</span>
+                            </h2>
+                            <p className={`text-sm md:text-base max-w-md mx-auto ${isDark ? 'text-white/40' : 'text-gray-400'
+                                }`}>
+                                Tap any project to see more details
+                            </p>
+                        </motion.div>
+
+                        {/* Projects Grid */}
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+                            {projects.map((project, index) => (
+                                <ProjectCard
+                                    key={project.id}
+                                    project={project}
+                                    index={index}
+                                    isDark={isDark}
+                                    isExpanded={expandedId === project.id}
+                                    onToggle={() => setExpandedId(expandedId === project.id ? null : project.id)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        // About Section
+        const About = ({ isDark }) => {
+            const ref = useRef(null);
+            const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+            const skills = [
+                { name: "React", icon: "⚛️" },
+                { name: "Node.js", icon: "🟢" },
+                { name: "TypeScript", icon: "📘" },
+                { name: "Firebase", icon: "🔥" },
+                { name: "OpenAI", icon: "🤖" },
+                { name: "Supabase", icon: "⚡" },
+            ];
+
+            return (
+                <section id="about" className="relative py-20 md:py-32 px-4 md:px-6">
+                    <div className="max-w-3xl mx-auto">
+                        <motion.div
+                            ref={ref}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={isInView ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 0.6 }}
+                            className={`relative overflow-hidden rounded-2xl md:rounded-3xl ${isDark ? 'glass-elevated' : 'glass-light'
+                                } p-6 md:p-10`}
+                        >
+                            {/* Decorative Gradient */}
+                            <div className="absolute top-0 right-0 w-48 md:w-64 h-48 md:h-64 bg-gradient-to-br from-violet-500/10 to-cyan-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+
+                            <div className="relative z-10">
+                                <span className={`inline-block text-xs md:text-sm font-medium tracking-widest uppercase mb-6 ${isDark ? 'text-white/40' : 'text-gray-400'
+                                    }`}>
+                                    About Me
+                                </span>
+
+                                <h2 className={`text-2xl md:text-3xl lg:text-4xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'
+                                    }`}>
+                                    Building{' '}
+                                    <span className="font-serif italic font-normal">solutions</span>
+                                    {' '}that matter
+                                </h2>
+
+                                <div className={`space-y-4 text-sm md:text-base leading-relaxed mb-8 ${isDark ? 'text-white/60' : 'text-gray-500'
+                                    }`}>
+                                    <p>
+                                        I'm a full-stack developer focused on building production-ready systems. I design solutions that are fast, reliable, and genuinely improve how businesses operate.
+                                    </p>
+                                    <p>
+                                        My focus is on{' '}
+                                        <strong className={isDark ? 'text-white/90' : 'text-gray-700'}>
+                                            efficiency, usability, and scalability
+                                        </strong>
+                                        . Every system I build serves a purpose—reducing effort and creating smoother experiences.
+                                    </p>
+                                </div>
+
+                                {/* Skills */}
+                                <div className="flex flex-wrap gap-2">
+                                    {skills.map((skill, i) => (
+                                        <motion.div
+                                            key={skill.name}
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                                            transition={{ duration: 0.3, delay: 0.4 + i * 0.08 }}
+                                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${isDark ? 'bg-white/4 border border-white/6' : 'bg-gray-100 border border-gray-200'
+                                                }`}
+                                        >
+                                            <span className="text-sm">{skill.icon}</span>
+                                            <span className={`text-xs md:text-sm font-medium ${isDark ? 'text-white/70' : 'text-gray-600'
+                                                }`}>
+                                                {skill.name}
+                                            </span>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                </section>
+            );
+        };
+
+        // Contact Section
+        const Contact = ({ isDark }) => {
+            const ref = useRef(null);
+            const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+            const links = [
+                { name: "Email", icon: "📧", href: "mailto:apoorvbhardwajabz@gmail.com" },
+                { name: "LinkedIn", icon: "💼", href: "https://in.linkedin.com/in/apoorv-bhardwaj-96a345175" },
+                { name: "GitHub", icon: "💻", href: "https://github.com/young-pluto" },
+                { name: "Resume", icon: "📄", href: "https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/resume%2FApoorv%20Bhardwaj.pdf?alt=media&token=ce20e7aa-ddef-422d-a57c-5b9d043a0910" },
+            ];
+
+            return (
+                <section id="contact" className="relative py-20 md:py-32 px-4 md:px-6">
+                    <div className="max-w-3xl mx-auto text-center">
+                        <motion.div
+                            ref={ref}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={isInView ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <span className={`inline-block text-xs md:text-sm font-medium tracking-widest uppercase mb-4 ${isDark ? 'text-white/40' : 'text-gray-400'
+                                }`}>
+                                Contact
+                            </span>
+
+                            <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'
+                                }`}>
+                                Let's{' '}
+                                <span className="font-serif italic font-normal">Connect</span>
+                            </h2>
+
+                            <p className={`text-sm md:text-base max-w-md mx-auto mb-10 ${isDark ? 'text-white/40' : 'text-gray-400'
+                                }`}>
+                                I'm always interested in discussing new opportunities or collaborating on projects.
+                            </p>
+
+                            <div className="flex flex-wrap justify-center gap-3">
+                                {links.map((link, i) => (
+                                    <motion.a
+                                        key={link.name}
+                                        href={link.href}
+                                        target={link.name !== "Email" ? "_blank" : undefined}
+                                        rel="noopener noreferrer"
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={isInView ? { opacity: 1, y: 0 } : {}}
+                                        transition={{ duration: 0.4, delay: 0.2 + i * 0.08 }}
+                                        className={`flex items-center gap-2.5 px-5 py-3 rounded-xl ${isDark ? 'glass' : 'glass-light'
+                                            } hover:scale-[1.02] active:scale-[0.98] transition-transform`}
+                                    >
+                                        <span className="text-lg">{link.icon}</span>
+                                        <span className={`font-medium text-sm ${isDark ? 'text-white/80' : 'text-gray-700'
+                                            }`}>
+                                            {link.name}
+                                        </span>
+                                    </motion.a>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </div>
+                </section>
+            );
+        };
+
+        // Footer
+        const Footer = ({ isDark }) => (
+            <footer className={`py-8 px-4 md:px-6 border-t ${isDark ? 'border-white/5' : 'border-gray-100'
+                }`}>
+                <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                    <p className={`text-xs md:text-sm ${isDark ? 'text-white/30' : 'text-gray-400'}`}>
+                        © 2025 Apoorv Bhardwaj
+                    </p>
+                    <p className={`text-xs md:text-sm ${isDark ? 'text-white/30' : 'text-gray-400'}`}>
+                        Built with React & Tailwind
+                    </p>
+                </div>
+            </footer>
+        );
+
+        // ============ MAIN APP ============
+        const App = () => {
+            const [isDark, setIsDark] = useState(true);
+
+            useEffect(() => {
+                const saved = localStorage.getItem('portfolio-theme');
+                if (saved === 'light') setIsDark(false);
+            }, []);
+
+            const toggleTheme = useCallback(() => {
+                setIsDark(prev => {
+                    localStorage.setItem('portfolio-theme', prev ? 'light' : 'dark');
+                    return !prev;
+                });
+            }, []);
+
+            return (
+                <div className={`${isDark ? 'dark' : 'light'} ${isDark ? 'bg-dark-950 grid-pattern' : 'bg-gray-50 grid-pattern-light'
+                    } min-h-screen noise`}>
+                    <AmbientBackground isDark={isDark} />
+                    <ThemeToggle isDark={isDark} toggle={toggleTheme} />
+                    <Navbar isDark={isDark} />
+
+                    <main>
+                        <Hero isDark={isDark} />
+                        <Projects isDark={isDark} />
+                        <About isDark={isDark} />
+                        <Contact isDark={isDark} />
+                    </main>
+
+                    <Footer isDark={isDark} />
+                </div>
+            );
+        };
+
+        // ============ RENDER ============
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
+
 </html>
