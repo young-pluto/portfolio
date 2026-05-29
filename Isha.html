@@ -729,6 +729,11 @@
     </section>
 
     <script>
+        /* Always begin the experience at the very top — never let the browser
+           restore the previous scroll position on refresh / back-forward. */
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
+
         /* ============================================================
            CONFIG  ▸▸  PASTE THE 3 FIREBASE IMAGE URLS HERE  ◂◂
            Replace each REPLACE_ME string with a public image URL.
@@ -1126,12 +1131,17 @@
            INTRO + INIT
            ============================================================ */
         function start() {
+            window.scrollTo(0, 0);   // ensure we open from the top
             $('#intro').classList.add('gone');
             document.body.style.overflow = '';
             setTimeout(() => burst({ particleCount: 70, spread: 90, origin: { y: 0.4 } }), 250);
         }
 
+        // restore-from-bfcache (e.g. mobile back/forward) should also reset to top
+        window.addEventListener('pageshow', () => window.scrollTo(0, 0));
+
         document.addEventListener('DOMContentLoaded', () => {
+            window.scrollTo(0, 0);
             // signature from config
             if (CONFIG.from) $('#closing .sig').lastChild.textContent = CONFIG.from;
 
