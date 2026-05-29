@@ -808,14 +808,21 @@
 
         /* ============================================================
            REVEAL ON SCROLL
+           Scroll-driven (not IntersectionObserver) so it is reliable on
+           every device and naturally covers dynamically-added cards.
            ============================================================ */
+        let revealEls = [];
         function initReveal() {
-            const io = new IntersectionObserver((entries) => {
-                entries.forEach(e => {
-                    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-                });
-            }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
-            $$('.reveal, .line').forEach(el => io.observe(el));
+            revealEls = $$('.reveal, .line');
+            sweepReveals();
+        }
+        function sweepReveals() {
+            if (!revealEls.length) return;
+            const trigger = window.innerHeight * 0.9;
+            revealEls = revealEls.filter(el => {
+                if (el.getBoundingClientRect().top < trigger) { el.classList.add('in'); return false; }
+                return true;
+            });
         }
 
         /* ============================================================
@@ -831,6 +838,8 @@
                 const h = document.documentElement;
                 const max = h.scrollHeight - h.clientHeight;
                 progress.style.width = (max > 0 ? (h.scrollTop || window.scrollY) / max * 100 : 0) + '%';
+
+                sweepReveals();
 
                 if (!reduceMotion) {
                     const vh = window.innerHeight;
@@ -1127,8 +1136,8 @@
             if (CONFIG.from) $('#closing .sig').lastChild.textContent = CONFIG.from;
 
             loadPhotos();
+            buildCoupons();   // must run before initReveal so the cards get observed
             initReveal();
-            buildCoupons();
             initParticles();
             initMilestoneConfetti();
 
