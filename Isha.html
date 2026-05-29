@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#fff3e6">
+    <title>Happy Birthday, Isha 🤍</title>
+
+    <!-- Open Graph / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.builtbyapoorv.in/Isha.html">
+    <meta property="og:title" content="Happy Birthday, Isha 🤍">
+    <meta property="og:description" content="A little something I made for you. Scroll slowly.">
+    <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/isha%2FB0E1846B-D45E-4F4A-89B2-525B9681EFE1.jpg?alt=media&token=55e57ed3-dce8-4edb-a605-c0473bb112ff">
+    <meta property="og:image:width" content="977">
+    <meta property="og:image:height" content="788">
+    <meta property="og:image:alt" content="Isha">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Happy Birthday, Isha 🤍">
+    <meta name="twitter:description" content="A little something I made for you. Scroll slowly.">
+    <meta name="twitter:image" content="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/isha%2FB0E1846B-D45E-4F4A-89B2-525B9681EFE1.jpg?alt=media&token=55e57ed3-dce8-4edb-a605-c0473bb112ff">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* ============================================================
+           PALETTE — "Golden Hour"  (tuned for non-OLED LCD screens:
+           luminous, saturated, light-leaning. No pure black anywhere.)
+           ============================================================ */
+        :root {
+            --cream: #fff7ef;
+            --ivory: #fdeede;
+            --peach: #ffd9b7;
+            --apricot: #ffc08a;
+            --coral: #f59e8c;
+            --rose: #e98ba0;
+            --rose-deep: #d76f8e;
+            --plum: #7a3f63;
+            --wine: #4f2440;
+            --gold: #c8962c;
+            --gold-soft: #e2b557;
+            --champagne: #f0d49a;
+            --ink: #3a2630;
+            --ink-soft: #6b5660;
+
+            --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+            --sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+        body {
+            font-family: var(--sans);
+            color: var(--ink);
+            background: var(--cream);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        ::selection { background: var(--gold-soft); color: var(--wine); }
+
+        img { display: block; max-width: 100%; }
+
+        /* ---------- Fixed atmosphere layers ---------- */
+        #grain {
+            position: fixed; inset: 0; z-index: 9; pointer-events: none;
+            opacity: 0.04; mix-blend-mode: multiply;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+        #particles { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+        #fx { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
+
+        /* ---------- Scroll progress ---------- */
+        #progress {
+            position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+            z-index: 80;
+            background: linear-gradient(90deg, var(--gold-soft), var(--rose-deep), var(--gold));
+            box-shadow: 0 0 12px rgba(200, 150, 44, 0.6);
+            transition: width 0.1s linear;
+        }
+
+        /* ============================================================
+           INTRO GATE
+           ============================================================ */
+        #intro {
+            position: fixed; inset: 0; z-index: 100;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 2rem;
+            background:
+                radial-gradient(120% 90% at 50% 20%, #fff9f1 0%, #ffe7cf 45%, #f7c39b 100%);
+            transition: opacity 1s var(--ease), visibility 1s;
+        }
+        #intro.gone { opacity: 0; visibility: hidden; }
+        #intro .for {
+            font-family: var(--sans); letter-spacing: 0.55em;
+            text-transform: uppercase; font-size: 0.7rem; font-weight: 600;
+            color: var(--gold); margin-bottom: 1.2rem; padding-left: 0.55em;
+            opacity: 0; animation: fadeUp 1s var(--ease) 0.2s forwards;
+        }
+        #intro .name {
+            font-family: var(--serif); font-weight: 400; font-style: italic;
+            font-size: clamp(3.2rem, 18vw, 7rem); line-height: 0.95;
+            color: var(--wine); margin-bottom: 2.2rem;
+            opacity: 0; animation: fadeUp 1.1s var(--ease) 0.45s forwards;
+        }
+        #beginBtn {
+            font-family: var(--sans); font-weight: 600; font-size: 0.85rem;
+            letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--wine); background: rgba(255,255,255,0.55);
+            border: 1.5px solid var(--gold); border-radius: 100px;
+            padding: 1rem 2.4rem; cursor: pointer;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 10px 30px rgba(122, 63, 99, 0.18);
+            opacity: 0; animation: fadeUp 1s var(--ease) 0.8s forwards;
+            transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), background 0.4s;
+        }
+        #beginBtn:hover, #beginBtn:active {
+            transform: translateY(-3px) scale(1.03);
+            background: rgba(255,255,255,0.85);
+            box-shadow: 0 16px 40px rgba(122, 63, 99, 0.28);
+        }
+        #intro .hint {
+            margin-top: 1.6rem; font-size: 0.72rem; letter-spacing: 0.1em;
+            color: var(--ink-soft); opacity: 0; animation: fadeUp 1s var(--ease) 1.1s forwards;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           SECTION SCAFFOLD
+           ============================================================ */
+        section {
+            position: relative;
+            padding: clamp(5rem, 14vh, 9rem) 1.5rem;
+            overflow: hidden;
+        }
+        .wrap { max-width: 860px; margin: 0 auto; width: 100%; }
+
+        .kicker {
+            font-family: var(--sans); font-weight: 600;
+            letter-spacing: 0.4em; text-transform: uppercase;
+            font-size: 0.68rem; color: var(--gold);
+            padding-left: 0.4em;
+        }
+        .display {
+            font-family: var(--serif); font-weight: 400;
+            line-height: 1.02; letter-spacing: -0.01em;
+            color: var(--wine);
+        }
+        .lead {
+            font-family: var(--sans); font-weight: 400;
+            line-height: 1.7; color: var(--ink-soft);
+            font-size: clamp(1.05rem, 4.4vw, 1.25rem);
+        }
+
+        /* ---------- reveal-on-scroll ---------- */
+        .reveal {
+            opacity: 0; transform: translateY(38px);
+            transition: opacity 1.1s var(--ease), transform 1.1s var(--ease);
+            will-change: opacity, transform;
+        }
+        .reveal.in { opacity: 1; transform: none; }
+        .reveal.d1 { transition-delay: 0.12s; }
+        .reveal.d2 { transition-delay: 0.24s; }
+        .reveal.d3 { transition-delay: 0.36s; }
+        .reveal.d4 { transition-delay: 0.48s; }
+
+        /* line-by-line clip reveal */
+        .line { display: block; overflow: hidden; }
+        .line > span {
+            display: block; transform: translateY(110%);
+            transition: transform 1.05s var(--ease);
+        }
+        .line.in > span { transform: none; }
+        .line.l1 > span { transition-delay: 0.05s; }
+        .line.l2 > span { transition-delay: 0.18s; }
+        .line.l3 > span { transition-delay: 0.31s; }
+
+        /* ============================================================
+           HERO
+           ============================================================ */
+        #hero {
+            min-height: 100svh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center;
+            background:
+                radial-gradient(130% 80% at 50% 0%, #fffaf3 0%, #ffe9d2 40%, #ffd2a6 78%, #f9b988 100%);
+        }
+        #hero .halo {
+            position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
+            width: 130vw; height: 80vh;
+            background: radial-gradient(50% 50% at 50% 50%, rgba(255,210,150,0.7), rgba(255,210,150,0) 70%);
+            pointer-events: none; filter: blur(10px);
+            animation: breathe 7s ease-in-out infinite;
+        }
+        @keyframes breathe { 50% { opacity: 0.65; transform: translateX(-50%) scale(1.06); } }
+
+        #hero .kicker { margin-bottom: 1.6rem; }
+        #hero h1 {
+            font-family: var(--serif); font-weight: 300; font-style: italic;
+            color: var(--wine);
+            font-size: clamp(3.4rem, 21vw, 9rem);
+            line-height: 0.92; letter-spacing: -0.02em;
+            margin-bottom: 0.3rem;
+        }
+        #hero h1 .happy {
+            display: block; font-style: normal; font-weight: 600;
+            font-size: 0.34em; letter-spacing: 0.12em;
+            text-transform: uppercase; color: var(--gold);
+            margin-bottom: 0.6rem;
+            -webkit-text-fill-color: var(--gold);
+        }
+        #hero h1 .name {
+            background: linear-gradient(95deg, var(--rose-deep), var(--gold), var(--plum));
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent; color: var(--rose-deep);
+        }
+        #hero .sub {
+            margin-top: 1.8rem; max-width: 30ch;
+            font-size: clamp(1rem, 4.4vw, 1.15rem); color: var(--ink-soft);
+            line-height: 1.6;
+        }
+        .scrollcue {
+            position: absolute; bottom: 2.2rem; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+            color: var(--plum); opacity: 0.8;
+            font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+        }
+        .scrollcue .mouse {
+            width: 22px; height: 36px; border: 1.5px solid var(--plum);
+            border-radius: 14px; position: relative;
+        }
+        .scrollcue .mouse::after {
+            content: ''; position: absolute; top: 7px; left: 50%; transform: translateX(-50%);
+            width: 3px; height: 7px; border-radius: 3px; background: var(--plum);
+            animation: wheel 1.8s var(--ease) infinite;
+        }
+        @keyframes wheel { 0% { opacity: 0; top: 6px; } 30% { opacity: 1; } 100% { opacity: 0; top: 18px; } }
+
+        /* ============================================================
+           PHOTO SECTIONS
+           ============================================================ */
+        .photo-section { padding-top: 0; padding-bottom: 0; }
+        .photo-section.tone-ivory { background: var(--ivory); }
+        .photo-section.tone-plum {
+            background: linear-gradient(180deg, var(--plum), var(--wine));
+        }
+        .photo-stage {
+            max-width: 980px; margin: 0 auto;
+            padding: clamp(4.5rem, 13vh, 8rem) 0;
+        }
+        .photo-frame {
+            position: relative; border-radius: 26px; overflow: hidden;
+            box-shadow:
+                0 40px 80px -30px rgba(79, 36, 64, 0.45),
+                0 2px 0 0 rgba(255,255,255,0.5) inset;
+            aspect-ratio: 4 / 5;
+            background: linear-gradient(135deg, var(--peach), var(--rose));
+        }
+        @media (min-width: 720px) { .photo-frame { aspect-ratio: 3 / 4; max-width: 560px; margin: 0 auto; } }
+        .photo-media {
+            position: absolute; inset: -12% 0; /* extra height for parallax */
+            will-change: transform;
+        }
+        .photo-media img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        .photo-frame::after {
+            content: ''; position: absolute; inset: 0;
+            box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.35);
+            border-radius: 26px; pointer-events: none;
+            background: linear-gradient(180deg, rgba(255,255,255,0) 55%, rgba(79,36,64,0.28) 100%);
+        }
+        /* graceful placeholder when no URL */
+        .photo-frame.placeholder .photo-media {
+            display: flex; align-items: center; justify-content: center;
+            inset: 0;
+        }
+        .photo-frame.placeholder .photo-media::before {
+            content: '🤍'; font-size: 3rem; opacity: 0.6;
+        }
+        .photo-caption { margin-top: 2rem; text-align: center; }
+        .photo-caption .num {
+            font-family: var(--serif); font-style: italic; font-size: 1rem;
+            color: var(--gold); display: block; margin-bottom: 0.5rem;
+        }
+        .photo-caption p {
+            font-family: var(--serif); font-size: clamp(1.3rem, 6vw, 1.9rem);
+            line-height: 1.35; color: var(--wine); font-weight: 400;
+            max-width: 22ch; margin: 0 auto;
+        }
+        .tone-plum .photo-caption p { color: var(--cream); }
+        .tone-plum .photo-caption .num { color: var(--champagne); }
+
+        /* ============================================================
+           MESSAGE SECTIONS
+           ============================================================ */
+        #message1 {
+            background: linear-gradient(170deg, var(--ivory) 0%, #ffd9c4 55%, var(--rose) 130%);
+            text-align: center;
+        }
+        #message1 .display { font-size: clamp(2.1rem, 9.5vw, 3.4rem); }
+        #message1 .lead { margin: 1.6rem auto 0; max-width: 30ch; }
+
+        /* ============================================================
+           MILESTONE — 23
+           ============================================================ */
+        #milestone {
+            text-align: center;
+            background:
+                radial-gradient(120% 80% at 50% 30%, #ffb27a 0%, var(--coral) 35%, var(--rose-deep) 70%, var(--plum) 100%);
+            color: var(--cream);
+        }
+        #milestone .kicker { color: var(--champagne); }
+        #milestone .pre {
+            font-family: var(--serif); font-style: italic;
+            font-size: clamp(1.2rem, 5.5vw, 1.6rem);
+            color: rgba(255,247,239,0.9); margin-bottom: 0.5rem;
+        }
+        .bignum {
+            font-family: var(--serif); font-weight: 600;
+            font-size: clamp(9rem, 52vw, 20rem); line-height: 0.8;
+            letter-spacing: -0.03em;
+            background: linear-gradient(180deg, #fff7ef, var(--champagne) 55%, var(--gold));
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 12px 30px rgba(79, 36, 64, 0.4));
+            position: relative; display: inline-block;
+        }
+        .bignum.glow { animation: pulseGlow 3.5s ease-in-out infinite; }
+        @keyframes pulseGlow {
+            50% { filter: drop-shadow(0 12px 50px rgba(255, 230, 180, 0.85)); }
+        }
+        #milestone .word {
+            font-family: var(--serif); font-style: italic; font-weight: 300;
+            font-size: clamp(1.8rem, 9vw, 3.2rem); color: var(--cream);
+            letter-spacing: 0.02em; margin-top: 0.4rem;
+        }
+        #milestone .lead { color: rgba(255,247,239,0.92); margin: 1.8rem auto 0; max-width: 32ch; }
+
+        /* ============================================================
+           HEARTFELT — growth / friendship / year ahead
+           ============================================================ */
+        #letter { background: linear-gradient(180deg, var(--cream), var(--ivory)); }
+        #letter .wrap { max-width: 640px; }
+        #letter .kicker { display: block; text-align: center; margin-bottom: 3rem; }
+        .verse { margin-bottom: 3.4rem; }
+        .verse:last-child { margin-bottom: 0; }
+        .verse .tag {
+            font-family: var(--serif); font-style: italic; font-size: 1.05rem;
+            color: var(--gold); display: block; margin-bottom: 0.7rem;
+        }
+        .verse p {
+            font-family: var(--serif); font-weight: 300;
+            font-size: clamp(1.45rem, 6.2vw, 2rem); line-height: 1.4;
+            color: var(--wine);
+        }
+
+        /* ============================================================
+           COUPONS
+           ============================================================ */
+        #gifts {
+            background: linear-gradient(175deg, var(--plum) 0%, var(--wine) 100%);
+            color: var(--cream);
+            text-align: center;
+        }
+        #gifts .kicker { color: var(--champagne); }
+        #gifts h2 {
+            font-family: var(--serif); font-style: italic; font-weight: 300;
+            font-size: clamp(2.2rem, 10vw, 3.4rem); color: var(--cream);
+            margin: 0.8rem 0 0.8rem;
+        }
+        #gifts .lead { color: rgba(255,247,239,0.82); max-width: 30ch; margin: 0 auto 3.4rem; }
+
+        .coupons { display: flex; flex-direction: column; gap: 2.4rem; max-width: 430px; margin: 0 auto; }
+
+        .coupon { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+
+        .coupon-card {
+            position: relative; width: 100%; perspective: 1700px; cursor: pointer;
+            aspect-ratio: 1.586 / 1;        /* true ISO credit-card ratio */
+            -webkit-tap-highlight-color: transparent;
+        }
+        .coupon-inner {
+            position: relative; width: 100%; height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1s var(--ease);
+        }
+        .coupon-card.open .coupon-inner { transform: rotateY(180deg); }
+
+        .cc {
+            position: absolute; inset: 0; border-radius: 16px; overflow: hidden;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            box-shadow:
+                0 24px 48px -22px rgba(0,0,0,0.6),
+                0 2px 5px rgba(0,0,0,0.18),
+                inset 0 1px 0 rgba(255,255,255,0.6),
+                inset 0 0 0 1px rgba(255,255,255,0.22);
+            font-size: clamp(13px, 3.7vw, 17px);
+            color: var(--cc-ink);
+        }
+        @media (min-width: 470px) { .cc { font-size: 17px; } }
+
+        /* metallic finishes */
+        .v-gold  { --c1:#fff7e6; --c2:#f0ce82; --c3:#d6a945; --cc-ink:#4a2440; --cc-label:#8a6418; }
+        .v-rose  { --c1:#fff1ec; --c2:#f3ccbd; --c3:#e0a488; --cc-ink:#5a2238; --cc-label:#a25e51; }
+        .v-white { --c1:#fdfaf2; --c2:#eae0c9; --c3:#cdb47f; --cc-ink:#4a2440; --cc-label:#8a7340; }
+
+        /* engine-turned guilloche texture + diagonal sheen */
+        .cc::before {
+            content: ''; position: absolute; inset: 0; pointer-events: none;
+            background:
+                repeating-linear-gradient(115deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 8px),
+                repeating-radial-gradient(circle at 82% -12%, rgba(180,130,40,0.05) 0 9px, transparent 9px 18px),
+                linear-gradient(120deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0) 32%, rgba(255,255,255,0) 72%, rgba(255,255,255,0.2) 100%);
+            opacity: 0.85;
+        }
+
+        /* ---------- FRONT ---------- */
+        .cc-front {
+            transform: rotateY(180deg);
+            display: flex; flex-direction: column;
+            padding: 7% 7.5%;
+            background: linear-gradient(135deg, var(--c1) 0%, var(--c2) 52%, var(--c3) 100%);
+        }
+        .cc-top { display: flex; justify-content: space-between; align-items: center; }
+        .cc-brand {
+            font: 700 0.6em/1 var(--sans); letter-spacing: 0.24em;
+            text-transform: uppercase; color: var(--cc-label);
+        }
+        .cc-wave { width: 1.5em; height: 1.5em; color: var(--cc-label); opacity: 0.85; }
+        .cc-wave svg { width: 100%; height: 100%; display: block; }
+
+        .cc-chip {
+            width: 2.9em; height: 2.2em; border-radius: 0.4em; margin: 0.6em 0 0;
+            background: linear-gradient(135deg, #f6e3a6 0%, #c79a3f 45%, #e7c878 70%, #b8893a 100%);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.6), inset 0 0 7px rgba(120,80,20,0.45);
+            position: relative;
+        }
+        .cc-chip::after {
+            content: ''; position: absolute; inset: 0.34em;
+            border: 1px solid rgba(120,80,20,0.45); border-radius: 0.2em;
+            background:
+                linear-gradient(to right, transparent 31%, rgba(120,80,20,0.5) 31% 33%, transparent 33%, transparent 64%, rgba(120,80,20,0.5) 64% 66%, transparent 66%),
+                linear-gradient(to bottom, transparent 44%, rgba(120,80,20,0.5) 44% 46%, transparent 46%);
+        }
+
+        .cc-name {
+            font-family: var(--serif); font-weight: 600; font-style: italic;
+            font-size: 1.85em; line-height: 1; color: var(--cc-ink);
+            margin-top: auto;
+        }
+        .cc-tag {
+            font: 400 0.72em/1.35 var(--sans); color: var(--cc-ink); opacity: 0.72;
+            margin-top: 0.45em; max-width: 92%;
+        }
+        .cc-num {
+            font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+            font-size: 0.82em; letter-spacing: 0.1em; color: var(--cc-ink);
+            margin-top: 0.7em; opacity: 0.95;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.45);
+        }
+        .cc-bottom {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-top: 0.6em; gap: 0.6em;
+        }
+        .cc-field small {
+            display: block; font: 700 0.46em/1 var(--sans); letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--cc-label); margin-bottom: 0.4em;
+        }
+        .cc-field b {
+            font: 600 0.78em/1 var(--sans); letter-spacing: 0.1em;
+            text-transform: uppercase; color: var(--cc-ink);
+        }
+        .cc-mark { position: relative; width: 2.7em; height: 1.6em; flex: none; align-self: center; }
+        .cc-mark span { position: absolute; top: 0; width: 1.6em; height: 1.6em; border-radius: 50%; }
+        .cc-mark span:first-child { left: 0; background: rgba(214,140,60,0.9); }
+        .cc-mark span:last-child { right: 0; background: rgba(122,63,99,0.65); mix-blend-mode: multiply; }
+
+        /* ---------- BACK (sealed) ---------- */
+        .cc-back { background: linear-gradient(135deg, var(--c1) 0%, var(--c2) 52%, var(--c3) 100%); }
+        .cc-mag { position: absolute; top: 11%; left: 0; right: 0; height: 21%; background: linear-gradient(#34212a, #241318); }
+        .cc-sign {
+            position: absolute; top: 43%; left: 7%; right: 30%; height: 17%;
+            background: repeating-linear-gradient(45deg, #fff 0 7px, #f1e9db 7px 14px);
+            border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+            display: flex; align-items: center; padding-left: 0.7em; overflow: hidden;
+        }
+        .cc-sign i { font-family: var(--serif); font-style: italic; font-size: 1.1em; color: #4a2440; opacity: 0.8; }
+        .cc-cvv {
+            position: absolute; top: 43%; right: 7%; width: 17%; height: 17%;
+            background: #fff; border-radius: 3px; display: flex; align-items: center; justify-content: center;
+            font: 600 0.62em/1 var(--sans); color: #4a2440; letter-spacing: 0.15em;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+        }
+        .cc-holo {
+            position: absolute; bottom: 9%; right: 7%; width: 1.9em; height: 1.9em; border-radius: 50%;
+            background: conic-gradient(from 0deg, #f6d365, #fda085, #a18cd1, #84fab0, #f6d365);
+            opacity: 0.6;
+        }
+        .cc-tapback {
+            position: absolute; bottom: 11%; left: 7%;
+            font: 700 0.55em/1 var(--sans); letter-spacing: 0.22em; text-transform: uppercase;
+            color: var(--cc-label); display: flex; align-items: center; gap: 0.5em;
+        }
+        .cc-tapback::before { content: '\21BB'; font-size: 1.4em; line-height: 0; }
+
+        /* ---------- save action (below card, never clipped) ---------- */
+        .coupon-actions {
+            opacity: 0; transform: translateY(6px); max-height: 0; overflow: hidden;
+            transition: opacity 0.5s var(--ease), transform 0.5s var(--ease), max-height 0.5s var(--ease);
+        }
+        .coupon-card.open + .coupon-actions { opacity: 1; transform: none; max-height: 80px; }
+        .dl {
+            font: 600 0.66rem/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase;
+            color: var(--champagne); background: rgba(255,255,255,0.07);
+            border: 1.5px solid rgba(240,212,154,0.45); border-radius: 100px;
+            padding: 0.7rem 1.4rem; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            transition: background 0.3s, transform 0.3s var(--ease), border-color 0.3s;
+        }
+        .dl:hover { background: rgba(255,255,255,0.16); border-color: var(--champagne); }
+        .dl:active { transform: scale(0.95); }
+
+        #gifts .gnote {
+            margin-top: 2.6rem; font-size: 0.72rem; letter-spacing: 0.05em;
+            color: rgba(255,247,239,0.6);
+        }
+
+        /* ============================================================
+           CLOSING
+           ============================================================ */
+        #closing {
+            min-height: 100svh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+            background:
+                radial-gradient(120% 90% at 50% 30%, #fffaf3 0%, #ffe7cf 55%, #ffd0a3 100%);
+        }
+        #closing .kicker { color: var(--gold); margin-bottom: 1.4rem; }
+        #closing h2 {
+            font-family: var(--serif); font-weight: 300; font-style: italic;
+            font-size: clamp(2.6rem, 13vw, 5rem); line-height: 1; color: var(--wine);
+        }
+        #closing .lead { margin: 1.8rem auto 2.6rem; max-width: 28ch; }
+        .celebrate {
+            font-family: var(--sans); font-weight: 600; font-size: 0.8rem;
+            letter-spacing: 0.16em; text-transform: uppercase; color: var(--wine);
+            background: rgba(255,255,255,0.6); border: 1.5px solid var(--gold);
+            border-radius: 100px; padding: 0.95rem 2.1rem; cursor: pointer;
+            box-shadow: 0 12px 30px rgba(122,63,99,0.18);
+            transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+        }
+        .celebrate:hover, .celebrate:active {
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: 0 18px 44px rgba(122,63,99,0.28);
+        }
+        #closing .sig {
+            margin-top: 3.5rem; font-family: var(--serif); font-style: italic;
+            font-size: 1.1rem; color: var(--plum);
+        }
+        #closing .sig small {
+            display: block; font-family: var(--sans); font-style: normal;
+            font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 0.5rem;
+        }
+
+        /* ---------- reduced motion ---------- */
+        @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; scroll-behavior: auto; }
+            .reveal { opacity: 1 !important; transform: none !important; }
+            .line > span { transform: none !important; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="progress"></div>
+    <canvas id="particles"></canvas>
+    <div id="grain"></div>
+    <canvas id="fx"></canvas>
+
+    <!-- INTRO GATE -->
+    <div id="intro">
+        <div class="for">A little something, just for</div>
+        <div class="name">Isha</div>
+        <button id="beginBtn">Open your day&nbsp;→</button>
+        <div class="hint">made by hand · best with sound of your own choosing</div>
+    </div>
+
+    <!-- HERO -->
+    <section id="hero">
+        <div class="halo"></div>
+        <div class="kicker reveal">29 · 05 · today is yours</div>
+        <h1 class="reveal d1">
+            <span class="happy">Happy Birthday</span>
+            <span class="name">Isha</span>
+        </h1>
+        <p class="sub reveal d2">Take a breath, scroll slowly, and let today unfold one little moment at a time.</p>
+        <div class="scrollcue reveal d3">
+            <span>scroll</span>
+            <span class="mouse"></span>
+        </div>
+    </section>
+
+    <!-- PHOTO 1 -->
+    <section class="photo-section tone-ivory">
+        <div class="photo-stage">
+            <div class="photo-frame reveal" data-photo="0">
+                <div class="photo-media"></div>
+            </div>
+            <div class="photo-caption reveal d1">
+                <span class="num">i.</span>
+                <p>There's a kind of light that follows some people around. You're one of them.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- MESSAGE 1 -->
+    <section id="message1">
+        <div class="wrap">
+            <h2 class="display reveal">
+                <span class="line l1"><span>Some people you meet</span></span>
+                <span class="line l2"><span>and instantly feel</span></span>
+                <span class="line l3"><span>like you've known forever.</span></span>
+            </h2>
+            <p class="lead reveal d2">We haven't known each other long — but some friendships don't measure themselves in time. They just feel right from the start.</p>
+        </div>
+    </section>
+
+    <!-- PHOTO 2 -->
+    <section class="photo-section tone-ivory">
+        <div class="photo-stage">
+            <div class="photo-frame reveal" data-photo="1">
+                <div class="photo-media"></div>
+            </div>
+            <div class="photo-caption reveal d1">
+                <span class="num">ii.</span>
+                <p>Here's to the laughs we've had — and all the ones still waiting for us.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- MILESTONE -->
+    <section id="milestone">
+        <div class="wrap">
+            <div class="kicker reveal">the headline of the day</div>
+            <div class="pre reveal d1">And just like that, you're</div>
+            <div class="bignum reveal d1" id="bignum">23</div>
+            <div class="word reveal d2">twenty-three</div>
+            <p class="lead reveal d3">Twenty-three looks good on you. A whole new year — fresh pages, open doors, and a hundred small adventures with your name on them.</p>
+        </div>
+    </section>
+
+    <!-- PHOTO 3 -->
+    <section class="photo-section tone-plum">
+        <div class="photo-stage">
+            <div class="photo-frame reveal" data-photo="2">
+                <div class="photo-media"></div>
+            </div>
+            <div class="photo-caption reveal d1">
+                <span class="num">iii.</span>
+                <p>Keep being exactly, unapologetically you. It suits you.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HEARTFELT LETTER -->
+    <section id="letter">
+        <div class="wrap">
+            <span class="kicker reveal">a few honest words</span>
+            <div class="verse reveal">
+                <span class="tag">on growth —</span>
+                <p>You've grown into someone who knows her own mind, and that's a rare, beautiful thing. Don't let anyone talk you quieter.</p>
+            </div>
+            <div class="verse reveal">
+                <span class="tag">on friendship —</span>
+                <p>Thank you for being easy to talk to and good to be around. New friend, real friend — I'm glad our paths crossed.</p>
+            </div>
+            <div class="verse reveal">
+                <span class="tag">on the year ahead —</span>
+                <p>May 23 bring you more of what makes you light up and less of what doesn't deserve you. I'm rooting for every bit of it.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- GIFTS / COUPONS -->
+    <section id="gifts">
+        <div class="wrap">
+            <span class="kicker reveal">no wrapping paper required</span>
+            <h2 class="reveal d1">A few little gifts</h2>
+            <p class="lead reveal d2">Tap a card to unwrap it — then save it to your gallery. Each one is a real promise, redeemable whenever you like.</p>
+            <div class="coupons" id="coupons"></div>
+            <p class="gnote reveal">no expiry · no fine print · just say the word</p>
+        </div>
+    </section>
+
+    <!-- CLOSING -->
+    <section id="closing">
+        <div class="kicker reveal">one last thing</div>
+        <h2 class="reveal d1">Happy birthday,<br>Isha.</h2>
+        <p class="lead reveal d2">Go be celebrated today. You've more than earned it. Here's to twenty-three — make it loud.</p>
+        <button class="celebrate reveal d2" id="celebrate">Celebrate 🎉</button>
+        <div class="sig reveal d3">
+            <small>with warmth</small>
+            your friend
+        </div>
+    </section>
+
+    <script>
+        /* ============================================================
+           CONFIG  ▸▸  PASTE THE 3 FIREBASE IMAGE URLS HERE  ◂◂
+           Replace each REPLACE_ME string with a public image URL.
+           Leave one as-is and it simply shows a soft placeholder.
+           ============================================================ */
+        const CONFIG = {
+            name: "Isha",
+            age: 23,
+            from: "your friend",       // optional signature (shown in closing)
+            photos: [
+                "https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/isha%2F6D5C6E2C-A875-4247-A058-FEB45634E1DE.jpg?alt=media&token=55d9a9e1-68bd-4d01-9501-58776e597736",
+                "https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/isha%2F95059030-C359-4F9D-A898-063405D287B4.jpg?alt=media&token=48d4d620-0e30-419c-a5f5-28875afbea1d",
+                "https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/isha%2FB0E1846B-D45E-4F4A-89B2-525B9681EFE1.jpg?alt=media&token=55e57ed3-dce8-4edb-a605-c0473bb112ff"
+            ]
+        };
+
+        /* Coupon definitions — premium card style. Edit copy freely. */
+        const COUPONS = [
+            {
+                v: "gold",
+                name: "The Open Road",
+                tag: "One long drive — windows down, your playlist, no destination.",
+                num: "7042  1980  3361  0001",
+                file: "isha-the-open-road.png"
+            },
+            {
+                v: "rose",
+                name: "Chef’s Table",
+                tag: "Dinner anywhere you choose — fancy or hole-in-the-wall, it’s on me.",
+                num: "5510  4423  0078  0002",
+                file: "isha-chefs-table.png"
+            },
+            {
+                v: "white",
+                name: "Carte Blanche",
+                tag: "One spontaneous day out — a view, a wander, a whim. Entirely your call.",
+                num: "8836  2271  9904  0003",
+                file: "isha-carte-blanche.png"
+            }
+        ];
+
+        const WAVE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 7a7 7 0 0 1 0 10"/><path d="M12 4.5a11 11 0 0 1 0 15"/><path d="M16 2a15 15 0 0 1 0 20"/></svg>';
+
+        /* ---------- small helpers ---------- */
+        const $ = (s, r = document) => r.querySelector(s);
+        const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        /* ============================================================
+           PHOTOS
+           ============================================================ */
+        function loadPhotos() {
+            $$('.photo-frame').forEach(frame => {
+                const i = +frame.dataset.photo;
+                const url = CONFIG.photos[i];
+                const media = $('.photo-media', frame);
+                if (!url || url.startsWith('REPLACE_ME')) {
+                    frame.classList.add('placeholder');
+                    return;
+                }
+                const img = new Image();
+                img.alt = CONFIG.name;
+                img.referrerPolicy = 'no-referrer';
+                img.onload = () => {
+                    // match the frame to the photo's real orientation so nothing
+                    // important gets cropped (clamped to keep the layout elegant)
+                    const r = img.naturalWidth / img.naturalHeight;
+                    const clamped = Math.max(0.74, Math.min(1.4, r));
+                    frame.style.aspectRatio = clamped + ' / 1';
+                    if (r > 1.05) frame.style.maxWidth = 'min(680px, 100%)';
+                    media.appendChild(img);
+                };
+                img.onerror = () => frame.classList.add('placeholder');
+                img.src = url;
+            });
+        }
+
+        /* ============================================================
+           REVEAL ON SCROLL
+           ============================================================ */
+        function initReveal() {
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+                });
+            }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+            $$('.reveal, .line').forEach(el => io.observe(el));
+        }
+
+        /* ============================================================
+           PARALLAX (photos) + PROGRESS BAR
+           ============================================================ */
+        const progress = $('#progress');
+        const medias = $$('.photo-media');
+        let ticking = false;
+        function onScroll() {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                const h = document.documentElement;
+                const max = h.scrollHeight - h.clientHeight;
+                progress.style.width = (max > 0 ? (h.scrollTop || window.scrollY) / max * 100 : 0) + '%';
+
+                if (!reduceMotion) {
+                    const vh = window.innerHeight;
+                    medias.forEach(m => {
+                        const r = m.parentElement.getBoundingClientRect();
+                        if (r.bottom < -200 || r.top > vh + 200) return;
+                        const center = r.top + r.height / 2;
+                        const pct = (center - vh / 2) / vh;     // -1..1 ish
+                        m.style.transform = `translateY(${(-pct * 9).toFixed(2)}%)`;
+                    });
+                }
+                ticking = false;
+            });
+        }
+
+        /* ============================================================
+           AMBIENT PARTICLES (soft floating gold motes)
+           ============================================================ */
+        function initParticles() {
+            if (reduceMotion) return;
+            const c = $('#particles'), x = c.getContext('2d');
+            let w, hgt, dots;
+            function size() {
+                w = c.width = innerWidth; hgt = c.height = innerHeight;
+                const n = Math.min(46, Math.floor(w / 26));
+                dots = Array.from({ length: n }, () => ({
+                    x: Math.random() * w, y: Math.random() * hgt,
+                    r: Math.random() * 2.2 + 0.6,
+                    s: Math.random() * 0.35 + 0.08,
+                    a: Math.random() * 0.5 + 0.2,
+                    d: Math.random() * Math.PI * 2
+                }));
+            }
+            size(); addEventListener('resize', size);
+            (function loop() {
+                x.clearRect(0, 0, w, hgt);
+                dots.forEach(p => {
+                    p.y -= p.s; p.d += 0.01;
+                    p.x += Math.sin(p.d) * 0.25;
+                    if (p.y < -10) { p.y = hgt + 10; p.x = Math.random() * w; }
+                    x.beginPath();
+                    x.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    x.fillStyle = `rgba(214, 165, 70, ${p.a})`;
+                    x.fill();
+                });
+                requestAnimationFrame(loop);
+            })();
+        }
+
+        /* ============================================================
+           CONFETTI
+           ============================================================ */
+        const PARTY_COLORS = ['#c8962c', '#e2b557', '#f0d49a', '#e98ba0', '#d76f8e', '#7a3f63', '#fff7ef'];
+        function burst(opts = {}) {
+            if (typeof confetti !== 'function' || reduceMotion) return;
+            confetti(Object.assign({
+                particleCount: 90, spread: 78, startVelocity: 42,
+                origin: { y: 0.62 }, colors: PARTY_COLORS, scalar: 0.95,
+                disableForReducedMotion: true
+            }, opts));
+        }
+        function cannons() {
+            if (typeof confetti !== 'function' || reduceMotion) return;
+            const end = Date.now() + 900;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 60, origin: { x: 0 }, colors: PARTY_COLORS, scalar: 0.9 });
+                confetti({ particleCount: 5, angle: 120, spread: 60, origin: { x: 1 }, colors: PARTY_COLORS, scalar: 0.9 });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            })();
+        }
+
+        /* fire confetti once when milestone enters */
+        function initMilestoneConfetti() {
+            const m = $('#milestone');
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) {
+                        burst({ particleCount: 120, spread: 100, origin: { y: 0.5 } });
+                        $('#bignum').classList.add('glow');
+                        io.disconnect();
+                    }
+                });
+            }, { threshold: 0.5 });
+            io.observe(m);
+        }
+
+        /* ============================================================
+           COUPONS — render DOM cards + canvas PNG download
+           ============================================================ */
+        function buildCoupons() {
+            const wrap = $('#coupons');
+            const brand = `The ${CONFIG.name} Collection`;
+            COUPONS.forEach((c, i) => {
+                const el = document.createElement('div');
+                el.className = 'coupon reveal';
+                el.style.transitionDelay = (0.1 + i * 0.12) + 's';
+                el.innerHTML = `
+                    <div class="coupon-card">
+                        <div class="coupon-inner">
+                            <div class="cc cc-back v-${c.v}">
+                                <div class="cc-mag"></div>
+                                <div class="cc-sign"><i>${CONFIG.name}</i></div>
+                                <div class="cc-cvv">${321 + i * 47}</div>
+                                <div class="cc-holo"></div>
+                                <div class="cc-tapback">tap to reveal</div>
+                            </div>
+                            <div class="cc cc-front v-${c.v}">
+                                <div class="cc-top">
+                                    <span class="cc-brand">${brand}</span>
+                                    <span class="cc-wave">${WAVE_SVG}</span>
+                                </div>
+                                <div class="cc-chip"></div>
+                                <div class="cc-name">${c.name}</div>
+                                <div class="cc-tag">${c.tag}</div>
+                                <div class="cc-num">${c.num}</div>
+                                <div class="cc-bottom">
+                                    <div class="cc-field"><small>Cardholder</small><b>${CONFIG.name}</b></div>
+                                    <div class="cc-field"><small>Valid</small><b>Forever</b></div>
+                                    <span class="cc-mark"><span></span><span></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="coupon-actions">
+                        <button class="dl" data-i="${i}" aria-label="Download ${c.name} card">↓ Save to gallery</button>
+                    </div>`;
+                const card = $('.coupon-card', el);
+                card.addEventListener('click', () => {
+                    card.classList.toggle('open');
+                    if (card.classList.contains('open')) burst({ particleCount: 34, spread: 55, scalar: 0.7, origin: { y: 0.72 } });
+                });
+                wrap.appendChild(el);
+            });
+            $$('.dl', wrap).forEach(btn => {
+                btn.addEventListener('click', (e) => { e.stopPropagation(); downloadCoupon(+btn.dataset.i); });
+            });
+        }
+
+        function roundRect(ctx, x, y, w, h, r) {
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.arcTo(x + w, y, x + w, y + h, r);
+            ctx.arcTo(x + w, y + h, x, y + h, r);
+            ctx.arcTo(x, y + h, x, y, r);
+            ctx.arcTo(x, y, x + w, y, r);
+            ctx.closePath();
+        }
+
+        const CARD_PALETTES = {
+            gold:  { c1: '#fff7e6', c2: '#f0ce82', c3: '#d6a945', ink: '#4a2440', label: '#8a6418' },
+            rose:  { c1: '#fff1ec', c2: '#f3ccbd', c3: '#e0a488', ink: '#5a2238', label: '#a25e51' },
+            white: { c1: '#fdfaf2', c2: '#eae0c9', c3: '#cdb47f', ink: '#4a2440', label: '#8a7340' }
+        };
+
+        function hexA(h, a) {
+            const n = parseInt(h.slice(1), 16);
+            return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`;
+        }
+        function letterText(ctx, text, x, y, ls) {
+            let cx = x;
+            for (const ch of text) { ctx.fillText(ch, cx, y); cx += ctx.measureText(ch).width + ls; }
+            return cx;
+        }
+        function wrapText(ctx, text, x, y, maxW, lh) {
+            const words = text.split(' ');
+            let line = '', yy = y;
+            for (const w of words) {
+                const test = line + w + ' ';
+                if (ctx.measureText(test).width > maxW && line) {
+                    ctx.fillText(line.trim(), x, yy); line = w + ' '; yy += lh;
+                } else line = test;
+            }
+            ctx.fillText(line.trim(), x, yy);
+            return yy;
+        }
+        function drawChip(ctx, x, y, w, h) {
+            const r = 9;
+            const g = ctx.createLinearGradient(x, y, x + w, y + h);
+            g.addColorStop(0, '#f6e3a6'); g.addColorStop(0.45, '#c79a3f');
+            g.addColorStop(0.7, '#e7c878'); g.addColorStop(1, '#b8893a');
+            roundRect(ctx, x, y, w, h, r); ctx.fillStyle = g; ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 1.5; roundRect(ctx, x, y, w, h, r); ctx.stroke();
+            ctx.strokeStyle = 'rgba(120,80,20,0.5)'; ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(x + w * 0.33, y); ctx.lineTo(x + w * 0.33, y + h);
+            ctx.moveTo(x + w * 0.66, y); ctx.lineTo(x + w * 0.66, y + h);
+            ctx.moveTo(x, y + h * 0.5); ctx.lineTo(x + w, y + h * 0.5);
+            ctx.stroke();
+            ctx.strokeStyle = 'rgba(120,80,20,0.4)'; ctx.lineWidth = 1.5;
+            roundRect(ctx, x + w * 0.28, y + h * 0.27, w * 0.44, h * 0.46, 4); ctx.stroke();
+        }
+        function drawWave(ctx, rightX, cy, size, color) {
+            ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = 3.4; ctx.lineCap = 'round'; ctx.globalAlpha = 0.85;
+            const cx = rightX - size;
+            for (let k = 1; k <= 3; k++) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, size * 0.22 * k, -Math.PI / 3.4, Math.PI / 3.4);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+        function drawMark(ctx, x, y, d) {
+            const r = d / 2;
+            ctx.save();
+            ctx.fillStyle = 'rgba(214,140,60,0.9)';
+            ctx.beginPath(); ctx.arc(x + r, y + r, r, 0, 7); ctx.fill();
+            ctx.globalCompositeOperation = 'multiply';
+            ctx.fillStyle = 'rgba(122,63,99,0.62)';
+            ctx.beginPath(); ctx.arc(x + r + r * 0.95, y + r, r, 0, 7); ctx.fill();
+            ctx.restore();
+        }
+
+        async function downloadCoupon(i) {
+            const c = COUPONS[i];
+            const p = CARD_PALETTES[c.v] || CARD_PALETTES.gold;
+            try { await document.fonts.load('italic 600 1px "Fraunces"'); await document.fonts.load('700 1px "Plus Jakarta Sans"'); } catch (_) {}
+
+            const S = 2, W = 1100, H = 694, R = 44, padX = 80, padY = 64;
+            const cv = document.createElement('canvas');
+            cv.width = W * S; cv.height = H * S;
+            const ctx = cv.getContext('2d');
+            ctx.scale(S, S);
+
+            // base + texture (clipped to rounded rect)
+            roundRect(ctx, 0, 0, W, H, R); ctx.save(); ctx.clip();
+            const g = ctx.createLinearGradient(0, 0, W, H);
+            g.addColorStop(0, p.c1); g.addColorStop(0.52, p.c2); g.addColorStop(1, p.c3);
+            ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+            ctx.strokeStyle = '#7a4a10'; ctx.lineWidth = 1; ctx.globalAlpha = 0.06;
+            for (let x = -H; x < W; x += 9) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + H, H); ctx.stroke(); }
+            ctx.globalAlpha = 0.05;
+            for (let r = 40; r < 560; r += 26) { ctx.beginPath(); ctx.arc(W * 0.84, H * 0.08, r, 0, 7); ctx.stroke(); }
+            ctx.globalAlpha = 1;
+            const sh = ctx.createLinearGradient(0, 0, W, H);
+            sh.addColorStop(0, 'rgba(255,255,255,0.38)'); sh.addColorStop(0.32, 'rgba(255,255,255,0)');
+            sh.addColorStop(0.74, 'rgba(255,255,255,0)'); sh.addColorStop(1, 'rgba(255,255,255,0.2)');
+            ctx.fillStyle = sh; ctx.fillRect(0, 0, W, H);
+            ctx.restore();
+
+            ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 2;
+            roundRect(ctx, 2, 2, W - 4, H - 4, R - 2); ctx.stroke();
+
+            ctx.textBaseline = 'top';
+            // brand (letter-spaced caps) + contactless
+            ctx.fillStyle = p.label; ctx.font = '700 21px "Plus Jakarta Sans", sans-serif';
+            letterText(ctx, `THE ${CONFIG.name.toUpperCase()} COLLECTION`, padX, padY, 4.5);
+            drawWave(ctx, W - padX, padY + 11, 30, p.label);
+
+            // chip
+            drawChip(ctx, padX, padY + 46, 84, 62);
+
+            // gift name (hero, serif italic)
+            ctx.fillStyle = p.ink; ctx.font = 'italic 600 64px "Fraunces", Georgia, serif';
+            ctx.fillText(c.name, padX - 2, 392);
+
+            // tagline
+            ctx.fillStyle = hexA(p.ink, 0.74); ctx.font = '400 25px "Plus Jakarta Sans", sans-serif';
+            wrapText(ctx, c.tag, padX, 474, W - padX * 2 - 30, 33);
+
+            // embossed number
+            ctx.fillStyle = p.ink; ctx.font = '500 30px ui-monospace, Menlo, monospace';
+            letterText(ctx, c.num, padX, 566, 3);
+
+            // bottom fields
+            ctx.fillStyle = p.label; ctx.font = '700 14px "Plus Jakarta Sans", sans-serif';
+            letterText(ctx, 'CARDHOLDER', padX, 616, 2.5);
+            letterText(ctx, 'VALID', padX + 360, 616, 2.5);
+            ctx.fillStyle = p.ink; ctx.font = '600 26px "Plus Jakarta Sans", sans-serif';
+            letterText(ctx, CONFIG.name.toUpperCase(), padX, 638, 1.5);
+            letterText(ctx, 'FOREVER', padX + 360, 638, 1.5);
+
+            // network emblem
+            drawMark(ctx, W - padX - 96, H - 92, 56);
+
+            const url = cv.toDataURL('image/png');
+            const a = document.createElement('a');
+            a.href = url; a.download = c.file;
+            document.body.appendChild(a); a.click(); a.remove();
+            burst({ particleCount: 60, spread: 70, origin: { y: 0.7 } });
+        }
+
+        /* ============================================================
+           INTRO + INIT
+           ============================================================ */
+        function start() {
+            $('#intro').classList.add('gone');
+            document.body.style.overflow = '';
+            setTimeout(() => burst({ particleCount: 70, spread: 90, origin: { y: 0.4 } }), 250);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // signature from config
+            if (CONFIG.from) $('#closing .sig').lastChild.textContent = CONFIG.from;
+
+            loadPhotos();
+            initReveal();
+            buildCoupons();
+            initParticles();
+            initMilestoneConfetti();
+
+            document.body.style.overflow = 'hidden';   // lock during intro
+            $('#beginBtn').addEventListener('click', start);
+            $('#celebrate').addEventListener('click', () => { burst({ particleCount: 130, spread: 110 }); cannons(); });
+
+            addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+        });
+    </script>
+</body>
+
+</html>
