@@ -3,6 +3,9 @@ window.Insights = (() => {
   const el = () => document.getElementById('screen-insights');
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
+  const BAR_MAX_PX = 120; // px height for a full-height bar (chart body)
+  const barPx = (pct) => Math.max(2, pct / 100 * BAR_MAX_PX);
+
   const monthTotal = (mk) => Store.getExpenses(mk).reduce((s, e) => s + e.amount, 0);
   const prevMonthKey = (mk, back = 1) => { const d = Fmt.parseMonthKey(mk); d.setMonth(d.getMonth() - back); return Fmt.monthKey(d); };
   const spendToDate = (mk, day) => Store.getExpenses(mk).filter((e) => Fmt.parseDateKey(e.date).getDate() <= day).reduce((s, e) => s + e.amount, 0);
@@ -61,9 +64,9 @@ window.Insights = (() => {
     return `<div class="ins-section">
       <div class="ins-headline">${headline}</div>
       <div class="bars">
-        ${months.map((m, i) => `<div class="bar-col ${m === mk ? 'current' : ''}">
-          <div class="bar ${m === mk ? 'accent' : ''}" data-h="${Math.max(3, totals[i] / max * 100)}"></div>
-          <div class="bar-lab">${Fmt.monthShort(m)}</div></div>`).join('')}
+        ${months.map((m, i) => { const h = Math.max(3, totals[i] / max * 100); return `<div class="bar-col ${m === mk ? 'current' : ''}">
+          <div class="bar ${m === mk ? 'accent' : ''}" data-h="${h}" style="min-height:${barPx(h)}px"></div>
+          <div class="bar-lab">${Fmt.monthShort(m)}</div></div>`; }).join('')}
       </div>
       <div class="ins-caption tnum">${caption}</div></div>`;
   };
@@ -168,7 +171,7 @@ window.Insights = (() => {
     return `<div class="ins-section">
       <div class="ins-headline">Spending by week.</div>
       <div class="bars">
-        ${weeks.map((w, i) => `<div class="bar-col"><div class="bar" data-h="${Math.max(3, w / max * 100)}"></div><div class="bar-lab">W${i + 1}</div></div>`).join('')}
+        ${weeks.map((w, i) => { const h = Math.max(3, w / max * 100); return `<div class="bar-col"><div class="bar" data-h="${h}" style="min-height:${barPx(h)}px"></div><div class="bar-lab">W${i + 1}</div></div>`; }).join('')}
       </div>
       <div class="ins-caption tnum">Highest week · ${Fmt.moneyR(max)}</div></div>`;
   };
@@ -230,12 +233,13 @@ window.Insights = (() => {
       <div class="smart">${cards.slice(0, 4).map((c) => `<div class="smart-card">${c}</div>`).join('')}</div></div>`;
   };
 
-  const BAR_MAX_PX = 120; // px height for a full-height bar (chart body)
   const animate = () => {
+    // Bars already have their correct min-height baked into the markup; animate
+    // the grow-in from the baseline for the first paint.
     el().querySelectorAll('.bar[data-h]').forEach((b, i) => {
-      const target = (parseFloat(b.getAttribute('data-h')) / 100 * BAR_MAX_PX);
-      b.style.flexBasis = '0px';
-      setTimeout(() => { b.style.flexBasis = Math.max(2, target) + 'px'; }, 30 * i);
+      const target = barPx(parseFloat(b.getAttribute('data-h')));
+      b.style.minHeight = '2px';
+      setTimeout(() => { b.style.minHeight = target + 'px'; }, 30 * i);
     });
     el().querySelectorAll('.rank-fill[data-w]').forEach((f, i) => { f.style.width = '0%'; setTimeout(() => { f.style.width = f.getAttribute('data-w') + '%'; }, 40 * i); });
   };
