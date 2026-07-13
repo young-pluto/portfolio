@@ -47,10 +47,10 @@ window.AddScreen = (() => {
       <div class="add-wrap">
         <div class="add-head">
           <span class="label">New expense</span>
-          <button class="date-pill" data-act="date">${datePillLabel()}
+          <label class="date-pill"><span id="date-label">${datePillLabel()}</span>
             <svg width="8" height="5" viewBox="0 0 8 5"><path d="M1 1l3 3 3-3" stroke="#6E6E74" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
-            <input type="date" id="add-date" value="${state.date}" style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none">
-          </button>
+            <input type="date" id="add-date" value="${state.date}">
+          </label>
         </div>
 
         <div class="amount-display" id="amount-display">
@@ -174,13 +174,9 @@ window.AddScreen = (() => {
     note.addEventListener('blur', () => noteLine.classList.remove('focused'));
 
     const dateInput = document.getElementById('add-date');
-    document.querySelector('[data-act="date"]').addEventListener('click', () => {
-      if (dateInput.showPicker) { try { dateInput.showPicker(); return; } catch (e) {} }
-      dateInput.click();
-    });
     dateInput.addEventListener('change', () => {
       state.date = dateInput.value || Fmt.dateKey(new Date());
-      document.querySelector('[data-act="date"]').childNodes[0].textContent = datePillLabel() + ' ';
+      document.getElementById('date-label').textContent = datePillLabel();
     });
 
     document.getElementById('add-save').addEventListener('click', save);

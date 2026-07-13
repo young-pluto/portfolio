@@ -14,6 +14,7 @@ window.Categories = (() => {
     { id: 'transport',     name: 'Transport',     emoji: '🚕', subs: [] },
     { id: 'business',      name: 'Business',      emoji: '💼', subs: [] },
     { id: 'gifts',         name: 'Gifts',         emoji: '🎁', subs: [] },
+    { id: 'sports',        name: 'Sports',        emoji: '⚽', subs: ['Turf', 'Equipment', 'Membership'] },
     { id: 'misc',          name: 'Miscellaneous', emoji: '📦', subs: [] },
   ];
 

@@ -256,15 +256,21 @@ input { font-family: inherit; }
 /* ============================================================
    ADD EXPENSE
    ============================================================ */
-.add-wrap { height: 100%; display: flex; flex-direction: column; padding-top: calc(var(--sat) + 8px); }
+.add-wrap { height: 100%; display: flex; flex-direction: column; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-top: calc(var(--sat) + 8px); }
 .add-head { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
 .date-pill {
-  display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 15px;
-  background: var(--surface-2); font-size: 13px; font-weight: 500; color: var(--text-2);
+  position: relative; overflow: hidden;
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 16px;
+  background: var(--surface-2); font-size: 14px; font-weight: 500; color: var(--text-2);
+}
+.date-pill:active { background: var(--surface); }
+.date-pill input[type="date"] {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  opacity: 0; border: none; margin: 0; padding: 0; background: none; -webkit-appearance: none;
 }
 .amount-display {
   display: flex; align-items: baseline; justify-content: center; gap: 4px;
-  padding: 26px 20px 0;
+  padding: 16px 20px 0;
 }
 .amount-display .cur { font-size: 32px; font-weight: 500; color: var(--text-3); }
 .amount-display .val { font-size: 60px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
@@ -272,7 +278,7 @@ input { font-family: inherit; }
 .caret { width: 2px; height: 44px; background: var(--accent); border-radius: 1px; align-self: center; animation: blink 1.1s steps(1) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 
-.cat-block { padding: 22px 20px 0; }
+.cat-block { padding: 18px 20px 0; }
 .cat-scroll { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip {
   padding: 11px 16px; border-radius: 10px; background: var(--chip); color: #C9C9CE;
@@ -285,7 +291,7 @@ input { font-family: inherit; }
 .chip .emoji { font-size: 15px; }
 
 .note-line {
-  margin: 18px 20px 0; padding: 12px 0; border-bottom: 0.5px solid var(--hairline);
+  margin: 14px 20px 0; padding: 12px 0; border-bottom: 0.5px solid var(--hairline);
 }
 .note-line input {
   width: 100%; background: none; border: none; outline: none; color: var(--text);
@@ -294,16 +300,16 @@ input { font-family: inherit; }
 .note-line input::placeholder { color: var(--text-3); }
 .note-line.focused { border-bottom-color: var(--accent); }
 
-.keypad-area { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 20px; min-height: 0; }
+.keypad-area { margin-top: auto; display: flex; flex-direction: column; padding: 14px 20px 0; }
 .keypad { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
 .key {
-  height: 60px; display: flex; align-items: center; justify-content: center;
+  height: 54px; display: flex; align-items: center; justify-content: center;
   font-size: 26px; font-weight: 500; border-radius: 12px;
   transition: background var(--t-press) var(--ease);
 }
 .key:active { background: rgba(255,255,255,0.10); }
 .key.muted { color: var(--text-3); }
-.add-save { margin: 10px 0 20px; }
+.add-save { width: 100%; margin: 14px 0 16px; }
 
 /* subcategory sheet uses the generic sheet */
 

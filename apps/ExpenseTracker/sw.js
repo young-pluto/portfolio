@@ -1,5 +1,5 @@
 // Ledger service worker — app-shell cache, network-first for navigations.
-const CACHE = 'ledger-v1';
+const CACHE = 'ledger-v2';
 const SHELL = [
   '/',
   '/index.html',
