@@ -18,6 +18,10 @@
       "use": "@vercel/static"
     },
     {
+      "src": "apps/ExpenseTracker/**/*",
+      "use": "@vercel/static"
+    },
+    {
       "src": "apps/Travel/**/*",
       "use": "@vercel/static"
     },
@@ -51,6 +55,26 @@
     }
   ],
   "routes": [
+    {
+      "src": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "expense.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/ExpenseTracker/index.html"
+    },
+    {
+      "src": "/(.+)",
+      "has": [
+        {
+          "type": "host",
+          "value": "expense.builtbyapoorv.in"
+        }
+      ],
+      "dest": "/apps/ExpenseTracker/$1"
+    },
     {
       "src": "/api/auth/(login|register)",
       "has": [
