@@ -261,7 +261,11 @@ const WorkoutsModule = (() => {
                         } else {
                             setInfo += 'No data recorded';
                         }
-                        
+
+                        if (set.rpe) {
+                            setInfo += ` <span class="set-rpe-tag">RPE ${set.rpe}</span>`;
+                        }
+
                         if (set.remarks) {
                             setInfo += ` <span class="set-remarks">(${set.remarks})</span>`;
                         }
@@ -461,21 +465,24 @@ const WorkoutsModule = (() => {
                                     const weightInput = setElement.querySelector('.weight-input');
                                     const repsInput = setElement.querySelector('.reps-input');
                                     const remarksInput = setElement.querySelector('.remarks-input');
-                                    
+
                                     if (weightInput) weightInput.value = set.weight || '';
                                     if (repsInput) repsInput.value = set.reps || '';
                                     if (remarksInput) remarksInput.value = set.remarks || '';
-                                    
+                                    applyRpeValue(setElement, set.rpe);
+
                                     // If set has data, mark it as saved and show in view mode
                                     if (set.weight || set.reps) {
                                         const weightStatic = setElement.querySelector('.weight-static');
                                         const repsStatic = setElement.querySelector('.reps-static');
                                         const remarksStatic = setElement.querySelector('.remarks-static');
-                                        
+                                        const rpeStatic = setElement.querySelector('.rpe-static');
+
                                         if (weightStatic) weightStatic.textContent = set.weight ? `${set.weight} kg` : '—';
                                         if (repsStatic) repsStatic.textContent = set.reps || '—';
+                                        if (rpeStatic) rpeStatic.textContent = set.rpe || '—';
                                         if (remarksStatic) remarksStatic.textContent = set.remarks || '—';
-                                        
+
                                         setElement.classList.add('saved');
                                     }
                                 }
@@ -549,21 +556,24 @@ const WorkoutsModule = (() => {
                                     const weightInput = setElement.querySelector('.weight-input');
                                     const repsInput = setElement.querySelector('.reps-input');
                                     const remarksInput = setElement.querySelector('.remarks-input');
-                                    
+
                                     if (weightInput) weightInput.value = set.weight || '';
                                     if (repsInput) repsInput.value = set.reps || '';
                                     if (remarksInput) remarksInput.value = set.remarks || '';
-                                    
+                                    applyRpeValue(setElement, set.rpe);
+
                                     // If set has data, mark it as saved and show in view mode
                                     if (set.weight || set.reps) {
                                         const weightStatic = setElement.querySelector('.weight-static');
                                         const repsStatic = setElement.querySelector('.reps-static');
                                         const remarksStatic = setElement.querySelector('.remarks-static');
-                                        
+                                        const rpeStatic = setElement.querySelector('.rpe-static');
+
                                         if (weightStatic) weightStatic.textContent = set.weight ? `${set.weight} kg` : '—';
                                         if (repsStatic) repsStatic.textContent = set.reps || '—';
+                                        if (rpeStatic) rpeStatic.textContent = set.rpe || '—';
                                         if (remarksStatic) remarksStatic.textContent = set.remarks || '—';
-                                        
+
                                         setElement.classList.add('saved');
                                     }
                                 }
@@ -879,26 +889,30 @@ const WorkoutsModule = (() => {
         const weightInput = setElement.querySelector('.weight-input');
         const repsInput = setElement.querySelector('.reps-input');
         const remarksInput = setElement.querySelector('.remarks-input');
-        
+        const rpeSlider = setElement.querySelector('.rpe-slider');
+
         const weight = weightInput ? weightInput.value : '';
         const reps = repsInput ? repsInput.value : '';
         const remarks = remarksInput ? remarksInput.value : '';
-        
+        const rpe = rpeSlider && rpeSlider.dataset.touched === 'true' ? rpeSlider.value : '';
+
         // Validate that at least weight or reps is filled
         if (!weight && !reps) {
             alert('Please enter at least weight or reps before saving.');
             return;
         }
-        
+
         // Update static view
         const weightStatic = setElement.querySelector('.weight-static');
         const repsStatic = setElement.querySelector('.reps-static');
         const remarksStatic = setElement.querySelector('.remarks-static');
-        
+        const rpeStatic = setElement.querySelector('.rpe-static');
+
         if (weightStatic) weightStatic.textContent = weight ? `${weight} kg` : '—';
         if (repsStatic) repsStatic.textContent = reps || '—';
+        if (rpeStatic) rpeStatic.textContent = rpe || '—';
         if (remarksStatic) remarksStatic.textContent = remarks || '—';
-        
+
         // Mark set as saved
         setElement.classList.add('saved');
         
@@ -910,7 +924,69 @@ const WorkoutsModule = (() => {
     const editSet = (setElement) => {
         setElement.classList.remove('saved');
     };
-    
+
+    // Map an RPE value (6-10) to a gradient color (green -> amber -> red)
+    const rpeColor = (val) => {
+        const v = parseFloat(val);
+        if (isNaN(v)) return 'var(--text-light)';
+        // 6 = easy (green), 8 = amber, 10 = max (red)
+        const t = Math.max(0, Math.min(1, (v - 6) / 4));
+        const hue = 145 - (t * 145); // 145 (green) -> 0 (red)
+        return `hsl(${hue}, 70%, 50%)`;
+    };
+
+    // Reflect the current slider value into its label + colors
+    const updateRpeDisplay = (setElement) => {
+        const slider = setElement.querySelector('.rpe-slider');
+        const valueLabel = setElement.querySelector('.rpe-value');
+        if (!slider || !valueLabel) return;
+
+        const touched = slider.dataset.touched === 'true';
+        if (touched) {
+            const color = rpeColor(slider.value);
+            valueLabel.textContent = slider.value;
+            valueLabel.style.color = color;
+            slider.style.setProperty('--rpe-fill', color);
+            const pct = ((parseFloat(slider.value) - slider.min) / (slider.max - slider.min)) * 100;
+            slider.style.setProperty('--rpe-pct', `${pct}%`);
+        } else {
+            valueLabel.textContent = '—';
+            valueLabel.style.color = 'var(--text-light)';
+            slider.style.setProperty('--rpe-fill', 'var(--border-hover)');
+            slider.style.setProperty('--rpe-pct', '0%');
+        }
+    };
+
+    // Wire up an RPE slider inside a freshly created set element
+    const initRpeSlider = (setElement) => {
+        const slider = setElement.querySelector('.rpe-slider');
+        if (!slider) return;
+
+        // Untouched until the user interacts (keeps RPE optional)
+        slider.dataset.touched = slider.dataset.touched || 'false';
+        updateRpeDisplay(setElement);
+
+        const markTouched = () => {
+            slider.dataset.touched = 'true';
+            updateRpeDisplay(setElement);
+        };
+        slider.addEventListener('input', markTouched);
+        slider.addEventListener('change', markTouched);
+    };
+
+    // Programmatically apply a saved RPE value to a set element
+    const applyRpeValue = (setElement, rpeValue) => {
+        const slider = setElement.querySelector('.rpe-slider');
+        if (!slider) return;
+        if (rpeValue !== undefined && rpeValue !== null && rpeValue !== '') {
+            slider.value = rpeValue;
+            slider.dataset.touched = 'true';
+        } else {
+            slider.dataset.touched = 'false';
+        }
+        updateRpeDisplay(setElement);
+    };
+
     // Add set to exercise
     const addSetToExercise = (exerciseElement) => {
         const setsContainer = exerciseElement.querySelector('.sets-container');
@@ -929,6 +1005,9 @@ const WorkoutsModule = (() => {
             setLabel.textContent = `Set ${setCount}`;
         }
         
+        // Wire up the RPE slider
+        initRpeSlider(setElement);
+
         // Add tick button click handler (save on click)
         const saveBtn = setElement.querySelector('.set-save-btn');
         if (saveBtn) {
@@ -1042,7 +1121,11 @@ for (const workout of workouts) {
             Object.values(exerciseData.sets).forEach(set => {
                 const setItem = document.createElement('li');
                 setItem.innerHTML = `<strong>${set.weight || 0}</strong> kg/lbs × <strong>${set.reps || 0}</strong> reps`;
-                
+
+                if (set.rpe) {
+                    setItem.innerHTML += ` <span class="set-rpe-tag">RPE ${set.rpe}</span>`;
+                }
+
                 if (set.remarks) {
                     setItem.innerHTML += ` <span class="history-remarks">(${set.remarks})</span>`;
                 }
@@ -1163,25 +1246,29 @@ exerciseElements.forEach(exerciseElement => {
             const weightInput = setElement.querySelector('.weight-input');
             const repsInput = setElement.querySelector('.reps-input');
             const remarksInput = setElement.querySelector('.remarks-input');
-            
+            const rpeSlider = setElement.querySelector('.rpe-slider');
+
             const weight = weightInput ? weightInput.value : '';
             const reps = repsInput ? repsInput.value : '';
             const remarks = remarksInput ? remarksInput.value : '';
-            
+            const rpe = rpeSlider && rpeSlider.dataset.touched === 'true' ? rpeSlider.value : '';
+
             sets[`set${index + 1}`] = {
                 weight: weight || '',
                 reps: reps || '',
+                rpe: rpe || '',
                 remarks: remarks || ''
             };
-            
+
             if (weight || reps) {
                 hasValidData = true;
             }
         });
-        
+
         workoutData.exercises[exerciseId] = {
             name: exercise.name,
             category: exercise.category,
+            muscleGroup: exercise.muscleGroup || '',
             sets: sets
         };
     }
@@ -1274,25 +1361,29 @@ if (exercise) {
         const weightInput = setElement.querySelector('.weight-input');
         const repsInput = setElement.querySelector('.reps-input');
         const remarksInput = setElement.querySelector('.remarks-input');
-        
+        const rpeSlider = setElement.querySelector('.rpe-slider');
+
         const weight = weightInput ? weightInput.value : '';
         const reps = repsInput ? repsInput.value : '';
         const remarks = remarksInput ? remarksInput.value : '';
-        
+        const rpe = rpeSlider && rpeSlider.dataset.touched === 'true' ? rpeSlider.value : '';
+
         // Only add sets with at least weight or reps
         if (weight || reps) {
             sets[`set${index + 1}`] = {
                 weight: weight || 0,
                 reps: reps || 0,
+                rpe: rpe || '',
                 remarks: remarks || ''
             };
             hasValidSets = true;
         }
     });
-    
+
     workoutData.exercises[exerciseId] = {
         name: exercise.name,
         category: exercise.category,
+        muscleGroup: exercise.muscleGroup || '',
         sets: sets
     };
     

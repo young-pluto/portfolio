@@ -69,7 +69,18 @@ const ExercisesModule = (() => {
         exerciseItem.dataset.id = exercise.id;
         exerciseItem.querySelector('.exercise-name').textContent = exercise.name;
         exerciseItem.querySelector('.exercise-category').textContent = capitalizeFirstLetter(exercise.category);
-        
+
+        // Muscle group badge
+        const muscleBadge = exerciseItem.querySelector('.exercise-muscle-badge');
+        if (muscleBadge) {
+            if (exercise.muscleGroup) {
+                muscleBadge.textContent = exercise.muscleGroup;
+                muscleBadge.classList.remove('hidden');
+            } else {
+                muscleBadge.classList.add('hidden');
+            }
+        }
+
         if (exercise.description) {
             exerciseItem.querySelector('.exercise-description').textContent = exercise.description;
         } else {
@@ -96,8 +107,9 @@ const ExercisesModule = (() => {
     const openAddExerciseForm = () => {
         document.getElementById('exercise-name').value = '';
         document.getElementById('exercise-category').value = 'strength';
+        document.getElementById('exercise-muscle-group').value = '';
         document.getElementById('exercise-description').value = '';
-        
+
         exerciseForm.classList.remove('hidden');
         editingExerciseId = null;
     };
@@ -106,8 +118,9 @@ const ExercisesModule = (() => {
     const openEditExerciseForm = (exercise) => {
         document.getElementById('exercise-name').value = exercise.name;
         document.getElementById('exercise-category').value = exercise.category;
+        document.getElementById('exercise-muscle-group').value = exercise.muscleGroup || '';
         document.getElementById('exercise-description').value = exercise.description || '';
-        
+
         exerciseForm.classList.remove('hidden');
         editingExerciseId = exercise.id;
     };
@@ -122,28 +135,31 @@ const ExercisesModule = (() => {
     const saveExercise = () => {
         const name = document.getElementById('exercise-name').value.trim();
         const category = document.getElementById('exercise-category').value;
+        const muscleGroup = document.getElementById('exercise-muscle-group').value;
         const description = document.getElementById('exercise-description').value.trim();
-        
+
         if (!name) {
             alert('Please enter an exercise name');
             return;
         }
-        
+
         const exerciseData = {
             name,
             category,
+            muscleGroup,
             description,
             createdAt: firebase.database.ServerValue.TIMESTAMP,
             updatedAt: firebase.database.ServerValue.TIMESTAMP
         };
-        
+
         const exercisesRef = getExercisesRef();
-        
+
         if (editingExerciseId) {
             // Update existing exercise
             exercisesRef.child(editingExerciseId).update({
                 name,
                 category,
+                muscleGroup,
                 description,
                 updatedAt: firebase.database.ServerValue.TIMESTAMP
             })

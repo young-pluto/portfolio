@@ -1129,15 +1129,16 @@ body.dark-mode .set-item.saved:hover {
     gap: 4px;
 }
 
-/* Weight and Reps side by side */
+/* Weight, Reps and RPE share the top row */
 .set-static-value:nth-child(1),
-.set-static-value:nth-child(2) {
-    flex: 1 1 calc(50% - 5px);
+.set-static-value:nth-child(2),
+.set-static-value:nth-child(3) {
+    flex: 1 1 calc(33.333% - 7px);
     min-width: 0;
 }
 
 /* Remarks takes full width below */
-.set-static-value:nth-child(3) {
+.set-static-value:nth-child(4) {
     flex: 1 1 100%;
     margin-top: 4px;
 }
@@ -1166,11 +1167,12 @@ body.dark-mode .set-item.saved:hover {
     }
     
     .set-static-value:nth-child(1),
-    .set-static-value:nth-child(2) {
-        flex: 1 1 calc(50% - 6px);
-    }
-    
+    .set-static-value:nth-child(2),
     .set-static-value:nth-child(3) {
+        flex: 1 1 calc(33.333% - 8px);
+    }
+
+    .set-static-value:nth-child(4) {
         flex: 1 1 100%;
         margin-top: 6px;
     }
@@ -1325,8 +1327,16 @@ body.dark-mode .set-save-btn:hover {
     font-size: 1.05rem !important;
 }
 
+/* RPE slider group takes full width */
+.rpe-group {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+}
+
 /* Remarks takes full width below - FORCE IT! */
-.input-group:nth-child(3) {
+.remarks-group {
     flex: 0 0 100% !important;
     width: 100% !important;
     min-width: 100% !important;
@@ -1334,7 +1344,7 @@ body.dark-mode .set-save-btn:hover {
 }
 
 /* Make remarks input specifically larger */
-.input-group:nth-child(3) input,
+.remarks-group input,
 .remarks-input {
     width: 100% !important;
     min-width: 100% !important;
@@ -1343,6 +1353,143 @@ body.dark-mode .set-save-btn:hover {
     min-height: 54px !important;
     font-size: 1.05rem !important;
     box-sizing: border-box !important;
+}
+
+/* ===== RPE Slider (iOS-friendly) ===== */
+.rpe-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.rpe-header label {
+    display: inline-block;
+    margin-bottom: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+}
+
+.rpe-hint {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 500;
+    color: var(--text-light);
+}
+
+.rpe-value {
+    min-width: 42px;
+    text-align: center;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-light);
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    padding: 3px 12px;
+    transition: color var(--transition-fast);
+    font-variant-numeric: tabular-nums;
+}
+
+body.dark-mode .rpe-value {
+    background: rgba(28, 28, 30, 0.7);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.rpe-slider-wrap {
+    padding: 4px 2px 0;
+}
+
+/* The range input itself */
+input[type="range"].rpe-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 34px;
+    background: transparent;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    --rpe-pct: 0%;
+    --rpe-fill: var(--border-hover);
+}
+
+/* WebKit track */
+input[type="range"].rpe-slider::-webkit-slider-runnable-track {
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(to right,
+        var(--rpe-fill) 0%,
+        var(--rpe-fill) var(--rpe-pct),
+        var(--border) var(--rpe-pct),
+        var(--border) 100%);
+}
+
+/* Firefox track */
+input[type="range"].rpe-slider::-moz-range-track {
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--border);
+}
+input[type="range"].rpe-slider::-moz-range-progress {
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--rpe-fill);
+}
+
+/* WebKit thumb */
+input[type="range"].rpe-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    margin-top: -9px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid var(--rpe-fill);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    transition: transform var(--transition-fast);
+}
+input[type="range"].rpe-slider:active::-webkit-slider-thumb {
+    transform: scale(1.15);
+}
+
+/* Firefox thumb */
+input[type="range"].rpe-slider::-moz-range-thumb {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid var(--rpe-fill);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.rpe-scale {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 4px 0;
+    font-size: 0.7rem;
+    color: var(--text-light);
+    font-variant-numeric: tabular-nums;
+}
+
+/* RPE tag used in history / details */
+.set-rpe-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    margin: 0 2px;
+    border-radius: var(--radius-full);
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+body.dark-mode .set-rpe-tag {
+    background: rgba(129, 140, 248, 0.2);
+    color: var(--primary-light);
 }
 
 .input-group label {
@@ -1491,16 +1638,17 @@ body.dark-mode .remarks-display {
         border-radius: 12px !important;
     }
     
-    .input-group:nth-child(3) {
+    .rpe-group,
+    .remarks-group {
         flex: 0 0 100% !important;
         width: 100% !important;
         min-width: 100% !important;
         max-width: 100% !important;
         margin-top: 4px;
     }
-    
+
     /* MAKE REMARKS MASSIVE ON MOBILE */
-    .input-group:nth-child(3) input,
+    .remarks-group input,
     .remarks-input {
         width: 100% !important;
         min-width: 100% !important;
@@ -1510,6 +1658,20 @@ body.dark-mode .remarks-display {
         font-size: 1.1rem !important;
         border-radius: 12px !important;
         box-sizing: border-box !important;
+    }
+
+    /* Bigger touch target for the RPE slider on mobile */
+    input[type="range"].rpe-slider {
+        height: 40px;
+    }
+    input[type="range"].rpe-slider::-webkit-slider-thumb {
+        width: 30px;
+        height: 30px;
+        margin-top: -11px;
+    }
+    input[type="range"].rpe-slider::-moz-range-thumb {
+        width: 30px;
+        height: 30px;
     }
 }
 
@@ -2149,5 +2311,194 @@ tbody tr:hover {
     
     .auth-card {
         padding: 30px 20px;
+    }
+}
+/* ===== Muscle Group Badge (exercise cards) ===== */
+.exercise-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.exercise-badges .exercise-category {
+    margin-bottom: 0;
+}
+
+.exercise-muscle-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 15px;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.exercise-muscle-badge::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, var(--secondary), var(--primary));
+}
+
+body.dark-mode .exercise-muscle-badge {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+/* ===== Analysis Section ===== */
+.analysis-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+}
+
+.analysis-stat-tile {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 18px 12px;
+    text-align: center;
+    box-shadow: var(--box-shadow);
+}
+
+body.dark-mode .analysis-stat-tile {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+}
+
+.analysis-stat-tile i {
+    font-size: 1.1rem;
+    background: linear-gradient(45deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+}
+
+.analysis-stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.analysis-stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.analysis-loading,
+.analysis-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+/* Give the analysis bar charts room to breathe */
+#analysis-section .graph-container canvas {
+    min-height: 260px;
+}
+
+.analysis-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+    margin-top: 24px;
+}
+
+.analysis-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--mg-color, var(--primary));
+    border-radius: var(--radius-md);
+    padding: 16px;
+    box-shadow: var(--box-shadow);
+}
+
+body.dark-mode .analysis-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-left: 4px solid var(--mg-color, var(--primary));
+}
+
+.analysis-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.analysis-card-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--mg-color, var(--primary));
+    flex-shrink: 0;
+}
+
+.analysis-card-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+.analysis-card-stats {
+    display: flex;
+    gap: 18px;
+}
+
+.analysis-card-stat {
+    display: flex;
+    flex-direction: column;
+}
+
+.analysis-card-num {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.analysis-card-unit {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .analysis-summary {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .analysis-stat-value {
+        font-size: 1.5rem;
+    }
+
+    .analysis-cards {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

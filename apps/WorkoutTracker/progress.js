@@ -102,6 +102,7 @@ const ProgressModule = (() => {
                             reps,
                             volume,
                             weightToBodyWeightRatio,
+                            rpe: set.rpe || '',
                             remarks: set.remarks || ''
                         });
                     }
@@ -132,7 +133,7 @@ const ProgressModule = (() => {
         exerciseHistoryBody.innerHTML = '';
         
         if (exerciseData.length === 0) {
-            exerciseHistoryBody.innerHTML = '<tr><td colspan="7">No history data available yet.</td></tr>';
+            exerciseHistoryBody.innerHTML = '<tr><td colspan="8">No history data available yet.</td></tr>';
             return;
         }
         
@@ -168,7 +169,12 @@ const ProgressModule = (() => {
             const repsCell = document.createElement('td');
             repsCell.textContent = data.reps;
             row.appendChild(repsCell);
-            
+
+            // RPE
+            const rpeCell = document.createElement('td');
+            rpeCell.textContent = data.rpe || '—';
+            row.appendChild(rpeCell);
+
             // Volume
             const volumeCell = document.createElement('td');
             volumeCell.textContent = `${data.volume} kg`;

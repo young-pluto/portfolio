@@ -72,6 +72,7 @@
             <button id="view-exercises-btn" class="nav-btn active">My Exercises</button>
             <button id="new-workout-btn" class="nav-btn">New Workout</button>
             <button id="workout-history-btn" class="nav-btn">Workout History</button>
+            <button id="analysis-btn" class="nav-btn">Analysis</button>
         </nav>
 
         <!-- Exercises Section -->
@@ -91,6 +92,23 @@
                     <option value="cardio">Cardio</option>
                     <option value="flexibility">Flexibility</option>
                     <option value="other">Other</option>
+                </select>
+                <select id="exercise-muscle-group">
+                    <option value="">— Muscle Group —</option>
+                    <option value="Chest">Chest</option>
+                    <option value="Back">Back</option>
+                    <option value="Shoulders">Shoulders</option>
+                    <option value="Biceps">Biceps</option>
+                    <option value="Triceps">Triceps</option>
+                    <option value="Forearms">Forearms</option>
+                    <option value="Core">Core / Abs</option>
+                    <option value="Quads">Quads</option>
+                    <option value="Hamstrings">Hamstrings</option>
+                    <option value="Glutes">Glutes</option>
+                    <option value="Calves">Calves</option>
+                    <option value="Full Body">Full Body</option>
+                    <option value="Cardio">Cardio</option>
+                    <option value="Other">Other</option>
                 </select>
                 <textarea id="exercise-description" placeholder="Exercise Description (Optional)"></textarea>
                 <div class="button-group">
@@ -211,6 +229,7 @@
                                 <th>Set</th>
                                 <th>Weight</th>
                                 <th>Reps</th>
+                                <th>RPE</th>
                                 <th>Volume</th>
                                 <th>Remarks</th>
                             </tr>
@@ -222,7 +241,35 @@
                 </div>
             </div>
         </section>
-        
+
+        <!-- Analysis Section (Hidden by default) -->
+        <section id="analysis-section" class="hidden">
+            <div class="section-header">
+                <h2>Last 7 Days</h2>
+                <button id="analysis-refresh-btn" class="action-btn">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <div class="analysis-summary" id="analysis-summary">
+                <!-- Summary stat tiles injected here -->
+            </div>
+
+            <div class="graph-container">
+                <h3>Volume — Sets per Muscle Group</h3>
+                <canvas id="muscle-volume-chart"></canvas>
+            </div>
+
+            <div class="graph-container">
+                <h3>Frequency — Days Trained per Muscle Group</h3>
+                <canvas id="muscle-frequency-chart"></canvas>
+            </div>
+
+            <div class="analysis-cards" id="analysis-cards">
+                <!-- Per muscle group breakdown cards injected here -->
+            </div>
+        </section>
+
     </div>
 
     <!-- Templates -->
@@ -236,7 +283,10 @@
                     <button class="delete-exercise-btn icon-btn" title="Delete"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
-            <div class="exercise-category"></div>
+            <div class="exercise-badges">
+                <div class="exercise-category"></div>
+                <div class="exercise-muscle-badge hidden"></div>
+            </div>
             <div class="exercise-description"></div>
             <div class="exercise-stats">
                 <span class="usage-count">Used in 0 workouts</span>
@@ -276,20 +326,32 @@
             
             <!-- Edit Mode: Input fields -->
             <div class="set-inputs">
-                <div class="input-group">
+                <div class="input-group input-group-weight">
                     <label>Weight (kg/lbs)</label>
                     <input type="text" inputmode="decimal" class="weight-input" placeholder="55">
                 </div>
-                <div class="input-group">
+                <div class="input-group input-group-reps">
                     <label>Reps</label>
                     <input type="text" inputmode="numeric" class="reps-input" placeholder="10">
                 </div>
-                <div class="input-group">
+                <div class="rpe-group">
+                    <div class="rpe-header">
+                        <label>RPE <span class="rpe-hint">· effort</span></label>
+                        <span class="rpe-value">—</span>
+                    </div>
+                    <div class="rpe-slider-wrap">
+                        <input type="range" class="rpe-slider" min="6" max="10" step="0.5" value="8">
+                    </div>
+                    <div class="rpe-scale">
+                        <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                    </div>
+                </div>
+                <div class="input-group remarks-group">
                     <label>Remarks</label>
                     <input type="text" class="remarks-input" placeholder="Feeling strong today...">
                 </div>
             </div>
-            
+
             <!-- View Mode: Static text (shown when saved) -->
             <div class="set-static-view">
                 <div class="set-static-value">
@@ -299,6 +361,10 @@
                 <div class="set-static-value">
                     <div class="set-static-label">Reps</div>
                     <div class="set-static-text reps-static">—</div>
+                </div>
+                <div class="set-static-value">
+                    <div class="set-static-label">RPE</div>
+                    <div class="set-static-text rpe-static">—</div>
                 </div>
                 <div class="set-static-value">
                     <div class="set-static-label">Remarks</div>
@@ -371,6 +437,7 @@
 <script src="workouts.js"></script>
 <script src="timer.js"></script>
 <script src="progress.js"></script>
+<script src="analysis.js"></script>
 <script src="app.js"></script>
 <script src="dialog-fix.js"></script>
 

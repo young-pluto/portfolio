@@ -4,10 +4,12 @@ const AppModule = (() => {
     const viewExercisesBtn = document.getElementById('view-exercises-btn');
     const newWorkoutBtn = document.getElementById('new-workout-btn');
     const workoutHistoryBtn = document.getElementById('workout-history-btn');
+    const analysisBtn = document.getElementById('analysis-btn');
     const exercisesSection = document.getElementById('exercises-section');
     const newWorkoutSection = document.getElementById('new-workout-section');
     const workoutHistorySection = document.getElementById('workout-history-section');
     const exerciseProgressSection = document.getElementById('exercise-progress-section');
+    const analysisSection = document.getElementById('analysis-section');
     const themeToggleBtn = document.getElementById('theme-toggle');
 
     // Show exercises section
@@ -21,7 +23,8 @@ const AppModule = (() => {
         newWorkoutSection.classList.add('hidden');
         workoutHistorySection.classList.add('hidden');
         exerciseProgressSection.classList.add('hidden');
-        
+        analysisSection.classList.add('hidden');
+
         // Update active nav button
         updateActiveNavButton(viewExercisesBtn);
     };
@@ -37,7 +40,8 @@ const AppModule = (() => {
         newWorkoutSection.classList.remove('hidden');
         workoutHistorySection.classList.add('hidden');
         exerciseProgressSection.classList.add('hidden');
-        
+        analysisSection.classList.add('hidden');
+
         // Update active nav button
         updateActiveNavButton(newWorkoutBtn);
         
@@ -51,7 +55,8 @@ const AppModule = (() => {
         newWorkoutSection.classList.add('hidden');
         workoutHistorySection.classList.remove('hidden');
         exerciseProgressSection.classList.add('hidden');
-        
+        analysisSection.classList.add('hidden');
+
         // Update active nav button
         updateActiveNavButton(workoutHistoryBtn);
         
@@ -59,6 +64,28 @@ const AppModule = (() => {
         // This prevents unnecessary memory usage when not viewing history
         if (typeof WorkoutsModule !== 'undefined' && WorkoutsModule.loadWorkoutHistory) {
             WorkoutsModule.loadWorkoutHistory();
+        }
+    };
+
+    // Show analysis section
+    const showAnalysisSection = () => {
+        // Cleanup workout history when navigating away
+        if (typeof WorkoutsModule !== 'undefined' && WorkoutsModule.cleanupWorkoutHistory) {
+            WorkoutsModule.cleanupWorkoutHistory();
+        }
+
+        exercisesSection.classList.add('hidden');
+        newWorkoutSection.classList.add('hidden');
+        workoutHistorySection.classList.add('hidden');
+        exerciseProgressSection.classList.add('hidden');
+        analysisSection.classList.remove('hidden');
+
+        // Update active nav button
+        updateActiveNavButton(analysisBtn);
+
+        // Load the last-7-days analysis
+        if (typeof AnalysisModule !== 'undefined' && AnalysisModule.loadAnalysis) {
+            AnalysisModule.loadAnalysis();
         }
     };
 
@@ -123,6 +150,9 @@ const AppModule = (() => {
         viewExercisesBtn.addEventListener('click', showExercisesSection);
         newWorkoutBtn.addEventListener('click', showNewWorkoutSection);
         workoutHistoryBtn.addEventListener('click', showWorkoutHistorySection);
+        if (analysisBtn) {
+            analysisBtn.addEventListener('click', showAnalysisSection);
+        }
         
         // Theme toggle
         if (themeToggleBtn) {
@@ -141,6 +171,9 @@ const AppModule = (() => {
             WorkoutsModule.init();
             TimerModule.init();
             ProgressModule.init();
+            if (typeof AnalysisModule !== 'undefined') {
+                AnalysisModule.init();
+            }
             init();
         }
     };
