@@ -122,6 +122,7 @@ window.Store = (() => {
       category: data.category || 'misc',
       subcategory: data.subcategory || null,
       note: (data.note || '').trim() || null,
+      paymentMethod: Pay.has(data.paymentMethod) ? data.paymentMethod : Pay.DEFAULT,
       date,
       createdAt: now,
       updatedAt: now,
@@ -134,11 +135,13 @@ window.Store = (() => {
     const existing = getExpense(oldMonth, id) || {};
     const date = data.date || existing.date;
     const newMonth = monthOf(date);
+    const method = data.paymentMethod !== undefined ? data.paymentMethod : existing.paymentMethod;
     const rec = {
       amount: Number(data.amount != null ? data.amount : existing.amount) || 0,
       category: data.category || existing.category,
       subcategory: (data.subcategory !== undefined ? data.subcategory : existing.subcategory) || null,
       note: (data.note !== undefined ? (data.note || '').trim() : existing.note) || null,
+      paymentMethod: Pay.has(method) ? method : null,
       date,
       createdAt: existing.createdAt || Date.now(),
       updatedAt: Date.now(),
@@ -156,7 +159,7 @@ window.Store = (() => {
   const duplicateExpense = (mk, id) => {
     const e = getExpense(mk, id);
     if (!e) return Promise.resolve(null);
-    return addExpense({ amount: e.amount, category: e.category, subcategory: e.subcategory, note: e.note, date: Fmt.dateKey(new Date()) });
+    return addExpense({ amount: e.amount, category: e.category, subcategory: e.subcategory, note: e.note, paymentMethod: e.paymentMethod, date: Fmt.dateKey(new Date()) });
   };
 
   // ---- recurring -------------------------------------------------------
@@ -219,6 +222,11 @@ window.Store = (() => {
     list.forEach((e) => { catMap[e.category] = (catMap[e.category] || 0) + e.amount; });
     const byCategory = Object.keys(catMap).map((id) => ({ id, total: catMap[id] })).sort((a, b) => b.total - a.total);
 
+    // by payment method (missing method => 'unmarked')
+    const methodMap = {};
+    list.forEach((e) => { const m = Pay.has(e.paymentMethod) ? e.paymentMethod : 'unmarked'; methodMap[m] = (methodMap[m] || 0) + e.amount; });
+    const byMethod = Object.keys(methodMap).map((id) => ({ id, total: methodMap[id] })).sort((a, b) => b.total - a.total);
+
     // by day
     const dayMap = {};
     list.forEach((e) => { dayMap[e.date] = (dayMap[e.date] || 0) + e.amount; });
@@ -249,7 +257,7 @@ window.Store = (() => {
       mk, isCurrent, budget, dim, daysElapsed, daysRemaining, monthPct,
       spent, remaining, utilisation, expectedPace, paceDelta,
       dailyAvg, safeDaily, projected,
-      count: list.length, byCategory, catMap, byDay: dayMap, days, highestDay, largest, weeks, burn,
+      count: list.length, byCategory, catMap, byMethod, methodMap, byDay: dayMap, days, highestDay, largest, weeks, burn,
       list,
     };
   };

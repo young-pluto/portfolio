@@ -1,5 +1,6 @@
 // Ledger service worker — app-shell cache, network-first for navigations.
-const CACHE = 'ledger-v2';
+// Increment when the app shell changes so installed iOS PWAs receive the update.
+const CACHE = 'ledger-v4';
 const SHELL = [
   '/',
   '/index.html',

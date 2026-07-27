@@ -300,6 +300,19 @@ input { font-family: inherit; }
 .note-line input::placeholder { color: var(--text-3); }
 .note-line.focused { border-bottom-color: var(--accent); }
 
+/* Payment method selector — small segmented pills (single-select) */
+.pay-row { display: flex; gap: 6px; padding: 12px 20px 0; }
+.pay-seg { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.pay-chip {
+  padding: 8px 13px; border-radius: 9px; background: var(--chip); color: var(--text-2);
+  font-size: 13px; font-weight: 500; display: inline-flex; align-items: center; gap: 5px;
+  transition: transform var(--t-press) var(--ease);
+}
+.pay-chip:active { transform: scale(0.96); }
+.pay-chip.is-selected { background: var(--text); color: #0B0B0D; font-weight: 600; }
+.pay-chip .emoji { font-size: 13px; }
+.pay-row .pay-chip { flex: 1; justify-content: center; }
+
 .keypad-area { margin-top: auto; display: flex; flex-direction: column; padding: 8px 20px 0; }
 .keypad { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
 .key {

@@ -35,6 +35,7 @@ window.Insights = (() => {
         ${sectionProjection(mk, s)}
         ${sectionTopCats(mk, s, cats)}
         ${sectionDonut(s, cats)}
+        ${sectionPayMethods(s)}
         ${sectionWeekly(s)}
         ${sectionCalendar(mk, s)}
         ${sectionSmart(mk, s, cats)}
@@ -162,6 +163,28 @@ window.Insights = (() => {
         <div class="donut-legend">
           ${slices.map((sl, i) => `<div class="li"><span class="dot" style="background:${ramp[i] || ramp[ramp.length - 1]}"></span><span class="nm">${esc(sl.name)}</span><span class="pct tnum">${Math.round(sl.val / total * 100)}%</span></div>`).join('')}
         </div></div></div>`;
+  };
+
+  // 4b · payment methods --------------------------------------------------
+  const payLabel = (id) => (id === 'unmarked' ? 'Unmarked' : Pay.name(id));
+  const sectionPayMethods = (s) => {
+    if (!s.byMethod || !s.byMethod.length) return '';
+    const total = s.spent || 1;
+    const max = s.byMethod[0].total || 1;
+    const top = s.byMethod[0];
+    let headline;
+    if (s.byMethod.length === 1) {
+      headline = `Everything went via <span>${esc(payLabel(top.id))}</span> this month.`;
+    } else {
+      headline = `<span>${Math.round(top.total / total * 100)}%</span> of your spending went via ${esc(payLabel(top.id))}.`;
+    }
+    return `<div class="ins-section">
+      <div class="ins-headline">${headline}</div>
+      <div class="rank">
+        ${s.byMethod.map((m) => `<div class="rank-item">
+          <div class="rank-top"><span class="n">${esc(Pay.emoji(m.id))} ${esc(payLabel(m.id))}</span><span class="a tnum">${Fmt.moneyR(m.total)} · ${Math.round(m.total / total * 100)}%</span></div>
+          <div class="rank-track"><div class="rank-fill" data-w="${m.total / max * 100}"></div></div></div>`).join('')}
+      </div></div>`;
   };
 
   // 5 · weekly ------------------------------------------------------------

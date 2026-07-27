@@ -1,7 +1,7 @@
 // add.js — log an expense in under 5 seconds. Keypad-first.
 window.AddScreen = (() => {
   const el = () => document.getElementById('screen-add');
-  const state = { amount: '', category: null, sub: null, note: '', date: Fmt.dateKey(new Date()) };
+  const state = { amount: '', category: null, sub: null, note: '', method: Pay.DEFAULT, date: Fmt.dateKey(new Date()) };
 
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
@@ -68,6 +68,10 @@ window.AddScreen = (() => {
           <div class="cat-scroll" id="sub-scroll" style="margin-top:8px">${subChips(selCat)}</div>
         </div>
 
+        <div class="pay-row" id="pay-row">
+          ${Pay.methods().map((m) => payChip(m)).join('')}
+        </div>
+
         <div class="note-line" id="note-line">
           <input type="text" id="note-input" placeholder="Add note (optional)" value="${esc(state.note)}" enterkeyhint="done" maxlength="80">
         </div>
@@ -90,6 +94,9 @@ window.AddScreen = (() => {
 
   const chip = (c) =>
     `<button class="chip ${c.id === state.category ? 'is-selected' : ''}" data-cat="${c.id}"><span class="emoji">${c.emoji}</span>${esc(c.name)}</button>`;
+
+  const payChip = (m) =>
+    `<button class="pay-chip ${m.id === state.method ? 'is-selected' : ''}" data-pay="${m.id}"><span class="emoji">${m.emoji}</span>${esc(m.name)}</button>`;
 
   const subChips = (cat) => {
     if (!cat || !cat.subs || !cat.subs.length) return '';
@@ -149,7 +156,7 @@ window.AddScreen = (() => {
     }
     const cats = Store.getCategories();
     const catName = Categories.name(cats, state.category);
-    const payload = { amount: amountValue(), category: state.category, subcategory: state.sub, note: state.note.trim(), date: state.date };
+    const payload = { amount: amountValue(), category: state.category, subcategory: state.sub, note: state.note.trim(), paymentMethod: state.method, date: state.date };
     Store.addExpense(payload);
     App.toast(`${Fmt.money(payload.amount)} · ${state.sub || catName}`);
     // reset amount + note but remember category for fast repeat logging
@@ -166,6 +173,13 @@ window.AddScreen = (() => {
     bindSubs();
 
     document.querySelector('[data-act="more"]').addEventListener('click', openCategorySheet);
+
+    document.querySelectorAll('#pay-row [data-pay]').forEach((n) =>
+      n.addEventListener('click', () => {
+        state.method = n.getAttribute('data-pay');
+        document.querySelectorAll('#pay-row [data-pay]').forEach((m) =>
+          m.classList.toggle('is-selected', m.getAttribute('data-pay') === state.method));
+      }));
 
     const note = document.getElementById('note-input');
     const noteLine = document.getElementById('note-line');

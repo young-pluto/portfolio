@@ -32,3 +32,21 @@ window.Categories = (() => {
     emoji: (list, id) => { const c = (list || []).find((x) => x.id === id); return c ? c.emoji : '📦'; },
   };
 })();
+
+// Pay — payment methods. Fixed, mutually-exclusive set. Exposed as window.Pay.
+window.Pay = (() => {
+  const METHODS = [
+    { id: 'upi',  name: 'UPI',  emoji: '📲' },
+    { id: 'card', name: 'Card', emoji: '💳' },
+    { id: 'cash', name: 'Cash', emoji: '💵' },
+  ];
+  const find = (id) => METHODS.find((m) => m.id === id) || null;
+  return {
+    DEFAULT: 'upi',
+    methods: () => METHODS.map((m) => ({ ...m })),
+    ids: () => METHODS.map((m) => m.id),
+    has: (id) => !!find(id),
+    name: (id) => { const m = find(id); return m ? m.name : 'Unmarked'; },
+    emoji: (id) => { const m = find(id); return m ? m.emoji : '•'; },
+  };
+})();

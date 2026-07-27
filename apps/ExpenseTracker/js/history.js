@@ -72,6 +72,7 @@ window.History = (() => {
     const name = e.note || Categories.name(cats, e.category);
     const bits = [Categories.name(cats, e.category)];
     if (e.subcategory) bits.push(e.subcategory);
+    bits.push(Pay.name(e.paymentMethod));
     return `<div class="hist-row-wrap" data-id="${e.id}">
       <div class="hist-actions">
         <button class="act edit" data-a="edit">Edit</button>
@@ -183,7 +184,7 @@ window.History = (() => {
       confirm: 'Delete', destructive: true,
       onConfirm: () => {
         wrap.classList.add('removing');
-        const snapshot = { amount: e.amount, category: e.category, subcategory: e.subcategory, note: e.note, date: e.date };
+        const snapshot = { amount: e.amount, category: e.category, subcategory: e.subcategory, note: e.note, paymentMethod: e.paymentMethod, date: e.date };
         setTimeout(() => Store.deleteExpense(Store.currentMonth, id), 150);
         App.toast('Expense deleted', { undo: () => Store.addExpense(snapshot) });
       },
@@ -207,6 +208,9 @@ window.History = (() => {
           <div class="sheet-row" id="ed-sub-row" ${cat && cat.subs.length ? '' : 'hidden'}><span class="k">Subcategory</span>
             <select id="ed-sub"><option value="">—</option>${(cat ? cat.subs : []).map((s) => `<option ${s === e.subcategory ? 'selected' : ''}>${esc(s)}</option>`).join('')}</select>
           </div>
+          <div class="sheet-row"><span class="k">Paid via</span>
+            <div class="pay-seg" id="ed-pay">${Pay.methods().map((m) => `<button class="pay-chip ${m.id === e.paymentMethod ? 'is-selected' : ''}" data-pay="${m.id}"><span class="emoji">${m.emoji}</span>${esc(m.name)}</button>`).join('')}</div>
+          </div>
           <div class="sheet-row"><span class="k">Note</span><input id="ed-note" value="${esc(e.note || '')}" placeholder="—" maxlength="80"></div>
           <div class="sheet-row"><span class="k">Date</span><input id="ed-date" type="date" value="${e.date}"></div>
         </div>
@@ -221,6 +225,9 @@ window.History = (() => {
           if (c && c.subs.length) { subRow.hidden = false; subSel.innerHTML = '<option value="">—</option>' + c.subs.map((s) => `<option>${esc(s)}</option>`).join(''); }
           else { subRow.hidden = true; }
         });
+        root.querySelectorAll('#ed-pay [data-pay]').forEach((n) => n.addEventListener('click', () => {
+          root.querySelectorAll('#ed-pay [data-pay]').forEach((m) => m.classList.toggle('is-selected', m === n));
+        }));
         root.querySelector('[data-a="del"]').addEventListener('click', () => { close(); confirmDeleteImmediate(id); });
       },
       onPrimary: (root, close) => {
@@ -228,9 +235,11 @@ window.History = (() => {
         if (amount <= 0) { App.toast('Amount required', { warn: true }); return; }
         const catId = root.querySelector('#ed-cat').value;
         const subSel = root.querySelector('#ed-sub');
+        const paySel = root.querySelector('#ed-pay .is-selected');
         Store.updateExpense(Store.currentMonth, id, {
           amount, category: catId,
           subcategory: subSel && !subSel.parentElement.parentElement.hidden ? subSel.value : null,
+          paymentMethod: paySel ? paySel.getAttribute('data-pay') : null,
           note: root.querySelector('#ed-note').value,
           date: root.querySelector('#ed-date').value,
         });
@@ -243,7 +252,7 @@ window.History = (() => {
   const confirmDeleteImmediate = (id) => {
     const e = Store.getExpense(Store.currentMonth, id);
     if (!e) return;
-    const snapshot = { amount: e.amount, category: e.category, subcategory: e.subcategory, note: e.note, date: e.date };
+    const snapshot = { amount: e.amount, category: e.category, subcategory: e.subcategory, note: e.note, paymentMethod: e.paymentMethod, date: e.date };
     Store.deleteExpense(Store.currentMonth, id);
     App.toast('Expense deleted', { undo: () => Store.addExpense(snapshot) });
   };
