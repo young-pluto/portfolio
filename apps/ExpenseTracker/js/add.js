@@ -45,6 +45,7 @@ window.AddScreen = (() => {
 
     el().innerHTML = `
       <div class="add-wrap">
+        <div class="add-scroll">
         <div class="add-head">
           <span class="label">New expense</span>
           <label class="date-pill"><span id="date-label">${datePillLabel()}</span>
@@ -75,6 +76,8 @@ window.AddScreen = (() => {
         <div class="note-line" id="note-line">
           <input type="text" id="note-input" placeholder="Add note (optional)" value="${esc(state.note)}" enterkeyhint="done" maxlength="80">
         </div>
+
+        </div><!-- /add-scroll -->
 
         <div class="keypad-area">
           <div class="keypad" id="keypad">

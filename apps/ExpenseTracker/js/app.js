@@ -200,4 +200,29 @@ window.App = (() => {
   };
 })();
 
+// --- viewport --------------------------------------------------------------
+// iOS Safari's layout viewport (what `position:fixed` is sized against) is taller
+// than the part of the screen you can see and touch while the toolbars are up.
+// Pin the shell to the real visible height so painted pixels and touch targets
+// line up. Ignore the shrink caused by the on-screen keyboard.
+(() => {
+  const vv = window.visualViewport;
+  const syncHeight = () => {
+    const h = vv ? vv.height : window.innerHeight;
+    if (!h) return;
+    // A keyboard takes a big bite; keep the shell at full height in that case.
+    if (window.innerHeight && h < window.innerHeight * 0.65) return;
+    document.documentElement.style.setProperty('--app-h', Math.round(h) + 'px');
+  };
+  syncHeight();
+  window.addEventListener('resize', syncHeight);
+  window.addEventListener('orientationchange', () => setTimeout(syncHeight, 250));
+  if (vv) { vv.addEventListener('resize', syncHeight); }
+  // iOS scrolls a position:fixed body to reveal a focused input and does not
+  // always put it back, which offsets every tap afterwards.
+  window.addEventListener('focusout', () => {
+    setTimeout(() => { if (window.scrollY || window.scrollX) window.scrollTo(0, 0); }, 50);
+  });
+})();
+
 document.addEventListener('DOMContentLoaded', () => { window.Auth.init(); });

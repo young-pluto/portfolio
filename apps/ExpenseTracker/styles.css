@@ -50,9 +50,19 @@ html, body {
   overscroll-behavior-y: none;
 }
 
-body { position: fixed; inset: 0; overflow: hidden; }
+body {
+  position: fixed; top: 0; left: 0; width: 100%;
+  /* iOS Safari sizes `position:fixed; inset:0` to the LAYOUT viewport (toolbars
+     retracted), which is taller than what you can actually see and touch. Size to
+     the visible viewport instead: dvh follows the toolbars, --app-h (set from
+     visualViewport in app.js) is exact. */
+  height: 100vh;
+  height: 100dvh;
+  height: var(--app-h, 100dvh);
+  overflow: hidden;
+}
 
-button { font-family: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+button { font-family: inherit; touch-action: manipulation; color: inherit; background: none; border: none; cursor: pointer; }
 input { font-family: inherit; }
 .hidden { display: none !important; }
 .tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
@@ -69,7 +79,7 @@ input { font-family: inherit; }
    AUTH
    ============================================================ */
 #auth-container {
-  position: fixed; inset: 0;
+  position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
   padding: calc(24px + var(--sat)) 28px calc(24px + var(--sab));
   background:
@@ -121,14 +131,14 @@ input { font-family: inherit; }
 /* ============================================================
    APP SHELL / SCREENS
    ============================================================ */
-#app { position: fixed; inset: 0; }
+#app { position: absolute; inset: 0; }
 
 #screens { position: absolute; inset: 0; }
 
 .screen {
   position: absolute; inset: 0;
   bottom: calc(var(--tabbar-h) + var(--sab));
-  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
   padding-top: calc(var(--sat) + 8px);
   background: var(--bg);
   opacity: 0; visibility: hidden; pointer-events: none;
@@ -256,7 +266,8 @@ input { font-family: inherit; }
 /* ============================================================
    ADD EXPENSE
    ============================================================ */
-.add-wrap { height: 100%; display: flex; flex-direction: column; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-top: calc(var(--sat) + 2px); }
+.add-wrap { height: 100%; display: flex; flex-direction: column; overflow: hidden; padding-top: calc(var(--sat) + 2px); }
+.add-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
 .add-head { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
 .date-pill {
   position: relative; overflow: hidden;
@@ -313,7 +324,7 @@ input { font-family: inherit; }
 .pay-chip .emoji { font-size: 13px; }
 .pay-row .pay-chip { flex: 1; justify-content: center; }
 
-.keypad-area { margin-top: auto; display: flex; flex-direction: column; padding: 8px 20px 0; }
+.keypad-area { flex: 0 0 auto; display: flex; flex-direction: column; padding: 8px 20px 0; }
 .keypad { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
 .key {
   height: 54px; display: flex; align-items: center; justify-content: center;
@@ -323,6 +334,19 @@ input { font-family: inherit; }
 .key:active { background: rgba(255,255,255,0.10); }
 .key.muted { color: var(--text-3); }
 .add-save { width: 100%; margin: 14px 0 16px; }
+
+/* Safari with both toolbars visible leaves ~700px — keep the keypad on screen. */
+@media (max-height: 780px) {
+  .amount-display .val { font-size: 52px; }
+  .amount-display { padding-top: 6px; }
+  .key { height: 50px; }
+  .add-save { margin: 10px 0 12px; }
+}
+@media (max-height: 700px) {
+  .amount-display .val { font-size: 44px; }
+  .caret { height: 34px; }
+  .key { height: 46px; font-size: 23px; }
+}
 
 /* subcategory sheet uses the generic sheet */
 
@@ -344,7 +368,7 @@ input { font-family: inherit; }
 .icon-btn.is-active { color: var(--accent); }
 .icon-btn:active { background: var(--surface-2); }
 
-.filter-row { display: flex; gap: 8px; padding: 8px 20px 4px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.filter-row { display: flex; gap: 8px; padding: 8px 20px 4px; overflow-x: auto; }
 .filter-row::-webkit-scrollbar { display: none; }
 .fchip {
   flex-shrink: 0; padding: 7px 13px; border-radius: 8px; background: var(--chip);
@@ -475,7 +499,7 @@ input { font-family: inherit; }
 /* ============================================================
    SHEETS / DIALOGS / TOASTS
    ============================================================ */
-#sheet-host, #dialog-host { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
+#sheet-host, #dialog-host { position: absolute; inset: 0; z-index: 100; pointer-events: none; }
 .scrim { position: absolute; inset: 0; background: rgba(0,0,0,0); transition: background var(--t-sheet) var(--ease); pointer-events: auto; }
 .scrim.show { background: rgba(0,0,0,0.5); }
 
@@ -523,7 +547,7 @@ input { font-family: inherit; }
 .dialog-actions button:active { background: var(--wash); }
 
 /* toast */
-#toast-host { position: fixed; left: 0; right: 0; bottom: calc(var(--tabbar-h) + var(--sab) + 12px); z-index: 200; display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none; padding: 0 20px; }
+#toast-host { position: absolute; left: 0; right: 0; bottom: calc(var(--tabbar-h) + var(--sab) + 12px); z-index: 200; display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none; padding: 0 20px; }
 .toast {
   display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 12px;
   background: var(--surface-2); box-shadow: 0 8px 24px rgba(0,0,0,0.4);
