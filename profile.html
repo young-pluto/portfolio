@@ -1,5 +1,15 @@
 <title>@apoorv</title>
 <meta name="description" content="Apoorv Bhardwaj — full-stack developer. Booking platforms, payment rails and internal tools that businesses actually run on.">
+<link rel="canonical" href="https://www.builtbyapoorv.in/">
+<meta property="og:type" content="profile">
+<meta property="og:url" content="https://www.builtbyapoorv.in/">
+<meta property="og:title" content="Apoorv Bhardwaj — full-stack developer">
+<meta property="og:description" content="Nine builds. Booking platforms, payment rails and internal tools that businesses actually run on.">
+<meta property="og:image" content="https://www.builtbyapoorv.in/media/apoorv.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Apoorv Bhardwaj — full-stack developer">
+<meta name="twitter:description" content="Nine builds. Booking platforms, payment rails and internal tools that businesses actually run on.">
+<meta name="twitter:image" content="https://www.builtbyapoorv.in/media/apoorv.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grand+Hotel&family=JetBrains+Mono:wght@400;500;700&family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
@@ -127,6 +137,8 @@
     letter-spacing: -.03em;
     user-select: none;
   }
+  /* Photo fills the disc; the gradient stays underneath as the loading state. */
+  img.avatar, img.mini { object-fit: cover; }
 
   .prof-main { min-width: 0; flex: 1; }
 
@@ -586,7 +598,7 @@
 <main class="shell flush" id="app">
 
   <section class="profile">
-    <div class="avatar-wrap"><div class="avatar" aria-hidden="true">A</div></div>
+    <div class="avatar-wrap"><img class="avatar" src="media/apoorv.jpg" alt="Apoorv Bhardwaj" width="480" height="480"></div>
     <div class="prof-main">
       <div class="prof-top">
         <h1 class="prof-handle">apoorv</h1>
@@ -628,7 +640,7 @@
     <a href="https://in.linkedin.com/in/apoorv-bhardwaj-96a345175" target="_blank" rel="noopener">LinkedIn</a>
     <a href="https://github.com/young-pluto" target="_blank" rel="noopener">GitHub</a>
     <span class="spacer"></span>
-    <a href="/index.html">Long-form version →</a>
+    <a href="/classic">Long-form version →</a>
   </footer>
 </main>
 
@@ -659,7 +671,7 @@
       Full-Stack Developer, Upscale Marketing Solutions (Sep 2022 – Sep 2024). B.Tech Information Technology, College of
       Engineering Roorkee, 2018–2022.</p>
     <p><a href="mailto:apoorvbhardwajabz@gmail.com">apoorvbhardwajabz@gmail.com</a> ·
-      <a href="/index.html">Long-form version of this portfolio</a></p>
+      <a href="/classic">Long-form version of this portfolio</a></p>
   </div>
 </noscript>
 
@@ -951,9 +963,7 @@
     {
       id: "building", live: true, label: "BUILDING", face: "●",
       cards: [
-        { t: "This profile", d: "13 Sep 2026", body: "<p>Rebuilding the portfolio around the way people actually browse — demo first, detail on demand. You're looking at it.</p><p>The long-form version with full architecture diagrams is still live and linked at the bottom of this page.</p>" },
-        { t: "Ball4Life ledger", d: "07 Sep 2026", body: "<p>Expenses now carry the method they were paid by — UPI, card or cash — so the monthly P&amp;L reconciles against the bank without a spreadsheet in between.</p><p>Plus a round of iOS Safari fixes: tap targets were landing a few pixels off on the expense sheet.</p>" },
-        { t: "Workout Tracker", d: "27 Jul 2026", body: "<p>Added RPE sliders, muscle-group tagging and a seven-day analysis tab.</p><p>RPE was the one thing I kept writing in the remarks field by hand, which is usually the signal that it should be a field.</p><div class='chips'><span class='chip'>train.builtbyapoorv.in</span></div>" }
+        { t: "Building", d: "Now", body: "<h3>One source of truth for orders</h3><p class='sub'>DailyObjects · Gurugram</p><p>Currently leading consolidation of sales order data across all channels into a single source of truth for company-wide reporting.</p>" }
       ]
     },
     {
@@ -1121,7 +1131,7 @@
       '<div class="post-card">' +
       '<div class="post-media">' + mediaMarkup(p, true) + '</div>' +
       '<div class="post-side">' +
-      '<div class="post-head"><span class="mini" aria-hidden="true">A</span>' +
+      '<div class="post-head"><img class="mini" src="media/apoorv.jpg" alt="">' +
       '<div><div class="who">apoorv</div>' + (co ? '<div class="where">' + esc(co.name) + '</div>' : "") + '</div>' +
       '<button class="icon-btn x" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>' +
 
@@ -1167,7 +1177,7 @@
       '<button type="button" data-step="1" aria-label="Next"></button>' +
       '</div>' +
       '<div class="bars">' + r.cards.map((_, k) => '<i class="' + (k <= story.i ? "on" : "") + '"></i>').join("") + '</div>' +
-      '<div class="story-head"><span class="mini" aria-hidden="true">A</span>' +
+      '<div class="story-head"><img class="mini" src="media/apoorv.jpg" alt="">' +
       '<span class="t">' + esc(r.label) + '</span>' +
       (c.d ? '<span class="d">' + esc(c.d) + '</span>' : "") + '</div>' +
       '<button class="icon-btn story-x" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
@@ -1231,7 +1241,7 @@
   function openDM() {
     openDialog($("#dlg-dm"),
       '<div class="dm-card">' +
-      '<div class="dm-head"><span class="mini" aria-hidden="true">A</span>' +
+      '<div class="dm-head"><img class="mini" src="media/apoorv.jpg" alt="">' +
       '<div><div class="who" style="font-weight:600">apoorv</div>' +
       '<div style="font-size:.74rem;color:var(--muted)">usually replies within a day</div></div>' +
       '<button class="icon-btn" style="margin-left:auto" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>' +

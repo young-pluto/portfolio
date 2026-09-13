@@ -470,8 +470,12 @@
       "dest": "/resume.html"
     },
     {
-      "src": "/",
+      "src": "/classic",
       "dest": "/index.html"
+    },
+    {
+      "src": "/",
+      "dest": "/profile.html"
     },
     {
       "src": "/(.*)",
