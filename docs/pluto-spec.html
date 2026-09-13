@@ -1,0 +1,1205 @@
+<title>Instagram for One Person</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400&display=swap">
+
+<style>
+  :root {
+    color-scheme: light;
+    --ground: #fbfafc;
+    --surface: #ffffff;
+    --surface-2: #f4f2f7;
+    --ink: #15131a;
+    --ink-soft: #46424f;
+    --muted: #736e80;
+    --line: #e5e2eb;
+    --line-strong: #cfcad8;
+    --accent: #c2256e;
+    --accent-soft: #fbe9f2;
+    --amber: #9c5c00;
+    --amber-soft: #fbeed6;
+    --good: #16713f;
+    --good-soft: #e2f2e8;
+    --shadow: 0 1px 2px rgba(21, 19, 26, .05), 0 14px 32px -20px rgba(21, 19, 26, .18);
+
+    --display: "Bricolage Grotesque", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --body: "Source Serif 4", ui-serif, Georgia, "Times New Roman", serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #0f0e13;
+      --surface: #17161d;
+      --surface-2: #1f1e27;
+      --ink: #ece9f2;
+      --ink-soft: #bfb9cc;
+      --muted: #928ca1;
+      --line: #2a2833;
+      --line-strong: #3d3a49;
+      --accent: #f06bab;
+      --accent-soft: #2c1522;
+      --amber: #e0a144;
+      --amber-soft: #2e2211;
+      --good: #4ec387;
+      --good-soft: #122a1e;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 14px 32px -20px rgba(0, 0, 0, .8);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #0f0e13;
+    --surface: #17161d;
+    --surface-2: #1f1e27;
+    --ink: #ece9f2;
+    --ink-soft: #bfb9cc;
+    --muted: #928ca1;
+    --line: #2a2833;
+    --line-strong: #3d3a49;
+    --accent: #f06bab;
+    --accent-soft: #2c1522;
+    --amber: #e0a144;
+    --amber-soft: #2e2211;
+    --good: #4ec387;
+    --good-soft: #122a1e;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 14px 32px -20px rgba(0, 0, 0, .8);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.62;
+    margin: 0;
+    padding: 0 24px 96px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 1000px; margin: 0 auto; }
+  .col { max-width: 680px; }
+
+  p, ul, ol { margin: 0 0 1em; }
+  ul, ol { padding-left: 1.15em; }
+  li { margin-bottom: .4em; }
+  li::marker { color: var(--muted); }
+  strong { font-weight: 600; }
+  em { font-style: italic; }
+
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+  code {
+    font-family: var(--mono);
+    font-size: .82em;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: .08em .35em;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 64px 0 26px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .masthead h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(2.3rem, 6vw, 3.6rem);
+    letter-spacing: -.035em;
+    line-height: .98;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .masthead .sub {
+    font-family: var(--mono);
+    font-size: .74rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 12px;
+  }
+
+  .stamp {
+    font-family: var(--mono);
+    font-size: .72rem;
+    line-height: 1.7;
+    color: var(--muted);
+    text-align: right;
+    padding-bottom: 6px;
+  }
+  .stamp b { color: var(--ink); font-weight: 500; }
+
+  .standfirst {
+    font-size: 1.18rem;
+    color: var(--ink-soft);
+    max-width: 620px;
+    margin: 26px 0 0;
+  }
+
+  /* ---------- sections ---------- */
+  section { padding-top: 56px; }
+
+  .sec-head {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 16px;
+    align-items: baseline;
+    margin-bottom: 20px;
+  }
+
+  .sec-num {
+    font-family: var(--mono);
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--accent);
+    padding-top: .35em;
+  }
+
+  h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.78rem;
+    letter-spacing: -.022em;
+    line-height: 1.14;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .sec-body { padding-left: 60px; }
+
+  @media (max-width: 640px) {
+    .sec-head { grid-template-columns: 1fr; gap: 2px; }
+    .sec-num { padding-top: 0; }
+    .sec-body { padding-left: 0; }
+  }
+
+  h3 {
+    font-family: var(--display);
+    font-weight: 650;
+    font-size: 1.03rem;
+    letter-spacing: -.008em;
+    margin: 32px 0 8px;
+  }
+
+  .kicker {
+    font-family: var(--mono);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+
+  /* ---------- callout ---------- */
+  .note {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 24px 0;
+  }
+  .note p:last-child { margin-bottom: 0; }
+  .note.ask { border-left-color: var(--amber); background: var(--amber-soft); }
+
+  /* ---------- tables ---------- */
+  .scroll { overflow-x: auto; margin: 22px 0; }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 540px;
+    font-size: .93rem;
+  }
+
+  th {
+    font-family: var(--mono);
+    font-size: .67rem;
+    font-weight: 600;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 0 14px 8px 0;
+    border-bottom: 1px solid var(--line-strong);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 11px 14px 11px 0;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  td:last-child, th:last-child { padding-right: 0; }
+
+  .t-key {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  .t-num { font-variant-numeric: tabular-nums; }
+
+  .pill {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: .64rem;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .p-ready { background: var(--good-soft); color: var(--good); }
+  .p-need { background: var(--amber-soft); color: var(--amber); }
+  .p-cut { background: var(--surface-2); color: var(--muted); text-decoration: line-through; }
+  .p-you { background: var(--accent-soft); color: var(--accent); }
+
+  /* ---------- profile mock ---------- */
+  .mock {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 24px 26px;
+    margin: 24px 0;
+  }
+
+  .mock-row {
+    display: flex;
+    gap: 22px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .avatar {
+    width: 78px;
+    height: 78px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 2px dashed var(--line-strong);
+    display: grid;
+    place-items: center;
+    font-family: var(--mono);
+    font-size: .56rem;
+    letter-spacing: .08em;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .handle {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: -.02em;
+  }
+
+  .statline {
+    display: flex;
+    gap: 26px;
+    flex-wrap: wrap;
+    margin: 12px 0 14px;
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--muted);
+  }
+  .statline b {
+    color: var(--ink);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bio {
+    font-size: .96rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .bio b { color: var(--ink); }
+
+  /* ---------- grid demo ---------- */
+  .demo-bar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .demo-bar .kicker { margin: 0 8px 0 0; }
+
+  .ratio-btn {
+    font-family: var(--mono);
+    font-size: .74rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+  .ratio-btn[aria-pressed="true"] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--ground);
+  }
+
+  .ig-grid {
+    --ratio: 1 / 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    max-width: 460px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .ig-grid figure { margin: 0; position: relative; background: var(--surface-2); }
+
+  .ig-grid video {
+    display: block;
+    width: 100%;
+    aspect-ratio: var(--ratio);
+    object-fit: cover;
+    object-position: center 42%;
+    background: var(--surface-2);
+  }
+
+  .ig-cap {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-family: var(--mono);
+    font-size: .58rem;
+    letter-spacing: .04em;
+    color: #fff;
+    background: linear-gradient(transparent, rgba(0, 0, 0, .72));
+    padding: 18px 7px 5px;
+  }
+
+  .demo-meta {
+    font-family: var(--mono);
+    font-size: .74rem;
+    color: var(--muted);
+    margin-top: 10px;
+    max-width: 460px;
+  }
+
+  /* ---------- comment mock ---------- */
+  .thread {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 20px 0;
+    font-size: .92rem;
+  }
+
+  .thread .c { display: grid; grid-template-columns: 108px 1fr; gap: 14px; padding: 9px 0; }
+  .thread .c + .c { border-top: 1px solid var(--line); }
+  .thread .c span {
+    font-family: var(--mono);
+    font-size: .75rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .thread .c p { margin: 0; color: var(--ink-soft); }
+  .thread .c p b { color: var(--ink); }
+
+  @media (max-width: 560px) {
+    .thread .c { grid-template-columns: 1fr; gap: 2px; }
+  }
+
+  /* ---------- route list ---------- */
+  .routes {
+    font-family: var(--mono);
+    font-size: .82rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 6px 20px;
+    margin: 22px 0;
+    list-style: none;
+  }
+  .routes li {
+    display: grid;
+    grid-template-columns: 168px 1fr;
+    gap: 16px;
+    padding: 9px 0;
+    margin: 0;
+  }
+  .routes li + li { border-top: 1px solid var(--line); }
+  .routes b { font-weight: 700; color: var(--ink); }
+  .routes span { color: var(--muted); font-family: var(--body); font-size: .92rem; }
+
+  @media (max-width: 560px) {
+    .routes li { grid-template-columns: 1fr; gap: 1px; }
+  }
+
+  /* ---------- diagram ---------- */
+  figure.diagram {
+    margin: 26px 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  figure.diagram .scroll { margin: 0; }
+  figure.diagram svg { display: block; min-width: 620px; width: 100%; height: auto; }
+  figcaption {
+    font-family: var(--mono);
+    font-size: .72rem;
+    color: var(--muted);
+    margin-top: 14px;
+  }
+
+  /* ---------- decisions ---------- */
+  .decision {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--line-strong);
+    border-radius: 0 10px 10px 0;
+    padding: 18px 22px;
+    margin: 18px 0;
+  }
+  .decision.open { border-left-color: var(--amber); }
+  .decision h3 { margin-top: 0; }
+  .decision p:last-child { margin-bottom: 0; }
+  .decision .verdict {
+    font-family: var(--mono);
+    font-size: .74rem;
+    color: var(--ink-soft);
+    display: block;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line-strong);
+  }
+  .decision .verdict b { color: var(--ink); }
+
+  footer {
+    margin-top: 72px;
+    padding-top: 22px;
+    border-top: 2px solid var(--ink);
+    font-family: var(--mono);
+    font-size: .74rem;
+    color: var(--muted);
+  }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div>
+      <p class="sub">Information architecture &amp; interaction spec</p>
+      <h1>Instagram for<br>one person</h1>
+    </div>
+    <div class="stamp">
+      <b>@youngpluto</b> · draft 1<br>
+      13 Sep 2026<br>
+      for review — not built yet
+    </div>
+  </header>
+
+  <p class="standfirst">Every structural decision for the portfolio, settled before a line of it gets written.
+    Three demo clips are cut and embedded below. What is still missing is listed at the end, with names against it.</p>
+
+  <!-- ============================================================ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span>
+      <h2>The résumé changed the plan</h2>
+    </div>
+    <div class="sec-body col">
+      <p>The portfolio as it stands presents seven side projects and says nothing about employment. The résumé says
+        something different, and it is a much stronger story:</p>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Company</th><th>Role</th><th>When</th><th>Already on the site?</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>DailyObjects</td><td>Associate Software Engineer</td>
+              <td class="t-key t-num">Apr 2026 →</td><td><span class="pill p-need">nothing</span></td>
+            </tr>
+            <tr>
+              <td>DailyObjects</td><td>Software Development Intern</td>
+              <td class="t-key t-num">Jan – Apr 2026</td><td><span class="pill p-need">nothing</span></td>
+            </tr>
+            <tr>
+              <td>B4L Sports Pvt Ltd</td><td>Full-Stack Developer</td>
+              <td class="t-key t-num">Oct 2024 – Jan 2025</td><td>Ball4Life, framed as a side project</td>
+            </tr>
+            <tr>
+              <td>Upscale Marketing</td><td>Marketing Specialist &amp; Full-Stack Dev</td>
+              <td class="t-key t-num">Sep 2022 – Sep 2024</td><td>Upscale, framed as a side project</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p><strong>Ball4Life and Upscale are jobs.</strong> The two flagship pieces of work are paid engagements at real
+        companies, and the current site quietly sells them as weekend builds. That single correction is worth more than
+        any amount of interface cleverness.</p>
+
+      <p>So the architecture does not split into "projects" and "work experience" the way the original sketch had it.
+        The grid <em>is</em> the work. Employment is a lens over the same posts, which is exactly what Instagram's
+        <em>Tagged</em> tab already means: things other accounts attached their name to.</p>
+
+      <div class="note">
+        <p><strong>The hard problem.</strong> The strongest and most current work — the DailyObjects order-management
+          migration, the MongoDB aggregation pipelines, the marketplace integrations, leading the consolidation of sales
+          order data into one source of truth — is internal tooling at someone else's company. It is almost certainly
+          the least screenshot-able thing you have ever built, and it is the thing a hiring manager most wants to see.
+          Section 09 proposes an answer. It needs your call on what is safe to show.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span>
+      <h2>The account</h2>
+    </div>
+    <div class="sec-body">
+      <div class="mock">
+        <div class="mock-row">
+          <div class="avatar">PHOTO<br>NEEDED</div>
+          <div style="min-width:260px;flex:1">
+            <div class="handle">youngpluto</div>
+            <div class="statline">
+              <span><b>9</b> builds</span>
+              <span><b>24</b> tools</span>
+              <span><b>3</b> companies</span>
+            </div>
+            <p class="bio">
+              <b>Apoorv Bhardwaj</b> · Full-stack developer<br>
+              Internal tools, analytics and backend systems at a D2C e-commerce company.<br>
+              Before that: booking platforms and payment rails that real businesses still run on.<br>
+              <span style="color:var(--muted)">Next.js · Node · MongoDB · AWS · 📍 Gurugram</span><br>
+              ↓ Everything I've shipped
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <p>Instagram gives you exactly three numbers, so each one has to carry weight. <code>posts</code> becomes builds,
+          <code>followers</code> becomes the technologies that actually appear in your work, <code>following</code>
+          becomes the companies. All three are computed from the content, not typed in — if a post is added the count
+          moves. That is the difference between a metaphor and a gimmick.</p>
+
+        <p><strong>Tapping a number opens a sheet</strong>, the way a follower list does. <em>tools</em> opens the stack
+          grouped by layer. <em>companies</em> opens the employment list. <em>builds</em> scrolls to the grid.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span>
+      <h2>What survives the metaphor</h2>
+    </div>
+    <div class="sec-body">
+      <p class="col">Your rule — every mechanic has to say something about you, or it goes — applied to the full list.</p>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Instagram</th><th>Becomes</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="t-key">Profile</td><td>Name, headline, the three counts, highlight row</td><td><span class="pill p-ready">keep</span></td></tr>
+            <tr><td class="t-key">Grid</td><td>Nine builds, newest and strongest first</td><td><span class="pill p-ready">keep</span></td></tr>
+            <tr><td class="t-key">Post</td><td>One build: demo, what it does, how it works, links</td><td><span class="pill p-ready">keep</span></td></tr>
+            <tr><td class="t-key">Reels</td><td>Longer uncut walkthroughs of the same builds</td><td><span class="pill p-ready">keep</span></td></tr>
+            <tr><td class="t-key">Tagged</td><td>Employment — the posts a company attached its name to</td><td><span class="pill p-ready">keep</span></td></tr>
+            <tr><td class="t-key">Highlights</td><td>About · Work · Stack · Education · Résumé</td><td><span class="pill p-ready">keep</span></td></tr>
+            <tr><td class="t-key">Stories</td><td>A live ring: what you are building this month</td><td><span class="pill p-ready">keep</span></td></tr>
+            <tr><td class="t-key">Comments</td><td>Technical context, filed under topic labels</td><td><span class="pill p-ready">keep</span></td></tr>
+            <tr><td class="t-key">DM</td><td>Contact, opened by what the visitor wants</td><td><span class="pill p-ready">keep</span></td></tr>
+            <tr><td class="t-key">Saved</td><td>Nothing you have that Highlights doesn't already hold</td><td><span class="pill p-cut">cut</span></td></tr>
+            <tr><td class="t-key">Likes</td><td>Nothing honest to count</td><td><span class="pill p-cut">cut</span></td></tr>
+            <tr><td class="t-key">Follower count</td><td>Replaced by the labelled tools count</td><td><span class="pill p-cut">cut</span></td></tr>
+            <tr><td class="t-key">Explore · Ads · Shop</td><td>Pure set dressing</td><td><span class="pill p-cut">cut</span></td></tr>
+            <tr><td class="t-key">Notifications</td><td>Would have to be fabricated</td><td><span class="pill p-cut">cut</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note col">
+        <p><strong>One correction to the original sketch.</strong> You wanted comments from accounts like
+          <code>@technical_details</code> and <code>@impact</code>. Written as <em>people</em>, those are invented
+          commenters — the exact thing your own no-fake-social rule forbids. Written as <em>topic labels</em> on your own
+          notes, they are honest and they read better. Section 05 shows the difference.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span>
+      <h2>The grid, and the aspect-ratio problem</h2>
+    </div>
+    <div class="sec-body">
+      <p class="col">Below is the real thing: the three clips I cut from your recordings this afternoon, running in a
+        three-column grid. Use the buttons to see why the crop matters.</p>
+
+      <div class="demo-bar">
+        <span class="kicker">Crop</span>
+        <button class="ratio-btn" type="button" data-ratio="1 / 1" aria-pressed="true">1:1 grid</button>
+        <button class="ratio-btn" type="button" data-ratio="4 / 5" aria-pressed="false">4:5 post</button>
+        <button class="ratio-btn" type="button" data-ratio="9 / 16" aria-pressed="false">9:16 reel</button>
+      </div>
+
+      <div class="ig-grid" id="ig-grid">
+        <figure>
+          <video src="m/ball4life.mp4" poster="m/ball4life.jpg" muted loop playsinline autoplay preload="metadata"></video>
+          <figcaption class="ig-cap">Ball4Life · 14s</figcaption>
+        </figure>
+        <figure>
+          <video src="m/upscale.mp4" poster="m/upscale.jpg" muted loop playsinline autoplay preload="metadata"></video>
+          <figcaption class="ig-cap">Upscale · 12s</figcaption>
+        </figure>
+        <figure>
+          <video src="m/workout.mp4" poster="m/workout.jpg" muted loop playsinline autoplay preload="metadata"></video>
+          <figcaption class="ig-cap">Workout · 13s</figcaption>
+        </figure>
+      </div>
+      <p class="demo-meta" id="demo-meta">1:1 keeps 46% of the phone screen — the middle band, which is where the content
+        always is.</p>
+
+      <div class="col">
+        <h3>Why this was nearly a problem</h3>
+        <p>Your recordings are <code>1284 × 2778</code> — an iPhone screen, 1 : 2.16. Instagram posts are 1:1 or 4:5.
+          Letterboxing a phone screen into 4:5 spends 21% of the frame width on empty bars down each side, and into 1:1
+          it spends more than half the frame. It looks like a mistake.</p>
+        <p>Centre-cropping instead works, because a phone screen puts its content in the middle band and its chrome at
+          the edges. The three crops keep 46%, 58% and 69% of the screen height respectively, and in every case the part
+          that survives is the part that matters.</p>
+
+        <div class="note">
+          <p><strong>Decision.</strong> Encode one master per clip at native aspect, 720px wide, and crop at render time
+            with <code>object-fit: cover</code> plus a per-post <code>object-position</code>. One encode serves the grid,
+            the post and the reel, and the framing of any individual post can be nudged later without re-encoding
+            anything.</p>
+        </div>
+
+        <h3>The nine posts</h3>
+      </div>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th></th><th>Post</th><th>Media</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="t-key">1</td><td>Ball4Life Arena — booking &amp; payment</td><td>video, cut</td><td><span class="pill p-ready">ready</span></td></tr>
+            <tr><td class="t-key">2</td><td>Upscale — self-serve checkout</td><td>video, cut</td><td><span class="pill p-ready">ready</span></td></tr>
+            <tr><td class="t-key">3</td><td>DailyObjects — order panel migration</td><td>architecture post</td><td><span class="pill p-you">your call</span></td></tr>
+            <tr><td class="t-key">4</td><td>DailyObjects — one source of truth for orders</td><td>architecture post</td><td><span class="pill p-you">your call</span></td></tr>
+            <tr><td class="t-key">5</td><td>Ball4Life — operations console &amp; P&amp;L</td><td>screen recording</td><td><span class="pill p-need">record</span></td></tr>
+            <tr><td class="t-key">6</td><td>Upscale — orders, clients, outreach CRM</td><td>screen recording</td><td><span class="pill p-need">record</span></td></tr>
+            <tr><td class="t-key">7</td><td>Workout Tracker — logging a set</td><td>video, cut</td><td><span class="pill p-ready">ready</span></td></tr>
+            <tr><td class="t-key">8</td><td>QueryFlow AI — live classification</td><td>screen recording</td><td><span class="pill p-need">record</span></td></tr>
+            <tr><td class="t-key">9</td><td>Nutrition Tracker — macros &amp; trends</td><td>screen recording</td><td><span class="pill p-need">record</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="col">SoccerStore Chatbot and Task Manager sit out of the launch grid. Nine posts fills three clean rows;
+        eleven leaves a ragged one. They stay reachable through the Stack highlight and can be promoted later.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">05</span>
+      <h2>Inside a post</h2>
+    </div>
+    <div class="sec-body">
+      <p class="col">Top to bottom, once a post is open. Everything here already exists in the current site's data — it is
+        being re-presented, not rewritten.</p>
+
+      <ul class="routes">
+        <li><b>media</b><span>The demo, looping, muted, poster-framed. 4:5.</span></li>
+        <li><b>caption</b><span>One line on what it is. Then the <em>before</em> — the mess it replaced.</span></li>
+        <li><b>metric</b><span>The single number, where there is an honest one. Ball4Life: ≈1s payment → confirmed slot.</span></li>
+        <li><b>notes</b><span>The comment thread. Technical depth, on demand, collapsed by default.</span></li>
+        <li><b>links</b><span>Live · Code · Architecture. Architecture opens the existing SVG full-screen.</span></li>
+        <li><b>tagged</b><span>The company, where there is one. Links to the role.</span></li>
+      </ul>
+
+      <p class="col kicker">The notes thread, using Ball4Life's real content</p>
+
+      <div class="thread">
+        <div class="c"><span>@architecture</span>
+          <p><b>Why one ledger writer?</b> All revenue — website and admin alike — enters the books through a single
+            idempotent writer, so every dashboard KPI and every P&amp;L export derives from one source of truth.</p>
+        </div>
+        <div class="c"><span>@reliability</span>
+          <p><b>Dual payment verification.</b> A Cashfree webhook and a client-side polling fallback race each other; an
+            atomic Firebase transaction guarantees the winner is processed exactly once.</p>
+        </div>
+        <div class="c"><span>@tradeoff</span>
+          <p><b>Schema debt compounds.</b> The flat 48-slot schema kept the v1→v2 migration data-compatible, but a fourth
+            bookable day or a second court means reworking the core model. The mapping layer was the bridge, not the
+            destination.</p>
+        </div>
+        <div class="c"><span>@next</span>
+          <p><b>Own the critical path.</b> A legacy Gen-1 Cloud Function still handles slot locking and notifications
+            over fire-and-forget HTTP. Folding it into the server actions removes the hop and the silent-failure mode.</p>
+        </div>
+      </div>
+
+      <p class="col">Four fields from the existing project record — <code>solution</code>, <code>highlights</code>,
+        <code>learnings</code>, <code>impactMetric</code> — become four notes. The content model barely moves; only the
+        presentation does. And a candidate who writes <em>@tradeoff</em> and <em>@next</em> notes about his own work reads
+        as someone with judgement, which is the actual thing being assessed.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">06</span>
+      <h2>Highlights, and the gap</h2>
+    </div>
+    <div class="sec-body">
+      <p class="col">Five rings under the bio. They open as story viewers — tap right to advance, tap left to go back,
+        swipe down to close — because that is the one Instagram interaction that makes dense reference material feel
+        light.</p>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Ring</th><th>Cards</th><th>Source</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="t-key">ABOUT</td><td>3</td><td>Profile paragraph, rewritten in the first person</td></tr>
+            <tr><td class="t-key">WORK</td><td>4</td><td>One card per role, résumé bullets as the body</td></tr>
+            <tr><td class="t-key">STACK</td><td>5</td><td>Languages · Frontend · Backend · Data · Cloud &amp; integrations</td></tr>
+            <tr><td class="t-key">EDU</td><td>1</td><td>B.Tech IT, College of Engineering Roorkee, 2018–2022</td></tr>
+            <tr><td class="t-key">RÉSUMÉ</td><td>1</td><td>Straight to the PDF — one tap, no viewer</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note ask col">
+        <p><strong>Needs your call.</strong> There is an eleven-month gap between B4L Sports ending in January 2025 and
+          the DailyObjects internship starting in January 2026. A visual timeline in the WORK ring makes that gap
+          conspicuous; four dated cards in sequence makes it quiet without hiding anything. I have specced the dated
+          cards, because a timeline draws the eye to its empty stretches. Say the word if you would rather it read as a
+          timeline — and if there is something that belongs in the gap, it should be a card of its own.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">07</span>
+      <h2>The ring that has to be live</h2>
+    </div>
+    <div class="sec-body col">
+      <p>One story ring sits apart from the highlights, with the gradient border Instagram reserves for unseen stories
+        and a <strong>BUILDING</strong> label. Three or four cards: what you are working on this month, a screenshot, a
+        half-finished thought. Dated, so a stale one is visibly stale.</p>
+
+      <p>This is the only part of the site that changes between deploys, and it is what stops the portfolio reading as a
+        thing you last touched in September. It is also the entire justification for a backend — see section 11.</p>
+
+      <p>If the newest card is more than six weeks old the ring renders grey rather than gradient, and the label reads
+        the date instead of BUILDING. An honestly stale ring beats a ring that lies about being live.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">08</span>
+      <h2>The DM</h2>
+    </div>
+    <div class="sec-body col">
+      <p>Your easter egg, kept almost exactly as you wrote it. The message icon opens a thread that is empty except for
+        one prompt and four replies:</p>
+
+      <ul class="routes">
+        <li><b>💼 Role</b><span>→ mail, subject prefilled, résumé PDF linked in the body</span></li>
+        <li><b>🤝 Build together</b><span>→ mail, subject prefilled</span></li>
+        <li><b>💻 Ask about a project</b><span>→ a picker of the nine, then mail with the post URL quoted</span></li>
+        <li><b>👋 Just saying hi</b><span>→ mail, no subject, no ceremony</span></li>
+      </ul>
+
+      <p>Every branch ends at <code>mailto:</code> with a prefilled subject and body. No form, no backend, no submission
+        that might silently fail, and the visitor ends up in their own sent folder with a record of it — which is what
+        someone reaching out about a job actually wants. LinkedIn and GitHub sit under the four as plain links.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">09</span>
+      <h2>The DailyObjects problem</h2>
+    </div>
+    <div class="sec-body col">
+      <p>Two of the nine grid posts are the current job, and neither can be a screen recording. Internal tooling at an
+        employer is not yours to film.</p>
+
+      <p><strong>The proposal: architecture posts.</strong> You already have the form — the hand-drawn SVG system
+        diagrams for Ball4Life and Upscale are the most technically credible things on the current site, and they are
+        the posts an engineer reading this will linger on. A diagram of the order-data consolidation, drawn at the level
+        of <em>channels → ingestion → normalisation → single order store → reporting</em>, names no internal service and
+        leaks nothing, while showing exactly the kind of thinking the role involves.</p>
+
+      <p>Same treatment for the migration post: AngularJS + Node 12 on the left, Next.js 16 + React 19 + Node 24 on the
+        right, the strategy in the middle, and the MongoDB query restructuring as a note underneath.</p>
+
+      <div class="note ask">
+        <p><strong>Needs your call, and possibly your manager's.</strong> What can you say publicly about DailyObjects
+          beyond what is already on your résumé? Specifically: may I draw a generic architecture of the order
+          consolidation, and do you have a scrubbed before/after number for the panel migration or the query work? If the
+          answer is that nothing beyond the résumé bullets is safe, these become two text-and-diagram posts built only
+          from those bullets — still worth their place in the grid, just thinner. The logo you offered is welcome
+          either way, but it is not the asset that matters here.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">10</span>
+      <h2>Navigation, URLs and the splash</h2>
+    </div>
+    <div class="sec-body">
+
+      <figure class="diagram">
+        <div class="scroll">
+          <svg viewBox="0 0 920 330" xmlns="http://www.w3.org/2000/svg" role="img"
+            aria-label="Screen graph: splash leads to profile; profile leads to the Posts, Reels and Tagged tabs, each with a detail screen; and to four overlay screens that open over the profile.">
+            <defs>
+              <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+                orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="var(--muted)" />
+              </marker>
+            </defs>
+
+            <g stroke="var(--muted)" stroke-width="1.2" fill="none" marker-end="url(#ar)">
+              <path d="M156,98 L210,98" />
+              <path d="M350,88 L377,88 L377,38 L404,38" />
+              <path d="M350,98 L404,98" />
+              <path d="M350,108 L377,108 L377,158 L404,158" />
+              <path d="M544,38 L620,38" />
+              <path d="M544,98 L620,98" />
+              <path d="M544,158 L620,158" />
+              <path d="M280,120 L280,262" />
+              <path d="M450,246 L450,262" />
+              <path d="M620,246 L620,262" />
+              <path d="M790,246 L790,262" />
+            </g>
+            <path d="M280,246 L790,246" stroke="var(--muted)" stroke-width="1.2" fill="none" stroke-dasharray="4,4" />
+
+            <g font-family="ui-sans-serif, system-ui, sans-serif">
+              <g fill="var(--surface-2)" stroke="var(--line-strong)" stroke-width="1">
+                <rect x="16" y="76" width="140" height="44" rx="6" stroke-dasharray="4,3" />
+                <rect x="210" y="76" width="140" height="44" rx="6" stroke="var(--accent)" stroke-width="1.6" />
+                <rect x="404" y="16" width="140" height="44" rx="6" />
+                <rect x="404" y="76" width="140" height="44" rx="6" />
+                <rect x="404" y="136" width="140" height="44" rx="6" />
+                <rect x="620" y="16" width="140" height="44" rx="6" />
+                <rect x="620" y="76" width="140" height="44" rx="6" />
+                <rect x="620" y="136" width="140" height="44" rx="6" />
+                <rect x="210" y="262" width="140" height="44" rx="6" />
+                <rect x="380" y="262" width="140" height="44" rx="6" />
+                <rect x="550" y="262" width="140" height="44" rx="6" />
+                <rect x="720" y="262" width="140" height="44" rx="6" />
+              </g>
+
+              <g text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">
+                <text x="86" y="96">Splash</text>
+                <text x="280" y="96">Profile</text>
+                <text x="474" y="36">Posts</text>
+                <text x="474" y="96">Reels</text>
+                <text x="474" y="156">Tagged</text>
+                <text x="690" y="36">Build</text>
+                <text x="690" y="96">Reel</text>
+                <text x="690" y="156">Role</text>
+                <text x="280" y="282">Highlight</text>
+                <text x="450" y="282">Building</text>
+                <text x="620" y="282">DM</text>
+                <text x="790" y="282">Résumé</text>
+              </g>
+
+              <g text-anchor="middle" font-size="10.5" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+                fill="var(--muted)">
+                <text x="86" y="111">700ms · once</text>
+                <text x="280" y="111">/</text>
+                <text x="474" y="51">/</text>
+                <text x="474" y="111">/reels</text>
+                <text x="474" y="171">/tagged</text>
+                <text x="690" y="51">/p/‹slug›</text>
+                <text x="690" y="111">/reels/‹slug›</text>
+                <text x="690" y="171">/tagged/‹co›</text>
+                <text x="280" y="297">/s/‹name›</text>
+                <text x="450" y="297">/building</text>
+                <text x="620" y="297">/dm</text>
+                <text x="790" y="297">/resume</text>
+              </g>
+
+              <g font-size="10" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--muted)"
+                letter-spacing="1.2">
+                <text x="16" y="243">OVERLAYS — own URL, Esc closes,</text>
+                <text x="16" y="257">back returns to the profile</text>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <figcaption>Every screen is addressable. Nothing is reachable only by gesture.</figcaption>
+      </figure>
+
+      <div class="col">
+        <h3>The splash, and when it must not play</h3>
+        <p>Black, the handle, then the profile — 700ms, as you wanted. But it plays <strong>once per session</strong>,
+          and <strong>never on a deep link</strong>. Someone opening <code>/p/ball4life</code> from a Slack message is
+          already looking for one specific thing; making them watch an animation first is the difference between a clever
+          opening and an annoying one. It is also skipped entirely under <code>prefers-reduced-motion</code>.</p>
+
+        <h3>The unglamorous requirement</h3>
+        <p>Every caption, note and role description ships as real text in the initial HTML, every video carries a poster
+          frame, and every grid tile is a real <code>&lt;a&gt;</code>. A recruiter will paste this URL into an applicant
+          tracking system, or open it on hotel wifi, or share it to someone who reads it with the images off. A
+          single-page app that renders its content only after JavaScript fails all three. This is a constraint on the
+          build, not a polish item at the end.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">11</span>
+      <h2>Three decisions I made for you</h2>
+    </div>
+    <div class="sec-body col">
+      <p>You did not answer these, so I have specced an answer for each and flagged it. Overrule any of them and I will
+        rework the affected sections before anything gets built.</p>
+
+      <div class="decision">
+        <h3>Backend: static content, except the story ring</h3>
+        <p>Posts, highlights and employment live in a content module beside the code, the way the current project array
+          does. Only the BUILDING ring reads from Firestore.</p>
+        <span class="verdict"><b>Why:</b> the whole trick is the page feeling as immediate as an app. A Firestore
+          round-trip on first paint buys a loading state on the one screen that cannot afford one. The story ring is the
+          only content that genuinely needs to change without a deploy — so it is the only content that pays for a
+          network call.</span>
+      </div>
+
+      <div class="decision">
+        <h3>Fidelity: faithful chrome, content does the reveal</h3>
+        <p>Instagram's real navigation, real grid, real story viewer, real icons. No renamed tabs — the tabs stay Posts,
+          Reels and Tagged, because renaming them to "Builds · Experiments · Experience" breaks the illusion in the first
+          two seconds, which is the opposite of what it is for.</p>
+        <span class="verdict"><b>Why:</b> this is the direction you argued for yourself — keep the UI and let the content
+          reveal it. The reveal only lands if the interface is committed enough to be mistaken for the real thing
+          first.</span>
+      </div>
+
+      <div class="decision">
+        <h3>Desktop: build Instagram's actual desktop layout</h3>
+        <p>Wide profile header, centred grid, posts open as a modal over a dimmed profile with the caption in a right-hand
+          column. Not a phone-width column floating on a large screen.</p>
+        <span class="verdict"><b>Why:</b> recruiters open links on desktop. Instagram's desktop web is a real design we
+          can borrow honestly, and a 400px column centred on a 27-inch monitor reads as an unfinished mobile site rather
+          than a deliberate choice.</span>
+      </div>
+
+      <h3 style="margin-top:38px">Still genuinely yours to decide</h3>
+
+      <div class="decision open">
+        <h3>The handle and the domain</h3>
+        <p>This spec assumes <code>youngpluto</code> throughout — your example, and close to your GitHub
+          <code>young-pluto</code>. It becomes the URL, the browser tab (<em>Instagram · @youngpluto</em>), and the
+          entire conceit, so it is worth deciding deliberately rather than inheriting from a draft. Does it live at
+          <code>builtbyapoorv.in</code>, or somewhere new?</p>
+      </div>
+
+      <div class="decision open">
+        <h3>What replaces the current site</h3>
+        <p>The site at <code>builtbyapoorv.in</code> is genuinely good — the architecture diagrams and the honest
+          learnings are rarer than anything in this spec. Does this become the front door with that one click away, or a
+          second site at its own address? I would keep the current one alive at <code>/classic</code> either way: some
+          readers want the dense version, and it costs nothing to leave it standing.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">12</span>
+      <h2>Media: what exists, what to shoot</h2>
+    </div>
+    <div class="sec-body">
+      <p class="col">Your three files came to 112MB of raw recording. They are now six clips totalling 5.4MB, in
+        <code>/media</code>, ready to ship.</p>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Clip</th><th>From</th><th>Cut</th><th class="t-num">Size</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="t-key">ball4life-post</td><td>captain details → price → book → VAR → SIUUU</td><td class="t-num">14.0s</td><td class="t-num">496K</td></tr>
+            <tr><td class="t-key">ball4life-reel</td><td>full flow, minus 27s of UPI countdown</td><td class="t-num">45.0s</td><td class="t-num">2.0M</td></tr>
+            <tr><td class="t-key">upscale-post</td><td>package slider → filled form → PayPal</td><td class="t-num">12.5s</td><td class="t-num">788K</td></tr>
+            <tr><td class="t-key">upscale-reel</td><td>full wizard, minus 5s of spinner</td><td class="t-num">28.0s</td><td class="t-num">2.0M</td></tr>
+            <tr><td class="t-key">workout-post</td><td>resume prompt → 85 × 14 → RPE → auto-saved</td><td class="t-num">13.5s</td><td class="t-num">656K</td></tr>
+            <tr><td class="t-key">workout-reel</td><td>exercise library → the same log</td><td class="t-num">17.9s</td><td class="t-num">916K</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col">
+        <p>All three recordings were good. The only thing I cut for dead air was waiting — 27 seconds of UPI countdown in
+          Ball4Life and 5 seconds of PayPal spinner in Upscale. Everything else earned its place, and the Ball4Life
+          World Cup theming, the VAR check and the SIUUU confirmation carry more personality than anything currently on
+          your site.</p>
+
+        <h3>For the four still to record</h3>
+        <ul>
+          <li><strong>20 to 40 seconds raw.</strong> Long enough to have a story in it, short enough that I am cutting
+            rather than hunting.</li>
+          <li><strong>Start after login.</strong> Be signed in, on the screen before the interesting one.</li>
+          <li><strong>Real data.</strong> Your workout clip works because there are 50 real workouts in it. Empty states
+            demo nothing.</li>
+          <li><strong>Don't wait on the screen.</strong> If something takes eight seconds, keep recording — I will cut
+            it — but don't pause and restart around it.</li>
+        </ul>
+
+        <p><strong>The admin consoles are landscape, which changes the maths.</strong> A browser window centre-cropped
+          to 1:1 loses both side columns, and that is usually the whole point of a dashboard. So those two get a
+          different treatment: the desktop frame sits letterboxed on a flat ground in a 4:5 post, which is what real
+          product accounts do with desktop software and reads as deliberate rather than broken. Record at a normal
+          window size, hide the bookmarks bar, and send it — the framing is my problem.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">13</span>
+      <h2>What I still need</h2>
+    </div>
+    <div class="sec-body">
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th></th><th>Item</th><th>Why it blocks</th><th>Effort</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="t-key">1</td><td><strong>Profile photo</strong>, square, high res</td>
+              <td>The one element with no substitute. Everything else can be drawn; a face cannot.</td>
+              <td class="t-key">5 min</td>
+            </tr>
+            <tr>
+              <td class="t-key">2</td><td><strong>DailyObjects: what's safe to publish</strong></td>
+              <td>Two of nine grid posts. Your strongest work has no post without this answer.</td>
+              <td class="t-key">a think</td>
+            </tr>
+            <tr>
+              <td class="t-key">3</td><td><strong>Ball4Life ops console</strong> recording</td>
+              <td>The whole "operations platform" claim currently has no picture behind it.</td>
+              <td class="t-key">10 min</td>
+            </tr>
+            <tr>
+              <td class="t-key">4</td><td><strong>Upscale ops console</strong> recording</td>
+              <td>Same — the half of Upscale that sits behind auth is invisible.</td>
+              <td class="t-key">10 min</td>
+            </tr>
+            <tr>
+              <td class="t-key">5</td><td><strong>QueryFlow</strong> and <strong>Nutrition</strong> recordings</td>
+              <td>Posts 8 and 9. Without them the grid launches at seven and the rows go ragged.</td>
+              <td class="t-key">15 min</td>
+            </tr>
+            <tr>
+              <td class="t-key">6</td><td><strong>Handle and domain</strong></td>
+              <td>Section 11. Sets the URL, the tab title and the whole conceit.</td>
+              <td class="t-key">a think</td>
+            </tr>
+            <tr>
+              <td class="t-key">7</td><td><strong>The WORK timeline call</strong></td>
+              <td>Section 06. Dated cards, or a timeline with the 2025 gap visible.</td>
+              <td class="t-key">a think</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="col">Items 1 to 5 are assets and can arrive in any order — none of them blocks me from building the
+        structure, because the layout is specced against known aspect ratios and placeholder posts drop straight out when
+        the real ones land. Items 2, 6 and 7 are decisions, and those are worth settling before I start, because each one
+        changes something structural rather than something cosmetic.</p>
+
+      <p class="col">The DailyObjects logo you offered: yes, useful for the Tagged tab and the WORK ring, along with B4L
+        Sports' and Upscale's. But it is item 2 that actually matters.</p>
+    </div>
+  </section>
+
+  <footer>
+    Draft 1 · 13 September 2026 · nothing built yet · @youngpluto
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var grid = document.getElementById('ig-grid');
+    var meta = document.getElementById('demo-meta');
+    var copy = {
+      '1 / 1': '1:1 keeps 46% of the phone screen — the middle band, which is where the content always is.',
+      '4 / 5': '4:5 keeps 58%. This is the post-detail crop: enough chrome for it to read as a phone.',
+      '9 / 16': '9:16 keeps 69%. Reels come closest to the source, but still are not a full phone screen.'
+    };
+    document.querySelectorAll('.ratio-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var r = btn.dataset.ratio;
+        grid.style.setProperty('--ratio', r);
+        meta.textContent = copy[r];
+        document.querySelectorAll('.ratio-btn').forEach(function (b) {
+          b.setAttribute('aria-pressed', String(b === btn));
+        });
+      });
+    });
+
+    // Respect reduced motion: hold the poster frame instead of looping.
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('#ig-grid video').forEach(function (v) {
+        v.removeAttribute('autoplay');
+        v.removeAttribute('loop');
+        v.controls = true;
+        v.pause();
+      });
+    }
+  })();
+</script>

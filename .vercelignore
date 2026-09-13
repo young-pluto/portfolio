@@ -5,3 +5,6 @@
 \!apps/WorkoutTracker/*.js
 \!apps/WorkoutTracker/*.css
 \!apps/WorkoutTracker/*.html
+
+# Working docs — kept in git, not deployed
+docs/
