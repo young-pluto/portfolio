@@ -1,4 +1,6 @@
 <title>@apoorv</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Apoorv Bhardwaj — full-stack developer. Booking platforms, payment rails and internal tools that businesses actually run on.">
 <link rel="canonical" href="https://www.builtbyapoorv.in/">
 <meta property="og:type" content="profile">
@@ -143,6 +145,7 @@
   .prof-main { min-width: 0; flex: 1; }
 
   .prof-top { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+  .prof-btns { display: flex; gap: 10px; flex-wrap: wrap; }
   .prof-handle { font-size: 1.35rem; font-weight: 400; letter-spacing: -.01em; }
   .verified { width: 17px; height: 17px; vertical-align: -3px; margin-left: 4px; }
 
@@ -168,12 +171,25 @@
   .bio .stack-line { font-family: var(--mono); font-size: .78rem; color: var(--muted); }
   .bio a { color: var(--action); font-weight: 500; }
 
+  /* Phone layout mirrors Instagram's: avatar and handle share row 1, the bio runs
+     full width beneath, and the actions take a full-width row of their own.
+     `display: contents` lifts the nested wrappers out so one grid can place them. */
   @media (max-width: 735px) {
-    .profile { gap: 18px; padding: 20px 0 14px; }
+    .profile {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px 16px;
+      align-items: center;
+      padding: 18px 0 14px;
+    }
+    .prof-main, .prof-top { display: contents; }
+    .avatar-wrap { grid-area: 1 / 1; }
+    .prof-handle { grid-area: 1 / 2; }
+    .bio { grid-area: 2 / 1 / 3 / -1; max-width: none; }
+    .prof-btns { grid-area: 3 / 1 / 4 / -1; }
+    .prof-btns .btn { flex: 1; text-align: center; padding: 8px 12px; }
     .avatar { width: 74px; height: 74px; font-size: 1.9rem; }
-    .prof-top { margin-bottom: 10px; }
     .stats { display: none; }
-    .bio { max-width: none; }
   }
 
   /* mobile stat strip */
@@ -598,12 +614,14 @@
 <main class="shell flush" id="app">
 
   <section class="profile">
-    <div class="avatar-wrap"><img class="avatar" src="media/apoorv.jpg" alt="Apoorv Bhardwaj" width="480" height="480"></div>
+    <div class="avatar-wrap"><img class="avatar" src="media/apoorv.jpg" alt="Apoorv Bhardwaj" width="560" height="560"></div>
     <div class="prof-main">
       <div class="prof-top">
         <h1 class="prof-handle">apoorv</h1>
-        <a class="btn primary" id="resume-btn" href="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/resume%2FApoorv%20Bhardwaj.pdf?alt=media&token=029d91ef-49da-42b5-a706-1db2910dc278" target="_blank" rel="noopener">Résumé</a>
-        <button class="btn" id="dm-btn-2" type="button">Message</button>
+        <div class="prof-btns">
+          <a class="btn primary" id="resume-btn" href="https://firebasestorage.googleapis.com/v0/b/slot-booking-c28d8.appspot.com/o/resume%2FApoorv%20Bhardwaj.pdf?alt=media&token=029d91ef-49da-42b5-a706-1db2910dc278" target="_blank" rel="noopener">Résumé</a>
+          <button class="btn" id="dm-btn-2" type="button">Message</button>
+        </div>
       </div>
       <div class="stats" id="stats-desk"></div>
       <div class="bio">
